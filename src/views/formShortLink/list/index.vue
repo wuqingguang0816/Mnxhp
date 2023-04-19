@@ -302,9 +302,13 @@ export default {
             let endDateTime = new Date()
             endDateTime.setHours(23, 59, 59, 999)
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
-          } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true) {
             //组织机构
-            initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
+            if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+              initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
+            } else {
+              initQueryJson[searchList[i].__vModel__] = []
+            }
           } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
             if (searchList[i].__config__.defaultValue != null) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].__config__.defaultValue
@@ -981,4 +985,4 @@ export default {
     margin-top: -16%;
   }
 }
-</style> 
+</style>

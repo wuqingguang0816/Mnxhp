@@ -1,17 +1,7 @@
 <template>
-  <el-dialog
-    v-bind="$attrs"
-    :close-on-click-modal="false"
-    :modal-append-to-body="false"
-    v-on="$listeners"
-    @open="onOpen"
-    fullscreen
-    lock-scroll
-    class="JNPF-full-dialog"
-    :show-close="false"
-    :modal="false"
-    append-to-body
-  >
+  <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
+    v-on="$listeners" @open="onOpen" fullscreen lock-scroll class="JNPF-full-dialog"
+    :show-close="false" :modal="false" append-to-body>
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
@@ -19,17 +9,9 @@
       </div>
       <div class="header-page">
         <el-button @click="pageIndex = pageIndex - 1">上一页</el-button>
-        <el-input-number
-          style="width: 60px"
-          class="text-center"
-          v-model="pageIndex"
-          @change="scrollpage"
-          @blur="scrollpage"
-          :controls="false"
-          controls-position="right"
-          :min="1"
-          :max="batchData.length"
-        ></el-input-number>
+        <el-input-number style="width: 60px" class="text-center" v-model="pageIndex"
+          @change="scrollpage" @blur="scrollpage" :controls="false" controls-position="right"
+          :min="1" :max="batchData.length"></el-input-number>
         <span class="page-size">/ {{ batchData.length }}</span>
         <el-button @click="pageIndex = pageIndex + 1">下一页</el-button>
       </div>
@@ -40,13 +22,18 @@
       </div>
     </div>
 
+    <div v-if="showContainer">
+      <!-- 主表使用 -->
+      <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
+      <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
+
+      <!-- 子表使用 -->
+      <div ref="barcodewrap"></div>
+      <div ref="qrcodewrap"></div>
+    </div>
+
     <div class="main" ref="tsPrint" v-loading="loading">
-      <div
-        class="print-content"
-        v-html="item"
-        v-for="(item, index) in batchData"
-        :key="index"
-      />
+      <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
     </div>
   </el-dialog>
 </template>
@@ -70,24 +57,30 @@ export default {
       handler(val) {
         this.scrollpage(val);
       },
+      deep: true,
+      immediate: true
     },
   },
   methods: {
     scrollpage() {
       let index = this.pageIndex - 1 < 0 ? 0 : this.pageIndex - 1;
       this.$nextTick(() => {
-        let dom = document.querySelector(".main");
-        dom.scrollTo({
-          top: (window.document.body.clientHeight - 10) * index,
-          behavior: "smooth",
-        });
+        let dom = this.$refs.tsPrint
+        if (dom) {
+          dom.scrollTo({
+            top: (window.document.body.clientHeight - 10) * index,
+            behavior: "smooth",
+          });
+        }
+
       });
     },
     onOpen() {
       // 打开时候初始化位置为第一页
       this.pageIndex = 0;
-      this.batchData = [];
       if (!this.id) return;
+      this.initData();
+      this.batchData = [];
       this.printTemplate = "";
       this.data = {};
       this.loading = true;
@@ -102,18 +95,25 @@ export default {
           const element = array[index];
           this.batchData.push(element.printTemplate);
         }
+        this.showContainer = true
         this.$nextTick(async () => {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            if (!element.printData) break;
+            
+            // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
-            let data = await this.handleData(element, domCurrent);
-            this.batchData[index] = data;
+            if (!element.printData) {
+              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g,"");
+            }
+            await this.handleData(element, domCurrent);
+            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g,"");
             if (index == array.length - 1) {
-              this.loading = false;
+              this.showContainer = false
             }
           }
+          
+          this.loading = false;
         });
       });
     },
@@ -144,7 +144,7 @@ export default {
             url: `/api/system/printLog/save`,
             method: "post",
             data,
-          }).then((res) => {});
+          }).then((res) => { });
         };
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
@@ -175,6 +175,7 @@ export default {
 
 .header-page {
   vertical-align: middle;
+  min-width: 300px;
   .el-button {
     margin: 0 10px;
   }

@@ -172,11 +172,11 @@ export default {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printDialogVisible = true
       this.$nextTick(() => {
-        if (!this.formConf.printId.includes(",")) {
-          this.printBrowseHandle(this.formConf.printId)
+        if (this.formConf.printId.length > 1) {
+          this.$refs.printDialog.init(this.formConf.printId)
           return
         }
-        this.$refs.printDialog.initOptions(JSON.parse(JSON.stringify(this.formConf.printId)))
+        this.printBrowseHandle(this.formConf.printId)
       })
     },
     init(formConf, modelId, id, isPreview, useFormPermission, allList, type) {
@@ -279,8 +279,12 @@ export default {
               if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+                if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                  val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+                } else {
+                  val = []
+                }
                 item.__config__.defaultValue = val
               }
             }

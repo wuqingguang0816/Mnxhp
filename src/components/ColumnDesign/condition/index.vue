@@ -5,7 +5,6 @@
       <el-col :span="6" class="label">条件字段</el-col>
       <el-col :span="4">条件符号</el-col>
       <el-col :span="9">数据值</el-col>
-
       <el-col :span="1"></el-col>
     </el-row>
     <template>
@@ -119,11 +118,10 @@
                   :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
-                <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'"
+                <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'" :precision="2"
                   :disabled="item.disabled"></NumRange>
-                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
-                  :precision="item.precision" :disabled="item.disabled" :controls="false"
-                  controls-position="right" />
+                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入" :precision="2"
+                  :disabled="item.disabled" :controls="false" controls-position="right" />
               </template>
               <template v-else-if="['rate', 'slider'].includes(item.jnpfKey)">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
@@ -139,8 +137,7 @@
                   placeholder="请选择" clearable :is-range="true" @input="input()"
                   :value-format="item['value-format']" :format="item.format">
                 </el-time-picker>
-
-                <el-time-picker v-else v-model="item.fieldValue" key="time2"
+                <el-time-picker v-else v-model="item.fieldValue" key="time2" @input="input()"
                   :picker-options="item['picker-options']" placeholder="请选择" clearable
                   :disabled="item.disabled" :value-format="item['value-format']"
                   :format="item.format">
@@ -158,11 +155,11 @@
                   </JnpfDateRangePicker>
                 </template>
                 <JnpfDatePicker v-else v-model="item.fieldValue" clearable :disabled="item.disabled"
-                  key="year2" placeholder="请选择" :type="item.type"
-                  :valueFormat="item['value-format']" :format="item.format">
+                  key="year2" placeholder="请选择" :type="item.type" @input="input()"
+                  :valueFormat="item['value-format']"
+                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'">
                 </JnpfDatePicker>
               </template>
-
               <template v-else-if="['comSelect', 'currOrganize'].includes(item.jnpfKey)">
                 <comSelect v-model="item.fieldValue" :disabled="item.disabled" placeholder="请选择"
                   ref="comselect" clearable :multiple="item.multiple" />

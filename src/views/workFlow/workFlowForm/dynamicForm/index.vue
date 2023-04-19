@@ -86,13 +86,17 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : ((this.isAdd)?item.__config__.defaultValue:undefined)
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               val = new Date().getTime()
               item.__config__.defaultValue = val
-            }else if((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-              val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+            }else if((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+              if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+              } else {
+                val = []
+              }
               item.__config__.defaultValue = val
             }
             let noShow = false, isDisabled = false, required = item.__config__.required || false

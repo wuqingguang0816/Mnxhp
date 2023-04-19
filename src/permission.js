@@ -29,7 +29,7 @@ router.beforeEach(async (to, from, next) => {
     })
   }
   // determine whether the user has logged in
-  if (hasToken && to.path !== '/formShortLink') {
+  if (hasToken && to.path !== '/sso' && to.path !== '/formShortLink') {
 
     if (store.getters.isLock && to.path !== '/lockScreen' && to.path !== '/login') {
       next({

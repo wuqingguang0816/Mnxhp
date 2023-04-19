@@ -380,6 +380,10 @@ export default {
       this.visible = false
       this.$refs.commonWordsDialog.close()
     },
+    beforeClose() {
+      this.visible = false
+      this.$refs.commonWordsDialog.close()
+    },
     addSign() {
       this.signVisible = true
       this.$nextTick(() => {

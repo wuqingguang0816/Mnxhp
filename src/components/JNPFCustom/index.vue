@@ -131,8 +131,12 @@ export default {
                   val = new Date().getTime()
                   item.__config__.defaultValue = val
                 }
-              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true && this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                val = data[item.__vModel__] ? data[item.__vModel__] : item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+                if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                  val = data[item.__vModel__] ? data[item.__vModel__] : (item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList)
+                } else {
+                  val = data[item.__vModel__] ? data[item.__vModel__] : []
+                }
                 item.__config__.defaultValue = val
               } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
                 if (!data.hasOwnProperty(item.__vModel__)) {

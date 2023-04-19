@@ -5,59 +5,205 @@ import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
 import { getAmountChinese } from "@/components/Generator/utils/index"
 
+/**
+ * 打印模板
+ */
+
 const printOptionApi = {
   computed: {
     ...mapGetters(['userInfo'])
   },
   data() {
     return {
+      width: '',
+      height: '',
+      barcodeId: '',
       data: {},
-      printTemplate: '',
+      printTemplate: "",
       recordList: [],
       loading: false,
+      printTemplateRe: '',
+      mainArr: [],
+      qrcodeId: '',
+      showContainer: false,
+      subData: [],
       mainData: [],
-      subData: {}
+      qrTemp: [],
+      barTemp: [],
     }
   },
   methods: {
-    handleData(data, dom) {
-      return new Promise((resolve) => {
+    initData() {
+      this.barTemp = []
+      this.qrTemp = []
+      this.batchData = [];
+      this.printTemplate = "";
+    },
+    qrbarReplace() {
+      if (this.barTemp.length > 0) {
+        let array = this.barTemp
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
 
-        this.printTemplate = data.printTemplate
+          // 在页面中设置这个dom,获取码的html字符串
+          const id = this.jnpf.idGenerator()
+          let dom = this.$refs.barcodewrap
+
+          let imgdom = document.createElement('img');
+          imgdom.width = '100';
+          imgdom.height = '100';
+          imgdom.id = `barcode${id}`
+          dom.appendChild(imgdom)
+
+          this.$nextTick(() => {
+            this.getJsBarcode(element.value, `#barcode${id}`, element.width, element.height)
+            let dom = document.querySelector(`#barcode${id}`)
+            this.printTemplate = this.printTemplate.replace(element.replaceStr, dom.outerHTML)
+          })
+
+        }
+      }
+      if (this.qrTemp.length > 0) {
+        let array = this.qrTemp
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
+          // 在页面中设置这个dom,获取码的html字符串
+          const id = this.jnpf.idGenerator()
+          let dom = this.$refs.qrcodewrap
+
+          let imgdom = document.createElement('img');
+          imgdom.width = '100';
+          imgdom.height = '100';
+          imgdom.id = `qrCode${id}`
+          dom.appendChild(imgdom)
+
+          this.$nextTick(() => {
+            let base64Url = this.getJsQrcode(element.value, `qrCode${id}`, element.width, element.height)
+            this.printTemplate = this.printTemplate.replace(element.replaceStr, `<img id='qrCode${id}'  width='${element.width}' height='${element.height}' src='${base64Url}'/>`)
+          })
+
+
+        }
+      }
+    },
+    subDo(domCurrent) {
+      return new Promise((resolve, reject) => {
+        const tableList = domCurrent.getElementsByTagName('table')
+        if (tableList.length) {
+          for (let j = 0; j < tableList.length; j++) {
+            const tableObj = tableList[j];
+            let tds = []
+            let newTable = []
+            for (let i = 0; i < tableObj.rows.length; i++) {
+              tds = tableObj.rows[i]
+              const dataTag = this.isChildTable(tds.cells)
+              if (dataTag) {
+                this.retrieveData(dataTag, tableObj, tds, newTable)
+              } else {
+                newTable.push(tds)
+              }
+            }
+
+            let copy = tableObj.getElementsByTagName('tbody')[0].innerHTML
+            tableObj.getElementsByTagName('tbody')[0].innerHTML = ''
+
+            for (let i = 0; i < newTable.length; i++) {
+              tableObj.getElementsByTagName('tbody')[0].appendChild(newTable[i])
+            }
+            this.printTemplate = this.printTemplate.replace(copy, tableObj.innerHTML)
+            this.qrbarReplace()
+          }
+          resolve(1)
+        }
+      })
+    },
+    async handleData(data, domCurrent, index) {
+      return new Promise(async (resolve, reject) => {
         this.data = data.printData
         this.recordList = data.operatorRecordList || []
-        this.$nextTick(() => {
-          // const tableList = dom.getElementsByTagName('table')
-          // if (tableList.length) {
-          //   for (let j = 0; j < tableList.length; j++) {
-          //     const tableObj = tableList[j];
-          //     let tds = []
-          //     let newTable = []
-          //     for (let i = 0; i < tableObj.rows.length; i++) {
-          //       tds = tableObj.rows[i]
-          //       const dataTag = this.isChildTable(tds.cells)
-          //       if (dataTag) {
-          //         this.retrieveData(this.data[dataTag], tableObj, tds, newTable)
-          //       } else {
-          //         newTable.push(tds)
-          //       }
-          //     }
-          //   }
-          // }
+        this.$nextTick(async () => {
+          this.printTemplate = domCurrent.innerHTML
 
+          await this.subDo(domCurrent)
+
+          this.replaceValue(this.data)
           this.replaceSysValue()
           this.replaceImg()
-          this.replaceBarCode()
-          this.replaceQrCode()
-          this.handleDataType(dom)
-          this.replaceValue(this.mainData)
-          this.replaceValueSub(this.subData)
+          this.replaceBarCodeMain()
+          this.replaceQrCodeMain()
+
+
           const pageBreak = '<p style="page-break-after:always;"></p>'
           this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
           resolve(this.printTemplate)
         })
 
       })
+    },
+    replaceBarCodeMain(childItem) {
+      let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
+      let imgList = []
+      if (childItem) {
+        const element = childItem.innerHTML
+        imgList = element.match(imgRegular)
+      } else {
+        imgList = this.printTemplate.match(imgRegular)
+      }
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          if (this.getIsChildren(item) && !childItem) continue
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const value = this.getValue(item)
+          const id = this.jnpf.idGenerator()
+          const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
+
+          // 在页面中设置这个dom
+          this.barcodeId = `barcode${id}`
+          this.width = `${width}`
+          this.height = `${height}`
+
+          this.$nextTick(() => {
+
+            this.getJsBarcode(value, '#barcode' + id, width, height)
+            // 获取节点内容替换
+            let dom = document.querySelector('#barcode' + id)
+            this.printTemplate = this.printTemplate.replace(item, dom.outerHTML)
+          })
+        }
+      }
+    },
+    replaceQrCodeMain(childItem) {
+      let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
+      let imgList = []
+      if (childItem) {
+        const element = childItem.innerHTML
+        imgList = element.match(imgRegular)
+      } else {
+        imgList = this.printTemplate.match(imgRegular)
+      }
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          if (this.getIsChildren(item) && !childItem) continue
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const value = this.getValue(item)
+          const id = this.jnpf.idGenerator()
+
+          // 在页面中设置这个dom
+          this.qrcodeId = `qrCode${id}`
+          this.width = `${width}`
+          this.height = `${height}`
+
+          this.$nextTick(() => {
+            let base64Url = this.getJsQrcode(value, 'qrCode' + id, width, height)
+            this.printTemplate = this.printTemplate.replace(item, `<img id='qrCode${id}'  width='${width}' height='${height}' src='${base64Url}'/>`)
+          })
+        }
+
+      }
     },
     isChildTable(cells) {
       let tableName = ''
@@ -82,17 +228,35 @@ const printOptionApi = {
     closeDialog() {
       this.$emit('update:visible', false)
     },
-    retrieveData(subData, tableObj, tds, newTable) {
-      for (let j = 0; j < subData.length; j++) {
-        let tr = tds.cloneNode(true)
-        let tds1 = tr.children
-        for (let i = 0; i < tds1.length; i++) {
-          const element = tds1[i];
-          this.replaceImg(element)
-          this.replaceBarCode(element)
-          this.replaceQrCode(element)
+    generateTable(data, tds) {
+      for (let key in data) {
+        for (let j = 0; j < tds.cells.length; j++) {
+          let spanList = tds.cells[j].getElementsByTagName('span')
+          for (let i = 0; i < spanList.length; i++) {
+            const dataTag = spanList[i].getAttribute('data-tag') ? spanList[i].getAttribute('data-tag').split('.')[1] : 'null'
+            if (key == dataTag) {
+              spanList[i].innerHTML = data[key]
+            }
+          }
         }
-        newTable.push(tr)
+      }
+      return tds
+    },
+    retrieveData(dataTag, tableObj, tds, newTable) {
+      for (let key in this.data) {
+        if (key == dataTag) {
+          for (let j = 0; j < this.data[key].length; j++) {
+            let tr = this.generateTable(this.data[key][j], tds.cloneNode(true))
+            let tds1 = tr.children
+            for (let i = 0; i < tds1.length; i++) {
+              const element = tds1[i];
+              this.replaceImg(element)
+              this.replaceBarCode(element)
+              this.replaceQrCode(element)
+            }
+            newTable.push(tr)
+          }
+        }
       }
     },
     getHandleName(handleStatus) {
@@ -197,7 +361,7 @@ const printOptionApi = {
       var count = value.toString().length - index;
       return count
     },
-    replaceValue(mainData) {
+    replaceMainValue(mainData) {
       let template = JSON.parse(JSON.stringify(this.printTemplate))
       for (let key in this.data) {
         if (mainData.includes(`{${key}}`)) {
@@ -206,15 +370,12 @@ const printOptionApi = {
       }
       this.printTemplate = template
     },
-    replaceValueSub(data) {
+    replaceValue(data) {
       for (let key in data) {
-        let subData = this.data[key][0]
-        let replaceKey = data[key]
-        replaceKey.forEach(key => {
-          let text = subData[key] || subData[key] == 0 ? subData[key] : ''
-          this.printTemplate = this.printTemplate.replaceAll(`{${key}}`, text)
-        });
-
+        this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
+        if (Array.isArray(data[key]) && data[key] && data[key].length) {
+          this.replaceValue(data[key])
+        }
       }
     },
     replaceImg(childItem) {
@@ -282,15 +443,16 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-          const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
-          if (childItem) {
-            childItem.innerHTML = template
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+
+          // 先收集码生成的信息
+          let info = {
+            replaceStr: item,
+            width, height,
+            barcodeId: `barcode${id}`,
+            value
           }
-          this.$nextTick(() => {
-            this.getJsBarcode(value, '#barcode' + id, width, height)
-          })
+          this.barTemp.push(info)
+
         }
       }
     },
@@ -312,19 +474,20 @@ const printOptionApi = {
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
           const template = `<span id='qrCode${id}'/>`
-          if (childItem) {
-            childItem.innerHTML = template
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+          // 先收集码生成的信息
+          let info = {
+            replaceStr: item,
+            width, height,
+            barcodeId: `qrCode${id}`,
+            value
           }
-          this.$nextTick(() => {
-            this.getJsQrcode(value, 'qrCode' + id, width, height)
-          })
+          this.qrTemp.push(info)
+
+
         }
 
       }
     },
-
     getWidthHeight(item, type = 'width') {
       let regular = ""
       if (type == 'width') regular = /width=[\"|'](.*?)[\"|']/gi;
@@ -383,6 +546,10 @@ const printOptionApi = {
         text: value, // 二维码内容
         correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
       })
+
+      let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
+      let base64Text = canvas.toDataURL("image/png");
+      return base64Text
     },
     replaceAll(data, replace, value) {
       const lenr = replace.length
@@ -470,7 +637,8 @@ const printOptionApi = {
       doc.write(print);
       doc.close();
     },
+  },
+  mounted() {
   }
 }
-
 export default printOptionApi;
