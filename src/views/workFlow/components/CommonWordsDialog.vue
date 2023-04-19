@@ -16,8 +16,11 @@
           </template>
         </el-table-column>
       </JNPF-table>
-      <div class="table-actions" @click="addOrUpdateHandle()">
-        <el-button type="text" icon="el-icon-plus">新 增</el-button>
+      <div class="actions">
+        <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">
+          新 增
+        </el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>
@@ -105,6 +108,9 @@ export default {
   computed: {
   },
   methods: {
+    close() {
+      this.visible = false
+    },
     openDialog() {
       this.visible = true
       this.initData()
@@ -229,5 +235,15 @@ export default {
 .table {
   height: 219px;
   overflow: auto;
+}
+.actions {
+  text-align: right;
+  margin-top: 10px;
+}
+>>> .el-table tr:last-child td {
+  border-bottom: unset;
+}
+>>> .el-table {
+  border-top: unset !important;
 }
 </style>

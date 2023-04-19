@@ -100,7 +100,7 @@
     </el-tabs>
     <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
       :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
-      width='600px'>
+      :before-close="beforeClose" width='600px'>
       <el-form ref="candidateForm" :model="candidateForm"
         :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
         <template v-if="eventType==='audit'">
@@ -375,6 +375,10 @@ export default {
         }
 
       }
+    },
+    beforeClose() {
+      this.visible = false
+      this.$refs.commonWordsDialog.close()
     },
     addSign() {
       this.signVisible = true

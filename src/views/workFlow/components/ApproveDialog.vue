@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
-    :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
-    width='600px'>
+    :visible.sync="visible" :before-close="beforeClose" class="JNPF-dialog JNPF-dialog_center"
+    lock-scroll append-to-body width='600px'>
     <el-form ref="dataForm" :model="dataForm"
       :label-width="dataForm.candidateList.length||branchList.length?'130px':'80px'">
       <template v-if="eventType==='audit'">
@@ -216,7 +216,11 @@ export default {
     closeDialog() {
       this.btnLoading = false
       this.visible = false
-    }
+    },
+    beforeClose() {
+      this.visible = false
+      this.$refs.commonWordsDialog.close()
+    },
   }
 }
 </script>
