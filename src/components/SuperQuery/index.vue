@@ -99,9 +99,9 @@
                 </template>
                 <template v-else-if="['select','radio','checkbox'].includes(item.jnpfKey)">
                   <el-select v-model="item.fieldValue" placeholder="请选择" clearable filterable>
-                    <el-option :label="oItem[item.attr.__config__.props.label]"
-                      v-for="(oItem, i) in item.attr.__slot__.options"
-                      :value="oItem[item.attr.__config__.props.value]" :key="i"></el-option>
+                    <el-option :label="oItem[item.attr.props.props.label]"
+                      v-for="(oItem, i) in item.attr.options"
+                      :value="oItem[item.attr.props.props.value]" :key="i"></el-option>
                   </el-select>
                 </template>
                 <template v-else-if="item.jnpfKey==='cascader'">
@@ -298,7 +298,7 @@ export default {
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              cur.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -306,9 +306,9 @@ export default {
             getDataInterfaceRes(config.propsUrl).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
-                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+                cur.options = data
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
             })
           }
@@ -340,7 +340,7 @@ export default {
         if (config.dataType === 'dictionary') {
           if (!config.dictionaryType) return
           getDictionaryDataSelector(config.dictionaryType).then(res => {
-            isTreeSelect ? item.attr.options = res.data.list : item.attr.__slot__.options = res.data.list
+            item.attr.options = res.data.list
           })
         }
         if (config.dataType === 'dynamic') {
@@ -348,9 +348,9 @@ export default {
           getDataInterfaceRes(config.propsUrl).then(res => {
             let data = res.data
             if (Array.isArray(data)) {
-              isTreeSelect ? item.attr.options = data : item.attr.__slot__.options = data
+              item.attr.options = data
             } else {
-              isTreeSelect ? item.attr.options = [] : item.attr.__slot__.options = []
+              item.attr.options = []
             }
           })
         }
