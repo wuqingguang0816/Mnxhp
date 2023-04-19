@@ -103,6 +103,7 @@ export default {
       commonBtnLoading: false,
       formLoading: false,
       dataFormBtnLoading: false,
+      state: false
     }
   },
   computed: {
@@ -112,10 +113,12 @@ export default {
       this.visible = false
     },
     openDialog() {
+      this.state = false
       this.visible = true
       this.initData()
     },
     addOrUpdateHandle(id) {
+      if (id) this.state = true
       this.commonWordsVisible = true
       this.formLoading = true
       this.dataForm.id = id || 0
@@ -131,6 +134,7 @@ export default {
       })
     },
     select() {
+      if (this.state) return
       this.$emit('input', this.checked)
       this.$emit('change', this.checkedRow)
       this.visible = false
@@ -165,6 +169,7 @@ export default {
       this.select()
     },
     handleDel(id) {
+      this.state = true
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
         type: 'warning'
       }).then(() => {
@@ -211,6 +216,7 @@ export default {
                   this.commonWordsVisible = false
                   this.commonBtnLoading = false
                   this.dataFormBtnLoading = false
+                  this.state = false
                   this.checked = ''
                   this.checkedRow = {}
                   this.openDialog()
@@ -220,7 +226,6 @@ export default {
           }).catch(() => {
             this.btnLoading = false
             this.commonWordsVisible = false
-
           })
         }
       })
