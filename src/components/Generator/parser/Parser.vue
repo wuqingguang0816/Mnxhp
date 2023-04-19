@@ -928,7 +928,7 @@ export default {
       }
     },
     setFormData(prop, value) {
-      if (!prop) return
+      if (!prop || this[this.formConf.formModel][prop] === value) return;
       const isChildTable = prop.indexOf('.') > -1
       if (isChildTable) {
         const list = prop.split('.')
