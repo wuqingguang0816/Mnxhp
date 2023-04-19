@@ -87,7 +87,7 @@ export default {
       this.loading = true;
       this.showContainer = true;
       getData(query).then(async (res) => {
-        if (!res.data || !res.data.printData) return (this.loading = false);
+        if (!res.data) return (this.loading = false);
         this.batchData.push(res.data.printTemplate);
         this.$nextTick(async () => {
           let dom = this.$refs["tsPrint"];
