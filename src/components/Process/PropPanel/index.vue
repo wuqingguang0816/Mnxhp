@@ -62,12 +62,6 @@
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
                   :precision="item.precision||0" controls-position="right" />
               </template>
-              <template v-else-if="item.jnpfKey==='autoComplete'">
-                <JnpfAutoComplete v-model="item.fieldValue" placeholder="请选择"
-                  :interfaceId="item.interfaceId" clearable :propsValue="item.propsValue"
-                  :relationField="item.relationField" :templateJson="item.templateJson"
-                  :total="item.total" />
-              </template>
               <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
                   controls-position="right" />
