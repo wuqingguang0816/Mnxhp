@@ -90,8 +90,9 @@
               </template>
               <template v-else-if="item.jnpfKey==='date'">
                 <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type" @change="onConditionDateChange($event,item)"
-                  :valueFormat="item['value-format']" :format="item.format">
+                  :type="item.type || 'date'" @change="onConditionDateChange($event,item)"
+                  :valueFormat="item['value-format'] || 'timestamp'"
+                  :format="item.format || 'yyyy-MM-dd'">
                 </JnpfDatePicker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
