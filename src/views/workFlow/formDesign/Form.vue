@@ -287,6 +287,7 @@ export default {
               this.$store.commit('generator/UPDATE_SUB_TABLE', subTable)
               this.$store.commit('generator/SET_ALL_TABLE', this.tables)
               this.$store.commit('generator/SET_TABLE', true)
+              this.$store.commit('generator/SET_DATABASE', this.dataForm.dbLinkId)
               this.$store.commit('generator/UPDATE_FORMITEM_LIST', this.mainTableFields)
               this.activeStep += 1
             }
