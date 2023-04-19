@@ -1,17 +1,7 @@
 <template>
-  <el-dialog
-    v-bind="$attrs"
-    :close-on-click-modal="false"
-    :modal-append-to-body="false"
-    v-on="$listeners"
-    @open="onOpen"
-    fullscreen
-    lock-scroll
-    class="JNPF-full-dialog"
-    :show-close="false"
-    :modal="false"
-    append-to-body
-  >
+  <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
+    v-on="$listeners" @open="onOpen" fullscreen lock-scroll class="JNPF-full-dialog"
+    :show-close="false" :modal="false" append-to-body>
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
@@ -19,17 +9,9 @@
       </div>
       <div class="header-page">
         <el-button @click="pageIndex = pageIndex - 1">上一页</el-button>
-        <el-input-number
-          style="width: 60px"
-          class="text-center"
-          v-model="pageIndex"
-          @change="scrollpage"
-          @blur="scrollpage"
-          :controls="false"
-          controls-position="right"
-          :min="1"
-          :max="batchData.length"
-        ></el-input-number>
+        <el-input-number style="width: 60px" class="text-center" v-model="pageIndex"
+          @change="scrollpage" @blur="scrollpage" :controls="false" controls-position="right"
+          :min="1" :max="batchData.length"></el-input-number>
         <span class="page-size">/ {{ batchData.length }}</span>
         <el-button @click="pageIndex = pageIndex + 1">下一页</el-button>
       </div>
@@ -51,12 +33,7 @@
     </div>
 
     <div class="main" ref="tsPrint" v-loading="loading">
-      <div
-        class="print-content"
-        v-html="item"
-        v-for="(item, index) in batchData"
-        :key="index"
-      />
+      <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
     </div>
   </el-dialog>
 </template>
@@ -80,8 +57,8 @@ export default {
       handler(val) {
         this.scrollpage(val);
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true
     },
   },
   methods: {
@@ -89,10 +66,13 @@ export default {
       let index = this.pageIndex - 1 < 0 ? 0 : this.pageIndex - 1;
       this.$nextTick(() => {
         let dom = this.$refs.tsPrint
-        dom.scrollTo({
-          top: (window.document.body.clientHeight - 10) * index,
-          behavior: "smooth",
-        });
+        if (dom) {
+          dom.scrollTo({
+            top: (window.document.body.clientHeight - 10) * index,
+            behavior: "smooth",
+          });
+        }
+
       });
     },
     onOpen() {
@@ -120,7 +100,12 @@ export default {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            if (!element.printData) break;
+            if (!element.printData) {
+              dom.innerHTML = ''
+              this.initData();
+              this.loading = false;
+              break;
+            }
             // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             await this.handleData(element, domCurrent);
@@ -160,7 +145,7 @@ export default {
             url: `/api/system/printLog/save`,
             method: "post",
             data,
-          }).then((res) => {});
+          }).then((res) => { });
         };
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
