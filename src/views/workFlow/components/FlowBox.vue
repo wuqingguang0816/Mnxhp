@@ -100,7 +100,7 @@
     </el-tabs>
     <el-dialog :title="eventType==='audit'?'审批通过':'审批退回'" :close-on-click-modal="false"
       :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body
-      width='600px'>
+      :before-close="beforeClose" width='600px'>
       <el-form ref="candidateForm" :model="candidateForm"
         :label-width="candidateForm.candidateList.length||branchList.length?'130px':'80px'">
         <template v-if="eventType==='audit'">
@@ -149,17 +149,9 @@
         </template>
         <template v-if="properties.hasOpinion">
           <el-form-item label="审批意见" prop="handleOpinion">
-            <el-row>
-              <el-col :span="22">
-                <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见"
-                  type="textarea" :rows="4" />
-              </el-col>
-              <el-col :span="2">
-                <el-button plain @click="commonWords()" class="commonWords-button">
-                  常用语
-                </el-button>
-              </el-col>
-            </el-row>
+            <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+              :rows="4" />
+            <CommonWordsDialog ref="commonWordsDialog" @change="common" />
           </el-form-item>
           <el-form-item label="审批附件" prop="fileList">
             <JNPF-UploadFz v-model="candidateForm.fileList" :limit="3" />
@@ -394,6 +386,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.commonWordsDialog.init()
       })
+    },
+    beforeClose() {
+      this.visible = false
+      this.$refs.commonWordsDialog.close()
     },
     addSign() {
       this.signVisible = true
