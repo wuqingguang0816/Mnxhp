@@ -51,9 +51,12 @@ export default {
     }
   },
   watch: {
-    innerValue(val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
+    innerValue: {
+      handler(val) {
+        this.$emit('input', val)
+        this.$emit('change', val)
+      },
+      immediate: true
     },
     value(val) {
       this.innerValue = val
