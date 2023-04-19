@@ -219,6 +219,7 @@
                   v-else
                   v-model="item.fieldValue"
                   key="time2"
+                  @input="input()"
                   :picker-options="item['picker-options']"
                   placeholder="请选择"
                   clearable
@@ -256,6 +257,7 @@
                   v-else
                   v-model="item.fieldValue"
                   clearable
+                  @input="input()"
                   :disabled="item.disabled"
                   key="year2"
                   placeholder="请选择"
