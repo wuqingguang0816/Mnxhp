@@ -100,21 +100,21 @@ export default {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            if (!element.printData) {
-              dom.innerHTML = ''
-              this.initData();
-              this.loading = false;
-              break;
-            }
+            
             // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
+            element.printData =null
+            if (!element.printData) {
+              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g,"");
+            }
             await this.handleData(element, domCurrent);
-            this.batchData[index] = this.printTemplate;
+            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g,"");
             if (index == array.length - 1) {
               this.showContainer = false
-              this.loading = false;
             }
           }
+          
+          this.loading = false;
         });
       });
     },
@@ -176,6 +176,7 @@ export default {
 
 .header-page {
   vertical-align: middle;
+  min-width: 300px;
   .el-button {
     margin: 0 10px;
   }

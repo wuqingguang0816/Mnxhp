@@ -95,8 +95,16 @@ export default {
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             // 给table加标识
             this.tagTable(domCurrent);
+            
+            if(!res.data.printData){
+              this.printTemplate = domCurrent.innerHTML
+              this.batchData[index] =  this.printTemplate.replace(/\{(.*?)\}/g,"")
+              this.loading = false;
+              break
+            }
+
             await this.handleData(res.data, domCurrent, index);
-            this.batchData[index] = this.printTemplate;
+            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g,"");
             this.showContainer = false;
             this.loading = false;
           }
