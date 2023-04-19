@@ -3609,6 +3609,8 @@ export default {
     fieldTypeChange(item) {
       item.field = ''
       item.fieldName = ''
+      item.jnpfKey = ''
+      item.fieldValue = ''
     },
     fieldValueChange(val, item) {
       let obj = this.usedFormItems.filter(o => o.__vModel__ == val)[0]
