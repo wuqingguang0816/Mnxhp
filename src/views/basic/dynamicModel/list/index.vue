@@ -179,9 +179,9 @@
                         :filterable="item.filterable"
                         :multiple="item.multiple||item.jnpfKey==='checkbox'"
                         :clearable="item.clearable" :disabled="item.disabled">
-                        <el-option :label="oItem[item.__config__.props.label]"
-                          v-for="(oItem, i) in item.__slot__.options"
-                          :value="oItem[item.__config__.props.value]" :key="i"></el-option>
+                        <el-option :label="oItem[item.props.props.label]"
+                          v-for="(oItem, i) in item.options" :value="oItem[item.props.props.value]"
+                          :key="i"></el-option>
                       </el-select>
                     </template>
                     <template v-else-if="item.jnpfKey==='cascader'">
@@ -1383,7 +1383,7 @@ export default {
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
             getDictionaryDataSelector(config.dictionaryType).then(res => {
-              isTreeSelect ? cur.options = res.data.list : cur.__slot__.options = res.data.list
+              cur.options = res.data.list
             })
           }
           if (config.dataType === 'dynamic') {
@@ -1394,9 +1394,9 @@ export default {
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let data = res.data
               if (Array.isArray(data)) {
-                isTreeSelect ? cur.options = data : cur.__slot__.options = data
+                cur.options = data
               } else {
-                isTreeSelect ? cur.options = [] : cur.__slot__.options = []
+                cur.options = []
               }
             })
           }
