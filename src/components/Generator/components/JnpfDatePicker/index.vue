@@ -72,7 +72,6 @@ export default {
     endTime(val) {
       this.innerEndTime = val
     },
-
   },
   computed: {
     readOnly() {
@@ -101,7 +100,9 @@ export default {
       }
     }
   },
-  created() { },
+  created() {
+    this.$emit('change', this.innerValue)
+  },
   mounted() { },
   methods: {
     change(val) {

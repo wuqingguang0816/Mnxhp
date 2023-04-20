@@ -55,6 +55,7 @@ export default {
   },
   computed: {},
   created() {
+    this.onChange()
   },
   mounted() { },
   methods: {

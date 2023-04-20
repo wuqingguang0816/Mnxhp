@@ -75,7 +75,9 @@ export default {
     },
   },
   computed: {},
-  created() { },
+  created() {
+    this.$emit('change', this.innerValue)
+  },
   mounted() { },
   methods: {}
 

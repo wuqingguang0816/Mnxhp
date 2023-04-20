@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if='!thousands && !controlsPosition'>
+    <!-- <template v-if='!thousands && !controlsPosition'>
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
@@ -10,13 +10,13 @@
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
       </div>
-    </template>
-    <template v-else-if='thousands && !controlsPosition'>
+    </template> -->
+    <template v-if='!controlsPosition'>
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
           :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
-          :controls-position="controlsPosition==='right'?'right':''"
+          :controls-position="controlsPosition==='right'?'right':''" :key="key2"
           :controls="!controlsPosition?false:true" @change="change">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
@@ -60,7 +60,7 @@ export default {
     },
     precision: {
       type: Number,
-      default: undefined
+      default: 0
     },
     disabled: {
       type: Boolean,
@@ -94,7 +94,8 @@ export default {
   data() {
     return {
       innerValue: this.value,
-      amountChineseName: ''
+      amountChineseName: '',
+      key2: ''
     }
   },
   watch: {
@@ -104,6 +105,7 @@ export default {
         this.$emit('change', val || 0)
         this.amountChinese(val)
       },
+      immediate: true,
       deep: true
     },
     value: {
@@ -116,6 +118,9 @@ export default {
     isAmountChinese() {
       this.amountChinese(this.innerValue)
     },
+    thousands(val) {
+      this.key2 = +new Date()
+    }
   },
   computed: {
 
@@ -129,40 +134,42 @@ export default {
       // 被绑定元素插入父节点时调用
       inserted: (el, binding, vnode) => {
         let precision = vnode.child.precision
+        let thousands = vnode.context.thousands
         // 获取input节点
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        // 千分位
-        el.value = parseFloat(el.value).toLocaleString('zh', {
-          minimumFractionDigits: precision,
-          maximumFractionDigits: precision
-        })
-        // 聚焦转化为数字格式（去除千分位）
-        el.onfocus = e => {
-          let a = el.value.replace(/,/g, '') //去除千分号的','
-          el.value = parseFloat(a).toFixed(precision)
+        if (thousands) {
+          // 千分位
+          el.value = vnode.context.format_number_thousandth(el.value)
+          // 聚焦转化为数字格式（去除千分位）
+          el.onfocus = e => {
+            let a = el.value.replace(/,/g, '') //去除千分号的','
+            el.value = parseFloat(a).toFixed(precision)
+          }
+          el.onblur = e => {
+            el.value = vnode.context.delcommafy(el.value)
+            el.value = vnode.context.format_number_thousandth(el.value)
+          }
+        } else {
+          el.value = el.value
         }
-        el.onblur = e => {
-          el.value = parseFloat(el.value).toLocaleString('zh', {
-            minimumFractionDigits: precision,
-            maximumFractionDigits: precision
-          })
-        }
+
+
       },
       componentUpdated: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
         el.focus()
         let precision = vnode.child.precision
-        if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
-          el = el.getElementsByTagName('input')[0]
-        }
-        // 聚焦转化为数字格式（去除千分位）
-        el.onblur = e => {
-          el.value = parseFloat(el.value).toLocaleString('zh', {
-            minimumFractionDigits: precision,
-            maximumFractionDigits: precision
-          })
+        let thousands = vnode.context.thousands
+        if (thousands) {
+          if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
+            el = el.getElementsByTagName('input')[0]
+          }
+          el.onblur = e => {
+            el.value = vnode.context.delcommafy(el.value)
+            el.value = vnode.context.format_number_thousandth(el.value)
+          }
         }
         el.value = el.value ? el.value : null
       },
@@ -184,11 +191,67 @@ export default {
     },
     change() {
       if (typeof this.innerValue === 'undefined') this.innerValue = null
-      this.$emit('input', this.innerValue || 0)
-      this.$emit('change', this.innerValue || 0)
+    },
+    format_number_thousandth(number) {
+      if (!number) {
+        return null
+      } else {
+        let dec_point = '.'
+        let thousands_sep = ','
+        number = (number + '').replace(/[^0-9+-Ee.]/g, '')
+        let roundtag = 'round' // "ceil","floor","round"
+        const n = !isFinite(+number) ? 0 : Number(number) // 检查number是否是无穷大
+        const prec = !isFinite(+this.precision) ? 0 : Math.abs(this.precision)
+        const sep = typeof thousands_sep === 'undefined' ? ',' : thousands_sep
+        const dec = typeof dec_point === 'undefined' ? '.' : dec_point
+        let s = ''
+        const toFixedFix = function (n, prec) {
+          n = Number(n)
+          prec = Number(prec)
+          const k = Math.pow(10, prec) // 10 的 prec 次幂
+          return (
+            '' +
+            parseFloat(
+              Math[roundtag](parseFloat((n * k).toFixed(prec * 2))).toFixed(
+                prec * 2
+              )
+            ) /
+            k
+          ) // 解析一个字符串，并返回一个浮点数。
+        }
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.')
+        const re = /(-?\d+)(\d{3})/
+        while (re.test(s[0])) {
+          s[0] = s[0].replace(re, '$1' + sep + '$2')
+        }
+        if ((s[1] || '').length < prec) {
+          s[1] = s[1] || ''
+          s[1] += new Array(prec - s[1].length + 1).join('0')
+        }
+        // 当数字位数过长去除科学计数法
+        return s.join(dec)
+      }
+    },
+    toNonExponential(num) {
+      if (num.indexOf('E') !== -1 || num.indexOf('e') !== -1) {
+        // 验证是否为科学计数法
+        const m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/)
+        return num.toFixed(Math.max(0, (m[1] || '').length - m[2]))
+      } else {
+        return num
+      }
+    },
+    delcommafy(num) {
+      if (num === null) {
+        return null
+      }
+      if ((num + '').trim() === '') {
+        return ''
+      }
+      num = String(num).replace(/,/gi, '')
+      return num
     }
   }
-
 }
 </script>
 <style lang="scss" scoped>

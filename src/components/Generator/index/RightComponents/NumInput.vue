@@ -11,9 +11,9 @@
       <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" />
     </el-form-item>
     <el-form-item label="默认值">
-      <el-input-number v-model="activeData.__config__.defaultValue" placeholder="默认值"
-        :min="activeData.min" :max="activeData.max" :step="activeData.step"
-        :precision="activeData.precision" controls-position="right" @change="change" />
+      <el-input-number v-model="innerVal" placeholder="默认值" :min="activeData.min"
+        :max="activeData.max" :step="activeData.step" :precision="activeData.precision"
+        controls-position="right" @change="change" />
     </el-form-item>
     <el-form-item label="最小值">
       <el-input-number v-model="activeData.min" placeholder="最小值" controls-position="right" />
@@ -22,7 +22,7 @@
       <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
     </el-form-item>
     <el-form-item label="精度">
-      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
+      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" :max="15"
         controls-position="right" />
     </el-form-item>
     <el-form-item label="按钮">
@@ -66,12 +66,20 @@ export default {
   props: ['activeData'],
   mixins: [comMixin],
   data() {
-    return {}
+    return {
+      innerVal: 0
+    }
   },
   created() { },
+  watch: {
+    'activeData.__config__.defaultValue'(val) {
+      this.innerVal = val
+    }
+  },
   methods: {
-    change() {
-      if (typeof this.activeData.__config__.defaultValue === 'undefined') this.activeData.__config__.defaultValue = null
+    change(val) {
+      this.$set(this.activeData.__config__, 'defaultValue', val || 0)
+      this.innerVal = this.activeData.__config__.defaultValue || null
     }
   }
 }
