@@ -289,7 +289,7 @@ export default {
                 item.__config__.defaultValue = val
               } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
                 let format = item.__config__.format === 'HH:mm' ? 'HH:mm:00' : item.__config__.format
-                vale = this.jnpf.toDate(new Date(), format)
+                val = this.jnpf.toDate(new Date(), format)
                 item.__config__.defaultValue = val
               }
             }
