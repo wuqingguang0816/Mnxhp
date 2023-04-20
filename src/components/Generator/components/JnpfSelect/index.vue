@@ -1,7 +1,8 @@
 <template>
   <el-select v-model="innerValue" :placeholder="placeholder" :clearable="clearable"
     @change="onChange()" :multiple="multiple" :disabled="disabled" :filterable="filterable">
-    <el-option v-for="item in options" :key="item.id" :label="item.fullName" :value="item.id">
+    <el-option v-for="item in options" :key="item[props.value]" :label="item[props.label]"
+      :value="item[props.value]">
     </el-option>
   </el-select>
 </template>
@@ -37,6 +38,10 @@ export default {
       type: Boolean,
       default: true
     },
+    props: {
+      label: "fullName",
+      value: "id"
+    }
   },
   data() {
     return {
