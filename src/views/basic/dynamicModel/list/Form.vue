@@ -277,7 +277,7 @@ export default {
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
             if (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time') item.__config__.custom = true
             if (flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
-              if (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
               } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
@@ -286,6 +286,10 @@ export default {
                 } else {
                   val = []
                 }
+                item.__config__.defaultValue = val
+              } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+                let format = item.__config__.format === 'HH:mm' ? 'HH:mm:00' : item.__config__.format
+                vale = this.jnpf.toDate(new Date(), format)
                 item.__config__.defaultValue = val
               }
             }
