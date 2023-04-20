@@ -20,11 +20,11 @@
                 :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 6">
                 <template slot-scope="scope">
                   <div>
-                    <el-tag
-                      v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='6')[0].show"
-                      size="mini" :color="scope.row.category == 1?'#e5ebfe':'#ebe6ff'"
-                      :style="{'color':scope.row.category == 1?'#1448f4':'#5e00f3'}">{{ scope.row.category }}</el-tag>
-                    <span style="margin-left: 10px;">{{ scope.row[item.filedName] }}</span>
+                    <span>
+                      <span
+                        v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='6')[0].show">{{ `【${scope.row.category}】` }}</span>
+                      {{ scope.row[item.filedName] }}
+                    </span>
                   </div>
                 </template>
               </el-table-column>
