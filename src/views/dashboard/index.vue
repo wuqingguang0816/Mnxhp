@@ -58,6 +58,7 @@ export default {
   created() {
     this.portalId = this.userInfo.portalId
     this.getData()
+
   },
   destroyed() {
     this.clearAutoRefresh()
@@ -167,8 +168,9 @@ export default {
       }
     },
     layoutUpdatedEvent() {
+      const system = this.userInfo.systemIds.filter(o => o.currentSystem)[0]
       this.formData.layout = this.layout
-      const query = { formData: JSON.stringify(this.formData) }
+      const query = { formData: JSON.stringify(this.formData), systemId: system.id }
       UpdateCustomPortal(this.portalId, query).then(res => { })
     }
   }
