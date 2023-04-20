@@ -49,16 +49,18 @@ export default {
       refreshData: {},
       timerList: [],
       formData: {},
-      enabledLock: 1
+      enabledLock: 1,
+      systemId: ''
     }
   },
   computed: {
     ...mapGetters(['userInfo'])
   },
   created() {
+    const system = this.userInfo.systemIds.filter(o => o.currentSystem)[0]
+    this.systemId = system.id
     this.portalId = this.userInfo.portalId
     this.getData()
-
   },
   destroyed() {
     this.clearAutoRefresh()
@@ -74,7 +76,7 @@ export default {
         this.noData = true
         return
       }
-      getAuthPortal(this.portalId, { platform: 'pc' }).then(res => {
+      getAuthPortal(this.portalId, { platform: 'pc', systemId: this.systemId }).then(res => {
         this.type = res.data.type || 0
         this.linkType = res.data.linkType || 0
         this.url = res.data.customUrl
@@ -168,9 +170,8 @@ export default {
       }
     },
     layoutUpdatedEvent() {
-      const system = this.userInfo.systemIds.filter(o => o.currentSystem)[0]
       this.formData.layout = this.layout
-      const query = { formData: JSON.stringify(this.formData), systemId: system.id }
+      const query = { formData: JSON.stringify(this.formData), systemId: this.systemId }
       UpdateCustomPortal(this.portalId, query).then(res => { })
     }
   }
