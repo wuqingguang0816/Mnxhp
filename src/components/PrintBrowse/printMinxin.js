@@ -123,14 +123,18 @@ const printOptionApi = {
         this.recordList = data.operatorRecordList || []
         this.$nextTick(async () => {
           this.printTemplate = domCurrent.innerHTML
-
+          // 子副表
           await this.subDo(domCurrent)
-
+          
           this.replaceValue(this.data)
           this.replaceSysValue()
+          
+          // 替换主表
           this.replaceImg()
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
+          
+          this.replaceNum()
 
 
           const pageBreak = '<p style="page-break-after:always;"></p>'
@@ -139,6 +143,62 @@ const printOptionApi = {
         })
 
       })
+    },
+    replaceNum(){
+      let dataList = dom.querySelectorAll('span')
+      dataList.forEach(element => {
+        let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
+        let dataKey = element.innerText
+        if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
+          if (dataTag == 'headTable') {
+            this.mainData.push(dataKey)
+          } else {
+            let dataTagArr = this.subData[dataTag]
+            if (!dataTagArr) dataTagArr = []
+            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{", "").replace("}", ""))
+            this.subData[dataTag] = dataTagArr
+          }
+        }
+      })
+      var stringToHTML = function (str) {
+        var dom = document.createElement('div');
+        dom.innerHTML = str;
+        return dom;
+      };
+      let reg = /大写金额\((.+?)\)/g;
+      let list = this.printTemplate.match(reg);
+      if (list && list.length) {
+        for (let i = 0; i < list.length; i++) {
+          const element = list[i];
+          let data = this.getAmount(element)
+          if (isNaN(data)) {
+            data = stringToHTML(data)
+            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
+            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
+            let value = subDataTag == 'headTable' ? getAmountChinese(this.data[data_]) : getAmountChinese(this.data[subDataTag][0][data_])
+            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, element, getAmountChinese(data))
+          }
+        }
+      }
+      let reg1 = /千位分隔符\((.+?)\)/g;
+      let list1 = this.printTemplate.match(reg1);
+      if (list1 && list1.length) {
+        for (let i = 0; i < list1.length; i++) {
+          const element = list1[i];
+          let [data, place] = this.getAmount(element).split(',')
+          if (isNaN(data)) {
+            data = stringToHTML(data)
+            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
+            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
+            let value = subDataTag == 'headTable' ? this.getThousands(this.data[data_], place) : this.getThousands(this.data[subDataTag][0][data_], place)
+            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+          } else {
+            this.printTemplate = this.replaceAll(this.printTemplate, element, this.getThousands(data, place))
+          }
+        }
+      }
     },
     replaceBarCodeMain(childItem) {
       let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
@@ -291,62 +351,7 @@ const printOptionApi = {
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
     },
-    handleDataType(dom) {
-      let dataList = dom.querySelectorAll('span')
-      dataList.forEach(element => {
-        let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
-        let dataKey = element.innerText
-        if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
-          if (dataTag == 'headTable') {
-            this.mainData.push(dataKey)
-          } else {
-            let dataTagArr = this.subData[dataTag]
-            if (!dataTagArr) dataTagArr = []
-            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{", "").replace("}", ""))
-            this.subData[dataTag] = dataTagArr
-          }
-        }
-      })
-      var stringToHTML = function (str) {
-        var dom = document.createElement('div');
-        dom.innerHTML = str;
-        return dom;
-      };
-      let reg = /大写金额\((.+?)\)/g;
-      let list = this.printTemplate.match(reg);
-      if (list && list.length) {
-        for (let i = 0; i < list.length; i++) {
-          const element = list[i];
-          let data = this.getAmount(element)
-          if (isNaN(data)) {
-            data = stringToHTML(data)
-            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
-            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
-            let value = subDataTag == 'headTable' ? getAmountChinese(this.data[data_]) : getAmountChinese(this.data[subDataTag][0][data_])
-            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, element, getAmountChinese(data))
-          }
-        }
-      }
-      let reg1 = /千位分隔符\((.+?)\)/g;
-      let list1 = this.printTemplate.match(reg1);
-      if (list1 && list1.length) {
-        for (let i = 0; i < list1.length; i++) {
-          const element = list1[i];
-          let [data, place] = this.getAmount(element).split(',')
-          if (isNaN(data)) {
-            data = stringToHTML(data)
-            let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
-            let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
-            let value = subDataTag == 'headTable' ? this.getThousands(this.data[data_], place) : this.getThousands(this.data[subDataTag][0][data_], place)
-            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
-          } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, element, this.getThousands(data, place))
-          }
-        }
-      }
-    },
+
     getThousands(value, place) {
       place = place ? place : this.getPlace(value)
       return parseFloat(value).toLocaleString('zh', {
@@ -361,15 +366,7 @@ const printOptionApi = {
       var count = value.toString().length - index;
       return count
     },
-    replaceMainValue(mainData) {
-      let template = JSON.parse(JSON.stringify(this.printTemplate))
-      for (let key in this.data) {
-        if (mainData.includes(`{${key}}`)) {
-          template = template.replace(`{${key}}`, this.data[key] || this.data[key] == 0 ? this.data[key] : '')
-        }
-      }
-      this.printTemplate = template
-    },
+    
     replaceValue(data) {
       for (let key in data) {
         this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
