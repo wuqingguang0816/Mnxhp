@@ -96,8 +96,7 @@ export default {
                 item.__config__.defaultValue = []
               }
             } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
-              let format = item.__config__.format === 'HH:mm' ? 'HH:mm:00' : item.__config__.format
-              item.__config__.defaultValue = this.jnpf.toDate(new Date(), format)
+              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
             }
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
