@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="never" class="portal-eChart-box">
+  <el-card shadow="never" class="portal-eChart-box portal-time-box">
     <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
       :card="activeData.card" />
     <div class="portal-box-body "
@@ -92,6 +92,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.ortal-time-box {
+  display: flex;
+  flex-direction: column;
+}
 .portal-box-body {
   height: 100%;
   overflow: auto;
