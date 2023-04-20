@@ -90,8 +90,8 @@ export default {
       if(ruleData && ruleData.length > 0){
         this.pconditions = JSON.parse(JSON.stringify(ruleData));
       }else{
+        this.$store.commit("generator/SET_FILTER_DATA",JSON.parse(JSON.stringify(data)))
         this.pconditions = data;
-        this.$store.commit("generator/SET_FILTER_DATA",ruleData)
       }
       this.buildOptions(data)
       
@@ -99,6 +99,7 @@ export default {
     buildOptions(componentList) {
       componentList.forEach(cur => {
         const config = cur.__config__
+        if(!config) return
         if (config.jnpfKey === 'cascader') cur.props.props.multiple = false
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'

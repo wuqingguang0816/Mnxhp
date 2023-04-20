@@ -758,14 +758,15 @@ export default {
       }
       item = { ...item, ...this.columnDataMap[val] };
 
-      if (item.jnpfKey != this.nowJnpfKey) {
-        item.symbol = undefined;
-      }
+     
       if(['null','notNull'].includes(item.symbol)){
         item.disabled = true
       }else{
         item.disabled = false
       }
+      // 清空数据
+      item.symbol = undefined;
+
       this.$set(this.pconditions, i, item);
       this.nowJnpfKey = item.jnpfKey;
     },
