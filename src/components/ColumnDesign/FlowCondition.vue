@@ -85,9 +85,16 @@ export default {
   },
   methods: {
     init(data) {
-      this.pconditions = data;
+      // 从缓存拿暂存数据
+      let ruleData = this.$store.getters.ruleData;
+      if(ruleData && ruleData.length > 0){
+        this.pconditions = JSON.parse(JSON.stringify(ruleData));
+      }else{
+        this.pconditions = data;
+        this.$store.commit("generator/SET_FILTER_DATA",ruleData)
+      }
       this.buildOptions(data)
-      this.tempCondition = JSON.parse(JSON.stringify(this.pconditions));
+      
     },
     buildOptions(componentList) {
       componentList.forEach(cur => {
@@ -155,13 +162,12 @@ export default {
         }
         let cloneConditions = JSON.parse(JSON.stringify(this.pconditions));
         this.$emit("ruleConfig", cloneConditions);
-        this.tempCondition = cloneConditions;
-
+        this.$store.commit("generator/SET_FILTER_DATA",cloneConditions)
         this.dialogVisible = false;
       });
     },
     handleClose() {
-      this.$emit("ruleConfig", this.tempCondition);
+      this.$emit("ruleConfig", this.$store.getters.ruleData);
       this.dialogVisible = false;
     },
     show(data) {
