@@ -131,6 +131,7 @@ export default {
             return;
           }
           if (!k.fieldValue) {
+            if ((k.jnpfKey == 'numInput' || k.jnpfKey == 'calculate') && k.fieldValue == 0) return valid = true;
             this.$message.warning("数据值不能为空");
             valid = false;
             return;

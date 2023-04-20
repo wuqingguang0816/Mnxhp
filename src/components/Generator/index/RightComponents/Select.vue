@@ -155,7 +155,6 @@ export default {
     }
   },
   methods: {
-
     selectChange() {
       this.$emit('changeSelect')
       this.dictionaryTypeChange(this.dictionaryId)

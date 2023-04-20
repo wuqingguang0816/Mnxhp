@@ -60,7 +60,7 @@ export default {
           maximumFractionDigits: this.precision
         })
       } else {
-        this.innerValue = this.innerValue.toFixed(this.precision || 0)
+        this.innerValue = Number(this.innerValue).toFixed(this.precision || 0)
       }
       return this.innerValue
     },

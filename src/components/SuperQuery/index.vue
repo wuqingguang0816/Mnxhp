@@ -390,6 +390,7 @@ export default {
       this.$refs.planPopper.doClose()
     },
     addPlan() {
+      if (!this.conditionList.length) return this.$message.warning('请添加条件')
       if (!this.exist()) return
       this.addPlanVisible = true
       this.$nextTick(() => {
