@@ -288,8 +288,7 @@ export default {
                 }
                 item.__config__.defaultValue = val
               } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
-                val = this.jnpf.toDate(new Date(), item.__config__.format)
-                item.__config__.defaultValue = val
+                item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
               }
             }
             if (!this.isPreview && this.useFormPermission) {
