@@ -1092,6 +1092,8 @@ export default {
           } else {
             item[e.__vModel__] = []
           }
+        } else if (e.__config__.jnpfKey === 'time' && e.__config__.defaultCurrent == true) {
+          item[e.__vModel__] = this.jnpf.toDate(new Date(), item.__config__.format)
         }
       }
       this.list.unshift(item)
