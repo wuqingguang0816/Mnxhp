@@ -53,7 +53,7 @@ export function delPortal(id) {
 //发布
 export function Release(id, data) {
   return request({
-    url: `/api//Portal/Actions/release/${id}/${data.systemId}`,
+    url: `/api/Portal/Actions/release/${id}`,
     method: 'put',
     data
   })

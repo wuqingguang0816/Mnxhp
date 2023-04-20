@@ -42,7 +42,7 @@ export default {
       this.$emit('update:visible', false)
     },
     confirm() {
-      let query = { itemType: 'portal', objectType: 'Role', objectId: this.selectedData }
+      let query = { itemType: 'portalManage', objectType: 'Role', objectId: this.selectedData }
       query.systemId = this.systemIdw
       setModelData(this.id, query).then(res => {
         this.$message({
