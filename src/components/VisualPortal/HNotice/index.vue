@@ -31,7 +31,7 @@
             </template>
           </JNPF-table>
         </template>
-        <template v-if="activeData.option.styleType==2">
+        <template v-if="activeData.option.styleType!=1">
           <template v-if="defaultValue.length">
             <div style="padding: 0 18px;">
               <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box"
@@ -41,122 +41,86 @@
                   :style="{'background': activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
                   <div class="item-image-box" v-if="activeData.option.showImage">
                     <img v-if="item.category == '公告'"
-                      :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                      :src="item.coverImage ? (define.comUrl+item.coverImage) : coverImage" alt=""
                       class="item-image">
-                    <img v-else :src="item.coverImage ? define.comUrl+item.coverImage : coverImage2"
-                      alt="" class="item-image">
+                    <img v-else
+                      :src="item.coverImage ? (define.comUrl+item.coverImage) : coverImage2" alt=""
+                      class="item-image">
                   </div>
-                  <div class="itme-content-box">
-                    <div class="item-title">
+                  <div class="item-r">
+                    <div class="item-r-inner">
                       <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
                         v-if="list[0].show"
                         :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category}}</el-tag>
-                      <span class="item-left-span" v-if="list[1].show"
-                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
-                      <div v-if="list[3].show">
-                        <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
-                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
-                        <span class="item-right-span" v-else
-                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                      <p class="item-r-title" v-if="list[1].show"
+                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
+                        {{ item.fullName }}
+                      </p>
+                      <div v-if="activeData.option.styleType==2 && list[3].show">
+                        <p v-if="list[3].timeClassify === '创建时间'"
+                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                          {{ item.creatorTime| toDateValue()}}</p>
+                        <p v-else
+                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                          {{item.releaseTime| toDateValue()}}</p>
                       </div>
                     </div>
                     <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
-                      class="itme-content" v-if="list[2].show">
+                      class="item-r-content" v-if="list[2].show">
                       {{ item.excerpt }}</p>
+                    <div v-if="activeData.option.styleType==3 && list[3].show" class="item-r-time">
+                      <p v-if="list[3].timeClassify === '创建时间'"
+                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                        {{ item.creatorTime| toDateValue()}}</p>
+                      <p v-else
+                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                        {{item.releaseTime| toDateValue()}}</p>
+                    </div>
                   </div>
                 </div>
                 <div v-else
                   :style="{background: activeData.option.noticeEvenyLineColor ? activeData.option.noticeEvenyLineColor : activeData.option.noticeBgColor }"
                   class="portal-list-item">
                   <div class="item-image-box" v-if="activeData.option.showImage">
-                    <img :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
+                    <img v-if="item.category == '公告'"
+                      :src="item.coverImage ? define.comUrl+item.coverImage : coverImage" alt=""
                       class="item-image">
+                    <img v-else :src="item.coverImage ? define.comUrl+item.coverImage : coverImage2"
+                      alt="" class="item-image">
                   </div>
-                  <div class="itme-content-box">
-                    <div class="item-title">
+                  <div class="item-r">
+                    <div class="item-r-inner">
                       <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
                         v-if="list[0].show"
-                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category }}</el-tag>
-                      <span class="item-left-span" v-if="list[1].show"
-                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
-                      <div v-if="list[3].show">
-                        <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
-                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
-                        <span class="item-right-span" v-else
-                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category}}</el-tag>
+                      <p class="item-r-title" v-if="list[1].show"
+                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
+                        {{ item.fullName }}
+                      </p>
+                      <div v-if="activeData.option.styleType==2 && list[3].show">
+                        <p v-if="list[3].timeClassify === '创建时间'"
+                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                          {{ item.creatorTime| toDateValue()}}</p>
+                        <p v-else
+                          :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                          {{item.releaseTime| toDateValue()}}</p>
                       </div>
                     </div>
                     <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
-                      class="itme-content" v-if="list[2].show">
+                      class="item-r-content" v-if="list[2].show">
                       {{ item.excerpt }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </template>
-          <div class="portal-common-noData" v-else>
-            <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
-            <p class="noData-txt">暂无数据</p>
-          </div>
-        </template>
-        <template v-if="activeData.option.styleType==3">
-          <template v-if="defaultValue.length">
-            <div style="padding: 0 18px;">
-              <div v-for="(item, i) in defaultValue" class="portal-list-box" :key="i"
-                @click="readInfo(item)"
-                :style="{'border-bottom':i == defaultValue.length-1 ? 'none':'1px solid #ebeef5'}">
-                <div class="portal-list-item" v-if=' i% 2 == 0'
-                  :style="{background: activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
-                  <div class="item-image-box">
-                    <img src="@/assets/images/gg.png" alt="" class="item-image">
-                  </div>
-                  <div style="" class="itme-content-box">
-                    <div class="item-title">
-                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
-                        v-if="list[0].show"
-                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category == '公告'?'公告':'通知' }}</el-tag>
-                      <span class="item-left-span" v-if="list[1].show"
-                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
-                    </div>
-                    <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
-                      class="itme-content" v-if="list[2].show">
-                      {{ item.excerpt }}</p>
-                    <div v-if="list[3].show">
-                      <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
-                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
-                      <span class="item-right-span" v-else
-                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="portal-list-item" v-else
-                  :style="{background: activeData.option.noticeEvenyLineColor ? activeData.option.noticeEvenyLineColor : activeData.option.noticeBgColor }">
-                  <div class="item-image-box">
-                    <img src="@/assets/images/gg.png" alt="" class="item-image">
-                  </div>
-                  <div style="" class="itme-content-box">
-                    <div class="item-title">
-                      <el-tag size="mini" :color="item.category == 1?'#ebe6ff':'#e5ebfe'"
-                        v-if="list[0].show"
-                        :style="{'color':item.category == 1?'#9016f3':'#1448f4'}">{{ item.category == 1?'公告':'通知' }}</el-tag>
-                      <span class="item-left-span" v-if="list[1].show"
-                        :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">{{ item.fullName }}</span>
-                    </div>
-                    <p :style="{'color':list[2].fontColor,'font-size':list[2].fontSize+'px','font-weight':list[2].fontWeight?700:400}"
-                      class="itme-content" v-if="list[2].show">
-                      {{ item.excerpt }}</p>
-                    <div v-if="list[3].show">
-                      <span class="item-right-span" v-if="list[3].timeClassify === '创建时间'"
-                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{ item.creatorTime| toDateValue()}}</span>
-                      <span class="item-right-span" v-else
-                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">{{item.releaseTime| toDateValue()}}</span>
+                    <div v-if="activeData.option.styleType==3 && list[3].show" class="item-r-time">
+                      <p v-if="list[3].timeClassify === '创建时间'"
+                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                        {{ item.creatorTime| toDateValue()}}</p>
+                      <p v-else
+                        :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
+                        {{item.releaseTime| toDateValue()}}</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </template>
           <div class="portal-common-noData" v-else>
             <img src="@/assets/images/portal-nodata.png" alt="" class="noData-img">
@@ -274,6 +238,7 @@ export default {
         height: 100%;
         width: 100%;
         padding: 12px 0;
+        align-items: center;
         .item-image-box {
           width: 52px;
           height: 52px;
@@ -282,30 +247,37 @@ export default {
           .item-image {
             width: 100%;
             height: 100%;
+            border-radius: 50%;
           }
         }
-        .itme-content-box {
+        .item-r {
           flex: 1;
-          margin-left: 10px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          min-width: 0;
-
-          .item-title {
-            .item-left-span {
-              margin-left: 10px;
-            }
-            .item-right-span {
-              float: right;
+          margin-left: 10px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          .item-r-inner {
+            display: flex;
+            margin-bottom: 5px;
+            .item-r-title {
+              overflow: hidden;
+              flex: 1;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              padding: 0 10px;
             }
           }
-          .itme-content {
-            min-width: 0;
+          .item-r-content {
             overflow: hidden;
             white-space: nowrap;
-            -o-text-overflow: ellipsis;
             text-overflow: ellipsis;
+            margin-top: 5px;
+          }
+          .item-r-time {
+            margin-top: 5px;
           }
         }
       }
