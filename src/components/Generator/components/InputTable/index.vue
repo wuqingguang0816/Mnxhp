@@ -355,6 +355,11 @@ export default {
         let item = row[i];
         const cur = row[i].config
         const config = cur.__config__
+        for (let key in this.value[rowIndex]) {
+          if (key === item.__vModel__) {
+            item.value = this.value[rowIndex][key]
+          }
+        }
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
             if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
