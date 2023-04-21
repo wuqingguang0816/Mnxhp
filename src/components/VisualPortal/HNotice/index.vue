@@ -49,9 +49,13 @@
                   </div>
                   <div class="item-r">
                     <div class="item-r-inner">
-                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
-                        v-if="list[0].show"
-                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category}}</el-tag>
+                      <div v-if="list[0].show">
+                        <el-tag v-if="item.category == '公告'" size="mini" :hit="false"
+                          color="#ebe6ff" style="color: #9016f3;">公告</el-tag>
+                        <el-tag v-else-if="item.category == '通知'" :hit="false"
+                          size="mini">通知</el-tag>
+                        <el-tag v-else :hit="false" size="mini" type="warning">其它</el-tag>
+                      </div>
                       <p class="item-r-title" v-if="list[1].show"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
                         {{ item.fullName }}
@@ -90,9 +94,13 @@
                   </div>
                   <div class="item-r">
                     <div class="item-r-inner">
-                      <el-tag size="mini" :color="item.category == '公告'?'#ebe6ff':'#e5ebfe'"
-                        v-if="list[0].show"
-                        :style="{'color':item.category == '公告'?'#9016f3':'#1448f4'}">{{ item.category}}</el-tag>
+                      <div v-if="list[0].show">
+                        <el-tag v-if="item.category == '公告'" size="mini" :hit="false"
+                          color="#ebe6ff" style="color: #9016f3;">公告</el-tag>
+                        <el-tag v-else-if="item.category == '通知'" :hit="false"
+                          size="mini">通知</el-tag>
+                        <el-tag v-else :hit="false" size="mini" type="warning">其它</el-tag>
+                      </div>
                       <p class="item-r-title" v-if="list[1].show"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
                         {{ item.fullName }}
