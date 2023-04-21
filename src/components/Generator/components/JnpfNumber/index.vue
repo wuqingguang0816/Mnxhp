@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import { getAmountChinese } from "@/components/Generator/utils/index"
+import { getAmountChinese, thousandsFormat } from "@/components/Generator/utils/index"
 export default {
   name: 'JNPF-number',
   components: {},
@@ -55,10 +55,7 @@ export default {
   methods: {
     thousandSeparator() {
       if (this.thousands) {
-        this.innerValue = this.innerValue.toLocaleString('zh', {
-          minimumFractionDigits: this.precision,
-          maximumFractionDigits: this.precision
-        })
+        this.innerValue = thousandsFormat(this.innerValue)
       } else {
         this.innerValue = Number(this.innerValue).toFixed(this.precision || 0)
       }

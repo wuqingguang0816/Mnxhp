@@ -1,16 +1,5 @@
 <template>
   <div>
-    <!-- <template v-if='!thousands && !controlsPosition'>
-      <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
-        <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
-        <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :step="step" :precision="precision" :disabled="disabled" class="input-number"
-          :controls-position="controlsPosition==='right'?'right':''"
-          :controls="!controlsPosition?false:true" @change="change">
-        </el-input-number>
-        <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
-      </div>
-    </template> -->
     <template v-if='!controlsPosition'>
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
@@ -33,7 +22,8 @@
   </div>
 </template>
 <script>
-import { getAmountChinese } from "@/components/Generator/utils/index"
+import { getAmountChinese, thousandsFormat } from "@/components/Generator/utils/index"
+
 export default {
   name: 'JNPF-input-number',
   components: {},
@@ -145,7 +135,7 @@ export default {
           // 聚焦转化为数字格式（去除千分位）
           el.onfocus = e => {
             let a = el.value.replace(/,/g, '') //去除千分号的','
-            el.value = parseFloat(a).toFixed(precision)
+            el.value = Number(parseFloat(a)).toFixed(precision)
           }
           el.onblur = e => {
             el.value = vnode.context.delcommafy(el.value)
@@ -154,8 +144,6 @@ export default {
         } else {
           el.value = el.value
         }
-
-
       },
       componentUpdated: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
@@ -192,46 +180,6 @@ export default {
     change() {
       if (typeof this.innerValue === 'undefined') this.innerValue = null
     },
-    format_number_thousandth(number) {
-      if (!number) {
-        return null
-      } else {
-        let dec_point = '.'
-        let thousands_sep = ','
-        number = (number + '').replace(/[^0-9+-Ee.]/g, '')
-        let roundtag = 'round' // "ceil","floor","round"
-        const n = !isFinite(+number) ? 0 : Number(number) // 检查number是否是无穷大
-        const prec = !isFinite(+this.precision) ? 0 : Math.abs(this.precision)
-        const sep = typeof thousands_sep === 'undefined' ? ',' : thousands_sep
-        const dec = typeof dec_point === 'undefined' ? '.' : dec_point
-        let s = ''
-        const toFixedFix = function (n, prec) {
-          n = Number(n)
-          prec = Number(prec)
-          const k = Math.pow(10, prec) // 10 的 prec 次幂
-          return (
-            '' +
-            parseFloat(
-              Math[roundtag](parseFloat((n * k).toFixed(prec * 2))).toFixed(
-                prec * 2
-              )
-            ) /
-            k
-          ) // 解析一个字符串，并返回一个浮点数。
-        }
-        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.')
-        const re = /(-?\d+)(\d{3})/
-        while (re.test(s[0])) {
-          s[0] = s[0].replace(re, '$1' + sep + '$2')
-        }
-        if ((s[1] || '').length < prec) {
-          s[1] = s[1] || ''
-          s[1] += new Array(prec - s[1].length + 1).join('0')
-        }
-        // 当数字位数过长去除科学计数法
-        return s.join(dec)
-      }
-    },
     toNonExponential(num) {
       if (num.indexOf('E') !== -1 || num.indexOf('e') !== -1) {
         // 验证是否为科学计数法
@@ -241,6 +189,9 @@ export default {
         return num
       }
     },
+    format_number_thousandth(num) {
+      return thousandsFormat(num)
+    },
     delcommafy(num) {
       if (num === null) {
         return null
@@ -248,7 +199,7 @@ export default {
       if ((num + '').trim() === '') {
         return ''
       }
-      num = String(num).replace(/,/gi, '')
+      num = num.replace(/\$\s?|(,*)/g, '')
       return num
     }
   }

@@ -1172,7 +1172,7 @@ export const selectComponents = [
       labelWidth: undefined,
       showLabel: true,
       tag: "JnpfAutoComplete",
-      tagIcon: "icon-ym icon-ym-generator-input",
+      tagIcon: "icon-ym icon-ym-generator-autoComplete",
       className: [],
       defaultValue: undefined,
       required: false,
