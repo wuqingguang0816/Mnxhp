@@ -88,7 +88,7 @@ export default {
             that.innerStartTime = new Date(innerStartTime).getTime()
           }
           if (that.innerEndTime) {
-            let innerEndTime = that.jnpf.toDate(that.innerEndTime, 'yyyy-MM-dd 00:00:00')
+            let innerEndTime = that.jnpf.toDate(that.innerEndTime, 'yyyy-MM-dd 23:59:59')
             that.innerEndTime = new Date(innerEndTime).getTime()
           }
           const timeVal = time.getTime()
