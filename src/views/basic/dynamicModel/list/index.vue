@@ -118,14 +118,16 @@
                       <JnpfTimePicker v-model="scope.row[item.prop]" style="width:100%"
                         :placeholder="item.placeholder" :clearable="item.clearable"
                         :valueFormat="item['value-format']" :format="item.format"
-                        :readonly="item.readonly" :disabled="item.disabled">
+                        :readonly="item.readonly" :disabled="item.disabled"
+                        :startTime='item.startTime' :endTime="item.endTime">
                       </JnpfTimePicker>
                     </template>
                     <template v-else-if="item.jnpfKey==='date'">
                       <JnpfDatePicker v-model="scope.row[item.prop]" :type="item.type"
                         :clearable="item.clearable" :placeholder="item.placeholder"
                         :valueFormat="item['value-format']" :format="item.format" style="width:100%"
-                        :readonly="item.readonly" :disabled="item.disabled">
+                        :readonly="item.readonly" :disabled="item.disabled"
+                        :startTime='item.startTime' :endTime="item.endTime">
                       </JnpfDatePicker>
                     </template>
                     <template v-else-if="['comSelect'].includes(item.jnpfKey)">
@@ -510,7 +512,7 @@ import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
 import { mapGetters } from "vuex";
-
+import { getDateDay, getLaterData, getBeforeData, getBeforeTime, getLaterTime } from '@/components/Generator/utils/index.js'
 export default {
   name: 'dynamicModel',
   components: { PrintDialog, PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox, RelevanceDetail },
@@ -984,6 +986,7 @@ export default {
     },
     editForRowEdit(row) {
       row.rowEdit = true
+      this.addHandleForRowEdit(true)
       if (!row.flowId) return
       const list = this.flowList.filter(o => o.id === row.flowId)
       if (!list.length) return
@@ -1077,26 +1080,128 @@ export default {
       let item = JSON.parse(JSON.stringify(this.cacheList[index]))
       this.$set(this.list, index, item)
     },
-    addHandleForRowEdit() {
+    addHandleForRowEdit(flag) {
       let item = {
         rowEdit: true
       }
       for (let i = 0; i < this.columnData.columnList.length; i++) {
         let e = this.columnData.columnList[i]
         item[e.__vModel__] = e.__config__.defaultValue
-        if (e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
-          item[e.__vModel__] = new Date().getTime()
+        const config = e.__config__
+        if (e.__config__.jnpfKey === 'date') {
+          if (e.__config__.defaultCurrent == true) item[e.__vModel__] = new Date().getTime()
+          if (config.startTimeRule) {
+            if (config.startTimeType == 1) {
+              e.startTime = config.startTimeValue
+            } else if (config.startTimeType == 3) {
+              e.startTime = new Date().getTime()
+            } else if (config.startTimeType == 4) {
+              let previousDate = '';
+              if (config.startTimeTarget == 1 || config.startTimeTarget == 2) {
+                previousDate = getDateDay(config.startTimeTarget, config.startTimeType, config.startTimeValue)
+                e.startTime = new Date(previousDate).getTime()
+              } else if (config.startTimeTarget == 3) {
+                previousDate = getBeforeData(config.startTimeValue)
+                e.startTime = new Date(previousDate).getTime()
+              } else {
+                e.startTime = getBeforeTime(config.startTimeTarget, config.startTimeValue).getTime()
+              }
+            } else if (config.startTimeType == 5) {
+              let previousDate = '';
+              if (config.startTimeTarget == 1 || config.startTimeTarget == 2) {
+                previousDate = getDateDay(config.startTimeTarget, config.startTimeType, config.startTimeValue)
+                e.startTime = new Date(previousDate).getTime()
+              } else if (config.startTimeTarget == 3) {
+                previousDate = getLaterData(config.startTimeValue)
+                e.startTime = new Date(previousDate).getTime()
+              } else {
+                e.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue).getTime()
+              }
+            }
+          }
+          if (config.endTimeRule) {
+            if (config.endTimeType == 1) {
+              e.endTime = config.endTimeValue
+            } else if (config.endTimeType == 3) {
+              e.endTime = new Date().getTime()
+            } else if (config.endTimeType == 4) {
+              let previousDate = '';
+              if (config.endTimeTarget == 1 || config.endTimeTarget == 2) {
+                previousDate = getDateDay(config.endTimeTarget, config.endTimeType, config.endTimeValue)
+                e.endTime = new Date(previousDate).getTime()
+              } else if (config.endTimeTarget == 3) {
+                previousDate = getBeforeData(config.endTimeValue)
+                e.endTime = new Date(previousDate).getTime()
+              } else {
+                e.endTime = getBeforeTime(config.endTimeTarget, config.endTimeValue).getTime()
+              }
+            } else if (config.endTimeType == 5) {
+              let previousDate = '';
+              if (config.endTimeTarget == 1 || config.endTimeTarget == 2) {
+                previousDate = getDateDay(config.endTimeTarget, config.endTimeType, config.endTimeValue)
+                e.endTime = new Date(previousDate).getTime()
+              } else if (config.endTimeTarget == 3) {
+                previousDate = getLaterData(config.endTimeValue)
+                e.endTime = new Date(previousDate).getTime()
+              } else {
+                e.endTime = getLaterTime(config.endTimeTarget, config.endTimeValue).getTime()
+              }
+            }
+          }
+
         } else if (e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true) {
           if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
             item[e.__vModel__] = e.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
           } else {
             item[e.__vModel__] = []
           }
-        } else if (e.__config__.jnpfKey === 'time' && e.__config__.defaultCurrent == true) {
-          item[e.__vModel__] = this.jnpf.toDate(new Date(), e.format)
+        } else if (e.__config__.jnpfKey === 'time') {
+          if (e.__config__.defaultCurrent == true) item[e.__vModel__] = this.jnpf.toDate(new Date(), e.format)
+          let format = e.format === 'HH:mm' ? 'HH:mm:00' : e.format
+          if (config.startTimeRule) {
+            if (config.startTimeType == 1) {
+              e.startTime = config.startTimeValue || '00:00:00'
+              if (e.startTime.split(':').length == 3) {
+                e.startTime = e.startTime
+              } else {
+                e.startTime = e.startTime + ':00'
+              }
+            } else if (config.startTimeType == 3) {
+              e.startTime = this.jnpf.toDate(new Date(), format)
+            } else if (config.startTimeType == 4) {
+              let previousDate = '';
+              previousDate = getBeforeTime(config.startTimeTarget, config.startTimeValue)
+              e.startTime = this.jnpf.toDate(previousDate, format)
+            } else if (config.startTimeType == 5) {
+              let previousDate = '';
+              previousDate = getLaterTime(config.startTimeTarget, config.startTimeValue)
+              e.startTime = this.jnpf.toDate(previousDate, format)
+            }
+          }
+          if (config.endTimeRule) {
+            if (config.endTimeType == 1) {
+              e.endTime = config.endTimeValue || '23:59:59'
+              if (e.endTime.split(':').length == 3) {
+                e.endTime = e.endTime
+              } else {
+                e.endTime = e.endTime + ':00'
+              }
+            } else if (config.endTimeType == 3) {
+              e.endTime = this.jnpf.toDate(new Date(), format)
+            } else if (config.endTimeType == 4) {
+              let previousDate = '';
+              previousDate = getBeforeTime(config.endTimeTarget, config.endTimeValue)
+              e.endTime = this.jnpf.toDate(previousDate, format)
+            } else if (config.endTimeType == 5) {
+              let previousDate = '';
+              previousDate = getLaterTime(config.endTimeTarget, config.endTimeValue)
+              e.endTime = this.jnpf.toDate(previousDate, format)
+            }
+          }
+
         }
       }
-      this.list.unshift(item)
+      if (!flag) this.list.unshift(item)
     },
     addHandle() {
       if (this.config.enableFlow == 1) {

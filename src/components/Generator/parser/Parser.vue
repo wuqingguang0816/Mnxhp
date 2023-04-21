@@ -505,9 +505,7 @@ export default {
               } else {
                 cur.startTime = getLaterTime(config.startTimeTarget, config.startTimeValue).getTime()
               }
-
             }
-
           }
           if (config.endTimeRule) {
             if (config.endTimeType == 1) {
