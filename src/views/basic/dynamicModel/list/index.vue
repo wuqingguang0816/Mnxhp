@@ -116,9 +116,9 @@
                     </div>
                     <template v-else-if="item.jnpfKey==='time'">
                       <JnpfTimePicker v-model="scope.row[item.prop]" style="width:100%"
-                        :picker-options="item['picker-options']" :placeholder="item.placeholder"
-                        :clearable="item.clearable" :valueFormat="item['value-format']"
-                        :format="item.format" :readonly="item.readonly" :disabled="item.disabled">
+                        :placeholder="item.placeholder" :clearable="item.clearable"
+                        :valueFormat="item['value-format']" :format="item.format"
+                        :readonly="item.readonly" :disabled="item.disabled">
                       </JnpfTimePicker>
                     </template>
                     <template v-else-if="item.jnpfKey==='date'">
@@ -1093,7 +1093,7 @@ export default {
             item[e.__vModel__] = []
           }
         } else if (e.__config__.jnpfKey === 'time' && e.__config__.defaultCurrent == true) {
-          item[e.__vModel__] = this.jnpf.toDate(new Date(), item.__config__.format)
+          item[e.__vModel__] = this.jnpf.toDate(new Date(), e.format)
         }
       }
       this.list.unshift(item)

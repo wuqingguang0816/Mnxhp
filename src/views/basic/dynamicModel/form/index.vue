@@ -89,7 +89,7 @@ export default {
               }
             }
             else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
-              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
+              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.format)
             }
           }
           if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {

@@ -99,7 +99,7 @@ export default {
               }
               item.__config__.defaultValue = val
             } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
-              val = this.jnpf.toDate(new Date(), item.__config__.format)
+              val = this.jnpf.toDate(new Date(), item.format)
               item.__config__.defaultValue = val
             }
             let noShow = false, isDisabled = false, required = item.__config__.required || false
