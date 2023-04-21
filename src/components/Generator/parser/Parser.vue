@@ -569,9 +569,9 @@ export default {
             }
           }
         }
-        if (!config.custom && config.jnpfKey === 'time') {
+        if (config.jnpfKey === 'time') {
           let format = cur.format === 'HH:mm' ? 'HH:mm:00' : cur.format
-          if (config.defaultCurrent) {
+          if (!config.custom && config.defaultCurrent) {
             config.defaultValue = this.jnpf.toDate(new Date(), format)
           }
           if (config.startTimeRule) {

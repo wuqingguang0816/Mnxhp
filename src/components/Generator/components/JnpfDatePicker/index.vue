@@ -101,7 +101,6 @@ export default {
     }
   },
   created() {
-    this.$emit('change', this.innerValue)
   },
   mounted() { },
   methods: {
