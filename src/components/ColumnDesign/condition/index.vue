@@ -120,8 +120,9 @@
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'" :precision="2"
                   :disabled="item.disabled"></NumRange>
-                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入" :precision="2"
-                  :disabled="item.disabled" :controls="false" controls-position="right" />
+                <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
+                  :precision="item.precision" :disabled="item.disabled" :controls="false"
+                  controls-position="right" />
               </template>
               <template v-else-if="['rate', 'slider'].includes(item.jnpfKey)">
                 <el-input-number v-model="item.fieldValue" placeholder="请输入"
@@ -561,6 +562,9 @@ export default {
       } else {
         item.disabled = false
       }
+      // 清空数据
+      item.symbol = undefined;
+
       this.$set(this.pconditions, i, item);
       this.nowJnpfKey = item.jnpfKey;
     },

@@ -7,10 +7,10 @@
           <div style="display: flex;">
             <el-input v-model="scope.row.fullName" placeholder="请输入名称"
               :disabled="type !=1?true:false" />
-            <el-select v-model="scope.row.classify" multiple placeholder="请选择"
+            <el-select v-model="scope.row.classify" multiple placeholder="请选择类型"
               style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'" filterable>
-              <el-option v-for="item in classifyOptions" :key="item.value" :label="item.fullName"
-                :value="item.value">
+              <el-option v-for="item in classifyOptions" :key="item.enCode" :label="item.fullName"
+                :value="item.enCode">
               </el-option>
             </el-select>
             <el-select v-model="scope.row.timeClassify" placeholder="请选择" style="margin-left: 5px;"
@@ -162,14 +162,7 @@ export default {
           value: 'right',
           fullName: '右对齐'
         }],
-      classifyOptions: [
-        {
-          value: '1',
-          fullName: '公告'
-        }, {
-          value: '2',
-          fullName: '通知'
-        }],
+      classifyOptions: [],
       timeOptions: [
         {
           value: '1',
@@ -193,6 +186,10 @@ export default {
       this.type = type || 1
       this.list = option ? JSON.parse(JSON.stringify(option)) : []
       this.visible = true
+      // 获取公告类型
+      this.$store.dispatch('base/getDictionaryData', { sort: 'NoticeType' }).then(res => {
+        this.classifyOptions = res
+      })
       this.$nextTick(() => {
         this.setSort()
       });

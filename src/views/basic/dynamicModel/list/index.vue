@@ -115,18 +115,18 @@
                         :inactive-value="item['inactive-value']" :disabled="item.disabled" />
                     </div>
                     <template v-else-if="item.jnpfKey==='time'">
-                      <el-time-picker v-model="scope.row[item.prop]" style="width:100%"
+                      <JnpfTimePicker v-model="scope.row[item.prop]" style="width:100%"
                         :picker-options="item['picker-options']" :placeholder="item.placeholder"
-                        :clearable="item.clearable" :value-format="item['value-format']"
+                        :clearable="item.clearable" :valueFormat="item['value-format']"
                         :format="item.format" :readonly="item.readonly" :disabled="item.disabled">
-                      </el-time-picker>
+                      </JnpfTimePicker>
                     </template>
-                    <template v-else-if="['date'].includes(item.jnpfKey)">
-                      <el-date-picker v-model="scope.row[item.prop]" :type="item.type||'datetime'"
+                    <template v-else-if="item.jnpfKey==='date'">
+                      <JnpfDatePicker v-model="scope.row[item.prop]" :type="item.type"
                         :clearable="item.clearable" :placeholder="item.placeholder"
-                        value-format="timestamp" :format="item.format||'yyyy-MM-dd HH:mm:ss'"
-                        style="width:100%" :readonly="item.readonly" :disabled="item.disabled">
-                      </el-date-picker>
+                        :valueFormat="item['value-format']" :format="item.format" style="width:100%"
+                        :readonly="item.readonly" :disabled="item.disabled">
+                      </JnpfDatePicker>
                     </template>
                     <template v-else-if="['comSelect'].includes(item.jnpfKey)">
                       <comSelect v-model="scope.row[item.prop]" :placeholder="item.placeholder"
@@ -1092,6 +1092,8 @@ export default {
           } else {
             item[e.__vModel__] = []
           }
+        } else if (e.__config__.jnpfKey === 'time' && e.__config__.defaultCurrent == true) {
+          item[e.__vModel__] = this.jnpf.toDate(new Date(), item.__config__.format)
         }
       }
       this.list.unshift(item)

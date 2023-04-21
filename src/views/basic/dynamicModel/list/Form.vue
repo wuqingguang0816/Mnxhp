@@ -275,6 +275,7 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
+            if (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time') item.__config__.custom = true
             if (flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
               if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
@@ -286,6 +287,8 @@ export default {
                   val = []
                 }
                 item.__config__.defaultValue = val
+              } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+                item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
               }
             }
             if (!this.isPreview && this.useFormPermission) {

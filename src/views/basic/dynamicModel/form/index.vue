@@ -82,11 +82,14 @@ export default {
             if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               item.__config__.defaultValue = new Date().getTime()
             } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
-              if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+              if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                 item.__config__.defaultValue = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 item.__config__.defaultValue = []
               }
+            }
+            else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
             }
           }
           if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {

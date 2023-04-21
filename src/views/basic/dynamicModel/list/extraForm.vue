@@ -20,7 +20,7 @@
 import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
 import Parser from '@/components/Generator/parser/Parser'
 import { deepClone } from '@/utils'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 export default {
   components: { Parser },
   data() {
@@ -86,14 +86,17 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (this.dataForm.id && (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time')) item.__config__.custom = true
+            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               item.__config__.defaultValue = new Date().getTime()
-            }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
-              if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                item.__config__.defaultValue = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
+            } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+              if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                item.__config__.defaultValue = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 item.__config__.defaultValue = []
               }
+            } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.__config__.format)
             }
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val

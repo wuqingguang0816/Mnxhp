@@ -273,7 +273,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      classify: ['1', '2'],
+      classify: [],
       id: '6'
     }, {
       fullName: '标题',
@@ -329,7 +329,7 @@ export const systemComponents = [{
         fullName: '类型',
         filedName: 'classify',
         fontSize: 12,
-        classify: ['1', '2'],
+        classify: [],
         fontWeight: false,
         fontColor: '#666666',
         show: true

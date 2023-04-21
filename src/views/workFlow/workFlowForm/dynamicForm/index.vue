@@ -14,7 +14,7 @@ import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import ErrorForm from '@/views/workFlow/components/ErrorForm'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 export default {
   components: { Parser, CandidateForm, ErrorForm },
   data() {
@@ -33,7 +33,7 @@ export default {
       branchList: [],
       errorVisible: false,
       errorNodeList: [],
-      isAdd:false,
+      isAdd: false,
       dataForm: {
         id: '',
         formData: {},
@@ -86,17 +86,20 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : ((this.isAdd)?item.__config__.defaultValue:undefined)
+            let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : ((this.isAdd) ? item.__config__.defaultValue : undefined)
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
               val = new Date().getTime()
               item.__config__.defaultValue = val
-            }else if((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
-              if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+              if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                 val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 val = []
               }
+              item.__config__.defaultValue = val
+            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+              val = this.jnpf.toDate(new Date(), item.__config__.format)
               item.__config__.defaultValue = val
             }
             let noShow = false, isDisabled = false, required = item.__config__.required || false
