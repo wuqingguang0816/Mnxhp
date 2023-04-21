@@ -548,8 +548,8 @@ export default {
         this.initBtnList()
         setTimeout(() => {
           this.$nextTick(() => {
-
             this.$refs.form && this.$refs.form.init(data)
+            if (!this.$refs.form) setTimeout(() => { this.$refs.form && this.$refs.form.init(data) }, 500)
           })
         }, 500)
       }).catch(() => { this.loading = false })
