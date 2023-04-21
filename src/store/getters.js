@@ -22,5 +22,6 @@ const getters = {
   hasTable: state => state.generator.hasTable,
   leftMenuList: state => state.user.leftMenuList,
   sysConfig: state => state.settings.sysConfig,
+  ruleData: state => state.generator.ruleData
 }
 export default getters

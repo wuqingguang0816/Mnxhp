@@ -20,6 +20,7 @@ export default {
       this.visible = false
       this.$emit('close', isRefresh)
       this.$store.state.generator.allTable = []
+      this.$store.state.generator.ruleData = []
     },
     prev() {
       this.activeStep -= 1

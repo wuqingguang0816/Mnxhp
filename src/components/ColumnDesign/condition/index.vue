@@ -562,6 +562,9 @@ export default {
       } else {
         item.disabled = false
       }
+      // 清空数据
+      item.symbol = undefined;
+
       this.$set(this.pconditions, i, item);
       this.nowJnpfKey = item.jnpfKey;
     },

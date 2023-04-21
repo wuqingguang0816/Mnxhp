@@ -602,6 +602,16 @@ export default {
     }
   },
   watch: {
+    'columnData.ruleList':{
+      handler(){
+        let ruleData = this.$store.getters.ruleData;
+        if(ruleData && ruleData.length > 0 && this.columnData.ruleList.length == 0){
+          this.$set(this.columnData,'ruleList',JSON.parse(JSON.stringify(ruleData)))
+        }
+      },
+      deep:true,
+      immediate:true
+    },
     btnsList(val) {
       let list = []
       outer: for (let i = 0; i < this.btnsOption.length; i++) {

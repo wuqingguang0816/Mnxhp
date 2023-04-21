@@ -16,10 +16,14 @@ const state = {
   dataBase: '',
   hasTable: false,
   relationData: {},
-  dynamicModelExtra: {}
+  dynamicModelExtra: {},
+  ruleData:[]
 };
 
 const mutations = {
+  SET_FILTER_DATA:(state, ruleData) => {
+    state.ruleData = ruleData
+  },
   SET_COMPANY_TREE: (state, companyTree) => {
     state.companyTree = companyTree;
   },
