@@ -134,7 +134,7 @@ const printOptionApi = {
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
           
-          this.replaceNum()
+          this.replaceNum(domCurrent)
 
 
           const pageBreak = '<p style="page-break-after:always;"></p>'
@@ -144,7 +144,7 @@ const printOptionApi = {
 
       })
     },
-    replaceNum(){
+    replaceNum(dom){
       let dataList = dom.querySelectorAll('span')
       dataList.forEach(element => {
         let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
