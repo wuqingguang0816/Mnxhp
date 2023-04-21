@@ -218,6 +218,7 @@ export default {
           }
           //用户过期
           if (data.method == 'logout') {
+            if (data.token && data.token !== this.$store.getters.token) return location.reload()
             if (this.socket) {
               this.socket.close()
               this.socket = null
