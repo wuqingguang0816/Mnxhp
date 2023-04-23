@@ -243,7 +243,14 @@ export default {
     isIncludesField(data) {
       let vModel = data.__vModel__
       let fieldModal = this.activeData.__vModel__
-      if (vModel !== fieldModal || (vModel === fieldModal && this.activeData.__config__.tableName !== data.__config__.tableName)) return true
+      if (vModel !== fieldModal) return true
+      if (data.__config__.relationTable && !data.__config__.isSubTable) {
+        if (vModel === fieldModal) return true
+      } else if (data.__config__.isSubTable) {
+        if (vModel === fieldModal && this.activeData.__config__.tableName != data.__config__.tableName) return true
+      } else if (this.activeData.__config__.isSubTable) {
+        if (vModel === fieldModal) return true
+      }
       return false
     },
     isIncludesTable(data) {
