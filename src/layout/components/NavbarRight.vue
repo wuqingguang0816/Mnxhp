@@ -116,6 +116,8 @@ import dragDialog from "@/directive/el-drag-dialog";
 import ReconnectingWebSocket from 'reconnecting-websocket'
 // import Notify from '@/utils/notify';
 import { setMajor } from '@/api/permission/userSetting'
+import { getToken } from '@/utils/auth'
+
 export default {
   directives: { dragDialog },
   components: {
@@ -218,21 +220,24 @@ export default {
           }
           //用户过期
           if (data.method == 'logout') {
-            if (this.socket) {
-              this.socket.close()
-              this.socket = null
-              this.$store.commit('user/SET_SOCKET', this.socket)
-            }
-            this.$message({
-              message: data.msg || '登录过期,请重新登录',
-              type: 'error',
-              duration: 1000,
-              onClose: () => {
-                this.$store.dispatch('user/resetToken').then(() => {
-                  location.reload()
-                })
+            setTimeout(() => {
+              if (data.token && data.token !== getToken()) return location.reload()
+              if (this.socket) {
+                this.socket.close()
+                this.socket = null
+                this.$store.commit('user/SET_SOCKET', this.socket)
               }
-            })
+              this.$message({
+                message: data.msg || '登录过期,请重新登录',
+                type: 'error',
+                duration: 1000,
+                onClose: () => {
+                  this.$store.dispatch('user/resetToken').then(() => {
+                    location.reload()
+                  })
+                }
+              })
+            }, 1000);
           }
           //断开websocket连接
           if (data.method == 'closeSocket') {

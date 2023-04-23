@@ -300,6 +300,7 @@ export default {
         if (Array.isArray(data)) data.forEach(d => loop(d))
         if (data.type === 'approver' || data.type === 'start') {
           data.properties.formOperates = this.initFormOperates(data, true, true)
+          data.properties.formFieldList = this.formFieldList
         }
         if (data.conditionNodes && Array.isArray(data.conditionNodes)) loop(data.conditionNodes)
         if (data.childNode) loop(data.childNode)
