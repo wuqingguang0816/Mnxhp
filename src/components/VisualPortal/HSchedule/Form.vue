@@ -98,8 +98,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"' required>
-          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间"
-            :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
+          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间" clearable
+            format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -156,16 +156,6 @@ export default {
           callback(new Error('结束时间必须晚于开始时间'));
         }
         if (this.dataForm.startDay > value) {
-          callback(new Error('结束时间应大于起始时间'));
-        }
-        callback();
-      }
-    };
-    var repeatPass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('结束重复不能为空'));
-      } else {
-        if (this.dataForm.repeatTime == value && this.dataForm.startTime > this.dataForm.repeatTime) {
           callback(new Error('结束时间必须晚于开始时间'));
         }
         callback();
@@ -218,7 +208,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, validator: repeatPass, trigger: 'change' }
+          { required: true, message: '重复时间不能为空', trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
