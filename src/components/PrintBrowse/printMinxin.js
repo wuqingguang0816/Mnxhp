@@ -109,10 +109,10 @@ const printOptionApi = {
           this.printTemplate = domCurrent.innerHTML
           // 数字替换优先,顺序必须第一
           this.replaceNum(domCurrent)
-          // 表格
-          await this.subDo(domCurrent)
           // 这个数据替换也必须在下面几个之前
           this.replaceRemainData(domCurrent)
+          // 表格
+          await this.subDo(domCurrent)
           // 通用          
           this.replaceImg()
           this.replaceSysValue()
@@ -120,7 +120,7 @@ const printOptionApi = {
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
           const pageBreak = '<p style="page-break-after:always;"></p>'
-          this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
+          this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
           resolve(this.printTemplate)
         })
       })
@@ -136,17 +136,11 @@ const printOptionApi = {
         if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
           dataKey = dataKey.replace('{', '').replace('}', '')
           if (dataTag == 'headTable') {
-            this.replaceMe({
-              key: element.outerHTML,
-              value: this.data[dataKey]
-            })
+            this.replaceMe(element.outerHTML,this.data[dataKey])
           } else {
             let subData = this.data[dataTag] && this.data[dataTag].length > 0 && this.data[dataTag][0]
             if (subData) {
-              this.replaceMe({
-                key: element.outerHTML,
-                value: subData[dataKey]
-              })
+              this.replaceMe(element.outerHTML,subData[dataKey])
             }
           }
         }
@@ -335,9 +329,9 @@ const printOptionApi = {
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
       }
-      this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrinter}', systemPrinter)
-      this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
-      this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
+      this.printTemplate = this.printTemplate.replace( '{systemPrinter}', systemPrinter)
+      this.printTemplate = this.printTemplate.replace( '{systemPrintTime}', systemPrintTime)
+      this.printTemplate = this.printTemplate.replace( '{systemApprovalContent}', systemApprovalContent)
     },
     getThousands(value, place) {
       if (!value) return ''
@@ -352,14 +346,6 @@ const printOptionApi = {
       var index = value.toString().indexOf(".") + 1;
       var count = value.toString().length - index;
       return count
-    },
-    replaceValue(data) {
-      for (let key in data) {
-        this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
-        if (Array.isArray(data[key]) && data[key] && data[key].length) {
-          this.replaceValue(data[key])
-        }
-      }
     },
     replaceImg(childItem) {
       let imgRegular = /&lt;img(\S|\s)*?&lt;\/img&gt;/g
@@ -381,7 +367,7 @@ const printOptionApi = {
             if (childItem) {
               childItem.innerHTML = template
             } else {
-              this.printTemplate = this.replaceAll(this.printTemplate, item, template)
+              this.printTemplate = this.printTemplate.replace( item, template)
             }
           }
           let isArray = false
@@ -527,26 +513,6 @@ const printOptionApi = {
       let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
       let base64Text = canvas.toDataURL("image/png");
       return base64Text
-    },
-    replaceAll(data, replace, value) {
-      const lenr = replace.length
-      const len = data.length
-      let newData = ''
-      let i = 0
-      for (i; i < len; i++) {
-        let k = 0
-        let string = ''
-        for (k; k < lenr; k++) {
-          var n = i + k
-          string += data[n]
-        }
-        if (string === replace) {
-          newData += value
-          i = i + lenr
-        }
-        newData += data[i]
-      }
-      return newData
     },
     getAmount(element) {
       let reg = /\((.+?)\)/g;
