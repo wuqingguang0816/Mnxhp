@@ -320,74 +320,74 @@ export const chartData = {
   radarData: [
     {
       "value": 75,
-      "name": "得分",
-      "type": "NBA",
+      "name": "销售",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 65,
-      "name": "篮板",
-      "type": "NBA",
+      "name": "管理",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 55,
-      "name": "防守",
-      "type": "NBA",
+      "name": "信息技术",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 74,
-      "name": "失误",
-      "type": "NBA",
+      "name": "客服",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 38,
-      "name": "盖帽",
-      "type": "NBA",
+      "name": "研发",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 88,
-      "name": "三分",
-      "type": "NBA",
+      "name": "市场",
+      "type": "预算分配",
       "max": 100
     },
     {
       "value": 35,
-      "name": "得分",
-      "type": "CBA",
+      "name": "销售",
+      "type": "实际开销",
       "max": 100
     },
     {
       "value": 62,
-      "name": "篮板",
-      "type": "CBA",
+      "name": "管理",
+      "type": "实际开销",
       "max": 100
     },
     {
       "value": 44,
-      "name": "防守",
-      "type": "CBA",
+      "name": "信息技术",
+      "type": "实际开销",
       "max": 100
     },
     {
       "value": 66,
-      "name": "失误",
-      "type": "CBA",
+      "name": "客服",
+      "type": "实际开销",
       "max": 100
     },
     {
       "value": 28,
-      "name": "盖帽",
-      "type": "CBA",
+      "name": "研发",
+      "type": "实际开销",
       "max": 100
     },
     {
       "value": 58,
-      "name": "三分",
-      "type": "CBA",
+      "name": "市场",
+      "type": "实际开销",
       "max": 100
     }
   ]
