@@ -97,7 +97,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"' required>
+        <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"'>
           <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间" clearable
             format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
@@ -160,7 +160,7 @@ export default {
         }
         callback();
       }
-    };
+    }
     return {
       visible: false,
       btnLoading: false,
@@ -208,7 +208,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, message: '重复时间不能为空', trigger: 'change' }
+          { required: true, message: '结束重复时间不能为空', trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
@@ -369,6 +369,7 @@ export default {
       if (Number(time) == 24) {
         time = 0
       }
+      this.dataForm.endDay = this.dataForm.startDay
       this.dataForm.endTime = time < 10 ? '0' + time + ':' + arr[1] : time + ':' + arr[1]
     },
     getDictionaryData() {
@@ -398,7 +399,7 @@ export default {
           }
           if (this.dataForm.allDay == 1) {
             if (this.dataForm.startDay > this.dataForm.endDay) {
-              return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
+              return this.$message({ message: '开始时间不能大结束时间', type: 'error' })
             }
           }
           if (this.dataForm.repetition != -1 && (this.dataForm.startDay == this.dataForm.endDay)) {
