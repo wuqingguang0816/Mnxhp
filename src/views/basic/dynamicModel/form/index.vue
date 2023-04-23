@@ -79,16 +79,21 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-              item.__config__.defaultValue = new Date().getTime()
-            } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
+              let format = item.format
+              let dateStr = this.jnpf.toDate(new Date().getTime(), format)
+              let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
+                ' 00:00:00' : ''
+              let value = new Date(dateStr + time).getTime()
+              item.__config__.defaultValue = value
+            } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent) {
               if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                 item.__config__.defaultValue = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 item.__config__.defaultValue = []
               }
             }
-            else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+            else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent) {
               item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.format)
             }
           }

@@ -470,14 +470,6 @@ export default {
           }
         }
         if (config.jnpfKey === 'date') {
-          if (!config.custom && config.defaultCurrent) {
-            let format = cur.format
-            let datestr = this.jnpf.toDate(new Date().getTime(), format)
-            let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
-              ' 00:00:00' : ''
-            let value = new Date(datestr + time).getTime()
-            config.defaultValue = value
-          }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
               cur.startTime = config.startTimeValue
@@ -569,9 +561,6 @@ export default {
         }
         if (config.jnpfKey === 'time') {
           let format = cur.format === 'HH:mm' ? 'HH:mm:00' : cur.format
-          if (!config.custom && config.defaultCurrent) {
-            config.defaultValue = this.jnpf.toDate(new Date(), format)
-          }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
               cur.startTime = config.startTimeValue || '00:00:00'

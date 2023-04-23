@@ -49,8 +49,7 @@
           添加选项
         </el-button>
         <el-divider direction="vertical"></el-divider>
-        <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
-          @click="updateSelectItem">
+        <el-button style="padding-bottom: 0" type="text" @click="updateSelectItem">
           批量编辑
         </el-button>
       </div>

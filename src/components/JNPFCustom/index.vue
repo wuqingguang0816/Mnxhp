@@ -124,21 +124,24 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if (this.isAdd || item.__config__.isSubTable == true) {//新增时候，默认当前
-              if (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time') item.__config__.custom = true
-              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (this.isAdd || item.__config__.isSubTable) {//新增时候，默认当前
+              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
                 if (!data.hasOwnProperty(item.__vModel__)) {
-                  val = new Date().getTime()
+                  let format = item.format
+                  let dateStr = this.jnpf.toDate(new Date().getTime(), format)
+                  let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
+                    ' 00:00:00' : ''
+                  val = new Date(dateStr + time).getTime()
                   item.__config__.defaultValue = val
                 }
-              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent) {
                 if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                   val = data[item.__vModel__] ? data[item.__vModel__] : (item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList)
                 } else {
                   val = data[item.__vModel__] ? data[item.__vModel__] : []
                 }
                 item.__config__.defaultValue = val
-              } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+              } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent) {
                 if (!data.hasOwnProperty(item.__vModel__)) {
                   val = this.jnpf.toDate(new Date(), item.format)
                   item.__config__.defaultValue = val

@@ -36,8 +36,7 @@
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
-            @click="treeSelectItem">
+          <el-button style="padding-bottom: 0" type="text" @click="treeSelectItem">
             批量编辑
           </el-button>
         </div>

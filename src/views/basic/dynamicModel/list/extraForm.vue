@@ -87,15 +87,15 @@ export default {
           let item = list[i]
           if (item.__vModel__) {
             if (this.dataForm.id && (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time')) item.__config__.custom = true
-            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
               item.__config__.defaultValue = new Date().getTime()
-            } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+            } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent) {
               if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                 item.__config__.defaultValue = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 item.__config__.defaultValue = []
               }
-            } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+            } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent) {
               item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.format)
             }
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue

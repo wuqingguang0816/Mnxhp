@@ -88,17 +88,21 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : ((this.isAdd) ? item.__config__.defaultValue : undefined)
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
-              val = new Date().getTime()
-              item.__config__.defaultValue = val
-            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+            if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
+              let format = item.format
+              let dateStr = this.jnpf.toDate(new Date().getTime(), format)
+              let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
+                ' 00:00:00' : ''
+              let value = new Date(dateStr + time).getTime()
+              item.__config__.defaultValue = value
+            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent) {
               if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
                 val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
               } else {
                 val = []
               }
               item.__config__.defaultValue = val
-            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent == true) {
+            } else if ((this.isAdd || (!this.isAdd && item.__config__.isSubTable == true)) && item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent) {
               val = this.jnpf.toDate(new Date(), item.format)
               item.__config__.defaultValue = val
             }
