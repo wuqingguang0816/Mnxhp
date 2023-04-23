@@ -1,5 +1,5 @@
 <template>
-  <div class="item" @click.stop="handleClick">
+  <div class="item" @click.stop="handleClick(item)">
     <HTodo v-if="item.jnpfKey==='todo'" :activeData="item" :key="item.renderKey" />
     <HCommonFunc v-if="item.jnpfKey==='commonFunc'" :activeData="item" :key="item.renderKey" />
     <HDataBoard v-if="item.jnpfKey==='dataBoard'" :activeData="item" :key="item.renderKey" />
@@ -27,8 +27,9 @@
         <CardHeader v-if="item.title" slot="header" :title="item.title" :card="item.card" />
         <div class="portal-box-body">
           <div v-show="item.children&&item.children.length" class="portal-box-item"
-            v-for="(it,index) in item.children" :key="index">
-            <parser :item="it" :class="{'active-item': it.i===activeId}" :detailed="detailed" />
+            v-for="(it,index) in item.children" :key="index" @click.stop="handleClick(it)">
+            <parser :item="it" :class="{'active-item': it.i===activeId}" :activeId="activeId"
+              :detailed="detailed" />
             <el-popconfirm v-if="!detailed" title="确定删除该组件？" class="drawing-item-delete"
               @confirm="(event)=>{handleRemoveItem(index,item.children)}">
               <i slot="reference" class="el-icon-delete"></i>
@@ -48,8 +49,9 @@
           <span slot="label"><i v-if="item.icon" :class="child.icon"></i> {{child.title}}</span>
           <div class="portal-box-body">
             <div v-show="child.children&&child.children.length" class="portal-box-item"
-              v-for="(it,index) in child.children" :key="index">
-              <parser :item="it" :class="{'active-item': it.i===activeId}" :detailed="detailed" />
+              v-for="(it,index) in child.children" :key="index" @click.stop="handleClick(it)">
+              <parser :item="it" :class="{'active-item': it.i===activeId}" :activeId="activeId"
+                :detailed="detailed" />
               <el-popconfirm v-if="!detailed" title="确定删除该组件？" class="drawing-item-delete"
                 @confirm="(event)=>{handleRemoveItem(index,child.children)}">
                 <i slot="reference" class="el-icon-delete"></i>
@@ -155,8 +157,8 @@ export default {
     addComponent(val, index) {
       this.$eventBus.$emit('addComponent', val, this.item, index)
     },
-    handleClick() {
-      this.$eventBus.$emit('handlerActive', this.item)
+    handleClick(data) {
+      this.$eventBus.$emit('handlerActive', data)
     },
     handleTabClick(e) {
       const active = this.item.active
