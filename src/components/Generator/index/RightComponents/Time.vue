@@ -201,7 +201,7 @@ export default {
           loop(data.__config__.children, data)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
-        if (data.__vModel__ && data.__config__.jnpfKey === 'time' && (data.__vModel__ !== this.activeData.__vModel__ || (data.__vModel__ == this.activeData.__vModel__ && data.__config__.relationTable))) {
+        if (data.__vModel__ && data.__config__.jnpfKey === 'time' && this.isIncludesField(data)) {
           const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
           list.push({
             realVModel: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
@@ -234,6 +234,12 @@ export default {
       } else {
         return this.activeData.__config__.startTimeType = 1
       }
+    },
+    isIncludesField(data) {
+      let vModel = data.__vModel__
+      let fieldModal = this.activeData.__vModel__
+      if (vModel !== fieldModal || (vModel === fieldModal && this.activeData.__config__.tableName !== data.__config__.tableName)) return true
+      return false
     },
     isIncludesTable(data) {
       if ((!data.__config__.layout || data.__config__.layout === 'rowFormItem') && data.__config__.jnpfKey !== 'table') return true

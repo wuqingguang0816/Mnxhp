@@ -676,6 +676,16 @@ export default {
         if (dyOptionsList.indexOf(t.__config__.jnpfKey) > -1) {
           options = t.options
         }
+        if (t.__config__.jnpfKey === 'date' && t.__config__.defaultCurrent) {
+          let format = t.format
+          let dateStr = this.jnpf.toDate(new Date().getTime(), format)
+          let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
+            ' 00:00:00' : ''
+          t.__config__.defaultValue = new Date(dateStr + time).getTime()
+        }
+        if (t.__config__.jnpfKey === 'time' && t.__config__.defaultCurrent) {
+          t.__config__.defaultValue = this.jnpf.toDate(new Date(), t.format)
+        }
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
@@ -733,8 +743,10 @@ export default {
     addItem() {
       if (this.config.addType == 1) {
         this.openSelectDialog()
+        console.log(2222)
       } else {
         this.addRow()
+        console.log(111)
       }
     },
     openSelectDialog() {
