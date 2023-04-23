@@ -32,8 +32,8 @@ module.exports = {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   sysConfig: {
-    sysVersion: '',
-    copyright: 'Copyright @ 2022 引迈信息技术有限公司版权所有',
+    sysVersion: '3.4.7',
+    copyright: 'Copyright @ 2023 引迈信息技术有限公司版权所有',
     navigationIcon: '',
     logoIcon: '',
     loginIcon: '',
