@@ -22,14 +22,10 @@ const printOptionApi = {
       printTemplate: "",
       recordList: [],
       loading: false,
-      printTemplateRe: '',
-      mainArr: [],
       qrcodeId: '',
       showContainer: false,
-      subData: [],
-      mainData: [],
       qrTemp: [],
-      barTemp: [],
+      barTemp: []
     }
   },
   methods: {
@@ -123,19 +119,23 @@ const printOptionApi = {
         this.recordList = data.operatorRecordList || []
         this.$nextTick(async () => {
           this.printTemplate = domCurrent.innerHTML
-          // 子副表
+          // 数字替换优先,顺序必须第一
+          this.replaceNum(domCurrent)
+          
+          // 表格
           await this.subDo(domCurrent)
-          
-          this.replaceValue(this.data)
-          this.replaceSysValue()
-          
-          // 替换主表
+
+          // 这个数据替换也必须在下面几个之前
+          this.replaceRemainData(domCurrent)
+          // 通用          
           this.replaceImg()
+          this.replaceSysValue()
+
+          // 替换主表二维码条码
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
-          
-          this.replaceNum(domCurrent)
 
+        
 
           const pageBreak = '<p style="page-break-after:always;"></p>'
           this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
@@ -144,22 +144,41 @@ const printOptionApi = {
 
       })
     },
-    replaceNum(dom){
+    replaceMe(data){
+      this.printTemplate = this.printTemplate.replace(data.key,data.value)
+    },
+    // 子表数组
+    replaceRemainData(dom){
       let dataList = dom.querySelectorAll('span')
       dataList.forEach(element => {
         let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
         let dataKey = element.innerText
         if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
+          dataKey = dataKey.replace('{','').replace('}','')
           if (dataTag == 'headTable') {
-            this.mainData.push(dataKey)
+            this.replaceMe({
+              key:element.outerHTML,
+              value:this.data[dataKey]
+            })
           } else {
-            let dataTagArr = this.subData[dataTag]
-            if (!dataTagArr) dataTagArr = []
-            if (!dataTagArr.includes(dataKey)) dataTagArr.push(dataKey.replace("{", "").replace("}", ""))
-            this.subData[dataTag] = dataTagArr
+            let subData = this.data[dataTag] &&  this.data[dataTag].length>0 && this.data[dataTag][0]
+            if(subData){
+              this.replaceMe({
+                key:element.outerHTML,
+                value:subData[dataKey]
+              })
+            }
           }
         }
       })
+    },
+    replaceNumMain(){
+      let reg = /大写金额\((.+?)\)/g;
+      let list = this.printTemplate.match(reg);
+      
+    },
+    replaceNum(dom){
+      
       var stringToHTML = function (str) {
         var dom = document.createElement('div');
         dom.innerHTML = str;
@@ -176,9 +195,9 @@ const printOptionApi = {
             let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
             let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
             let value = subDataTag == 'headTable' ? getAmountChinese(this.data[data_]) : getAmountChinese(this.data[subDataTag][0][data_])
-            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+            this.printTemplate = this.printTemplate.replace(element, value)
           } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, element, getAmountChinese(data))
+            this.printTemplate = this.printTemplate.replace(element, getAmountChinese(data))
           }
         }
       }
@@ -193,9 +212,9 @@ const printOptionApi = {
             let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
             let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
             let value = subDataTag == 'headTable' ? this.getThousands(this.data[data_], place) : this.getThousands(this.data[subDataTag][0][data_], place)
-            this.printTemplate = this.replaceAll(this.printTemplate, element, value)
+            this.printTemplate = this.printTemplate.replace( element, value)
           } else {
-            this.printTemplate = this.replaceAll(this.printTemplate, element, this.getThousands(data, place))
+            this.printTemplate = this.printTemplate.replace( element, this.getThousands(data, place))
           }
         }
       }
@@ -360,7 +379,6 @@ const printOptionApi = {
       })
     },
     getPlace(value) {
-      console.log(value)
       if (!value || value.toString().indexOf(".") == -1) return 0
       var index = value.toString().indexOf(".") + 1;
       var count = value.toString().length - index;
