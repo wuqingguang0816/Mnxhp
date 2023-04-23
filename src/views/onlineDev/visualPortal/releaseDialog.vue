@@ -120,7 +120,7 @@ export default {
       if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种门户同步方式')
       this.releaseBtnLoading = true
       this.releaseQuery.pcSystemId = this.releaseQuery.pcModuleParentId.toString()
-      this.releaseQuery.appSystemId = this.releaseQuery.pcModuleParentId.toString()
+      this.releaseQuery.appSystemId = this.releaseQuery.appModuleParentId.toString()
       Release(this.currRow.id, this.releaseQuery).then(res => {
         this.$message({
           type: 'success',
