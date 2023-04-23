@@ -168,6 +168,7 @@ export function deepClone(obj) {
  * 
  */
 export function getAmountChinese(val) {
+  if (!val && val !== 0) return ''
   const amount = +val
   if (Number.isNaN(amount) || amount < 0) return ''
   const NUMBER = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
