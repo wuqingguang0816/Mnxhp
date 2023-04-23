@@ -50,9 +50,9 @@
                   </el-tooltip>
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list">
-                  <el-table-column prop="categoryName" label="分类" align="center" />
-                  <el-table-column prop="fullName" label="门户名称" align="center" />
-                  <el-table-column prop="description" label="说明" align="center" />
+                  <el-table-column prop="categoryName" label="分类" />
+                  <el-table-column prop="fullName" label="门户名称" />
+                  <el-table-column prop="description" label="说明" />
                   <el-table-column prop="creatorUser" label="创建人" width="120" />
                   <el-table-column prop="creatorTime" label="创建时间" width="120"
                     :formatter="jnpf.tableDateFormat" />
@@ -66,7 +66,7 @@
                         {{scope.row.enabledMark==1?'启用':'禁用'}}</el-tag>
                     </template>
                   </el-table-column>
-                  <el-table-column label="操作" fixed="right" width="200">
+                  <el-table-column label="操作" fixed="right" width="150">
                     <template slot-scope="scope">
                       <tableOpts @edit="addOrUpdateHandle(scope.row.id)"
                         @del="handleDel(scope.row.id)">
