@@ -87,7 +87,7 @@ export default {
         sortCode: 0,
         enabledMark: 1,
         type: 0,
-        linkType: null,
+        linkType: 0,
         customUrl: '',
         category: '',
         description: "",
