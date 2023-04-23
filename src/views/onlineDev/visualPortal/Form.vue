@@ -21,17 +21,17 @@
           </el-select>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="类型" prop="type">
-          <el-select v-model="dataForm.type" placeholder="选择类型">
-            <el-option label="门户设计" :value="0" />
-            <el-option label="配置路径" :value="1" />
-          </el-select>
+          <el-radio-group v-model="dataForm.type" size="mini">
+            <el-radio-button :label="0">门户设计</el-radio-button>
+            <el-radio-button :label="1">配置路径</el-radio-button>
+          </el-radio-group>
         </jnpf-form-tip-item>
         <template v-if="dataForm.type==1">
           <jnpf-form-tip-item label="链接类型" prop="linkType" tip-label="链接类型选择页面，只支持PC显示，不支持APP显示。">
-            <el-select v-model="dataForm.linkType" placeholder="选择链接类型" @change="changeLinkType">
-              <el-option label="页面" :value="0" />
-              <el-option label="外链" :value="1" />
-            </el-select>
+            <el-radio-group v-model="dataForm.linkType" size="mini" @change="changeLinkType">
+              <el-radio-button :label="0">页面</el-radio-button>
+              <el-radio-button :label="1">外链</el-radio-button>
+            </el-radio-group>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="链接地址" prop="customUrl">
             <el-input v-model="dataForm.customUrl" placeholder="链接地址">
