@@ -83,8 +83,10 @@ export default {
       let that = this
       return {
         disabledDate(time) {
+          let format = that.format === 'yyyy' ? 'yyyy-01-01 00:00:00' : that.format === 'yyyy-MM' ? 'yyyy-MM-01 00:00:00' : that.format === 'yyyy-MM-dd' ?
+            ' 00:00:00' : 'yyyy-MM-dd 00:00:00'
           if (that.innerStartTime) {
-            let innerStartTime = that.jnpf.toDate(that.innerStartTime, 'yyyy-MM-dd 00:00:00')
+            let innerStartTime = that.jnpf.toDate(that.innerStartTime, format)
             that.innerStartTime = new Date(innerStartTime).getTime()
           }
           if (that.innerEndTime) {

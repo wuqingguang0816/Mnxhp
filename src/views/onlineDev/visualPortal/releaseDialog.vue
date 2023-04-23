@@ -21,7 +21,7 @@
     <el-form class="dialog-form-main" :model="releaseQuery" :rules="releaseQueryRule"
       label-position="right" label-width="50px" ref="releaseForm">
       <template v-if="!currRow.pcIsRelease">
-        <el-form-item label="上级" prop="pcModuleParentId" v-if="releaseQuery.pc">
+        <el-form-item label="应用" prop="pcModuleParentId" v-if="releaseQuery.pc">
           <el-select v-model="releaseQuery.pcModuleParentId" multiple placeholder="选择应用">
             <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
@@ -31,7 +31,7 @@
       <template v-if="!currRow.appIsRelease">
         <el-form-item label="" v-if="(!releaseQuery.pc||currRow.pcIsRelease) && releaseQuery.app">
         </el-form-item>
-        <el-form-item label="上级" prop="appModuleParentId" v-if="releaseQuery.app">
+        <el-form-item label="应用" prop="appModuleParentId" v-if="releaseQuery.app">
           <el-select v-model="releaseQuery.appModuleParentId" multiple placeholder="选择应用">
             <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
@@ -68,10 +68,10 @@ export default {
       },
       releaseQueryRule: {
         pcModuleParentId: [
-          { required: true, message: '上级菜单不能为空', trigger: 'change' }
+          { required: true, message: '应用不能为空', trigger: 'change' }
         ],
         appModuleParentId: [
-          { required: true, message: '上级菜单不能为空', trigger: 'change' }
+          { required: true, message: '应用不能为空', trigger: 'change' }
         ],
       },
       treeData: [],
@@ -87,7 +87,7 @@ export default {
     releaseModel() {
       this.$refs['releaseForm'].validate((valid) => {
         if (!valid) return
-        this.$confirm('发布模板会覆盖当前线上版本且进行菜单同步，是否继续？', '提示', {
+        this.$confirm('发布确定后会覆盖当前线上版本且进行门户同步，是否继续？', '提示', {
           type: 'warning'
         }).then(() => {
           setTimeout(() => {
@@ -117,7 +117,7 @@ export default {
     },
     // 发布菜单
     release() {
-      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种菜单同步方式')
+      if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种门户同步方式')
       this.releaseBtnLoading = true
       this.releaseQuery.pcSystemId = this.releaseQuery.pcModuleParentId.toString()
       this.releaseQuery.appSystemId = this.releaseQuery.pcModuleParentId.toString()
