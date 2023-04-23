@@ -153,10 +153,20 @@ export default {
         callback(new Error('结束时间不能为空'));
       } else {
         if (this.dataForm.startDay == value && this.dataForm.startTime > this.dataForm.endTime) {
-          callback(new Error('结束时间应大于起始时间'));
+          callback(new Error('结束时间必须晚于开始时间'));
         }
         if (this.dataForm.startDay > value) {
           callback(new Error('结束时间应大于起始时间'));
+        }
+        callback();
+      }
+    };
+    var repeatPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('结束重复不能为空'));
+      } else {
+        if (this.dataForm.repeatTime == value && this.dataForm.startTime > this.dataForm.repeatTime) {
+          callback(new Error('结束时间必须晚于开始时间'));
         }
         callback();
       }
@@ -208,7 +218,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, validator: validatePass, trigger: 'change' }
+          { required: true, validator: repeatPass, trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
