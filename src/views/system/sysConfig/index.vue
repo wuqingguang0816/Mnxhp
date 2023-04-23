@@ -15,8 +15,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="窗口标题" prop="title">
-                <el-input v-model="baseForm.title" clearable placeholder="窗口标题" />
+              <el-form-item label="系统标题" prop="title">
+                <el-input v-model="baseForm.title" clearable placeholder="系统标题" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -171,8 +171,8 @@
                   <el-form-item v-if="baseForm.passwordStrengthLimit">
                     <el-checkbox v-model="baseForm.passwordLengthMin" :true-label="1"
                       :false-label="0">最小长度</el-checkbox>
-                    <el-input-number v-model="baseForm.passwordLengthMinNumber" :precision="0" :min="1"
-                      :step="1" controls-position="right" /><br />
+                    <el-input-number v-model="baseForm.passwordLengthMinNumber" :precision="0"
+                      :min="1" :step="1" controls-position="right" /><br />
                     <el-checkbox v-model="baseForm.containsNumbers" :true-label="1"
                       :false-label="0">包含数字</el-checkbox><br />
                     <el-checkbox v-model="baseForm.includeLowercaseLetters" :true-label="1"
