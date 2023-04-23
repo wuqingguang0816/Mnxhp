@@ -4,11 +4,9 @@ import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
 import { getAmountChinese } from "@/components/Generator/utils/index"
-
 /**
  * 打印模板
  */
-
 const printOptionApi = {
   computed: {
     ...mapGetters(['userInfo'])
@@ -40,23 +38,19 @@ const printOptionApi = {
         let array = this.barTemp
         for (let index = 0; index < array.length; index++) {
           const element = array[index];
-
           // 在页面中设置这个dom,获取码的html字符串
           const id = this.jnpf.idGenerator()
           let dom = this.$refs.barcodewrap
-
           let imgdom = document.createElement('img');
           imgdom.width = '100';
           imgdom.height = '100';
           imgdom.id = `barcode${id}`
           dom.appendChild(imgdom)
-
           this.$nextTick(() => {
             this.getJsBarcode(element.value, `#barcode${id}`, element.width, element.height)
             let dom = document.querySelector(`#barcode${id}`)
             this.printTemplate = this.printTemplate.replace(element.replaceStr, dom.outerHTML)
           })
-
         }
       }
       if (this.qrTemp.length > 0) {
@@ -66,19 +60,15 @@ const printOptionApi = {
           // 在页面中设置这个dom,获取码的html字符串
           const id = this.jnpf.idGenerator()
           let dom = this.$refs.qrcodewrap
-
           let imgdom = document.createElement('img');
           imgdom.width = '100';
           imgdom.height = '100';
           imgdom.id = `qrCode${id}`
           dom.appendChild(imgdom)
-
           this.$nextTick(() => {
             let base64Url = this.getJsQrcode(element.value, `qrCode${id}`, element.width, element.height)
             this.printTemplate = this.printTemplate.replace(element.replaceStr, `<img id='qrCode${id}'  width='${element.width}' height='${element.height}' src='${base64Url}'/>`)
           })
-
-
         }
       }
     },
@@ -99,10 +89,8 @@ const printOptionApi = {
                 newTable.push(tds)
               }
             }
-
             let copy = tableObj.getElementsByTagName('tbody')[0].innerHTML
             tableObj.getElementsByTagName('tbody')[0].innerHTML = ''
-
             for (let i = 0; i < newTable.length; i++) {
               tableObj.getElementsByTagName('tbody')[0].appendChild(newTable[i])
             }
@@ -121,64 +109,50 @@ const printOptionApi = {
           this.printTemplate = domCurrent.innerHTML
           // 数字替换优先,顺序必须第一
           this.replaceNum(domCurrent)
-          
           // 表格
           await this.subDo(domCurrent)
-
           // 这个数据替换也必须在下面几个之前
           this.replaceRemainData(domCurrent)
           // 通用          
           this.replaceImg()
           this.replaceSysValue()
-
           // 替换主表二维码条码
           this.replaceBarCodeMain()
           this.replaceQrCodeMain()
-
-        
-
           const pageBreak = '<p style="page-break-after:always;"></p>'
           this.printTemplate = this.replaceAll(this.printTemplate, '<p><!-- pagebreak --></p>', pageBreak)
           resolve(this.printTemplate)
         })
-
       })
     },
-    replaceMe(data){
-      this.printTemplate = this.printTemplate.replace(data.key,data.value)
+    replaceMe(data) {
+      this.printTemplate = this.printTemplate.replace(data.key, data.value)
     },
-    // 子表数组
-    replaceRemainData(dom){
+    replaceRemainData(dom) {
       let dataList = dom.querySelectorAll('span')
       dataList.forEach(element => {
         let dataTag = element.getAttribute('data-tag') ? element.getAttribute('data-tag').split('.')[0] : false
         let dataKey = element.innerText
         if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
-          dataKey = dataKey.replace('{','').replace('}','')
+          dataKey = dataKey.replace('{', '').replace('}', '')
           if (dataTag == 'headTable') {
             this.replaceMe({
-              key:element.outerHTML,
-              value:this.data[dataKey]
+              key: element.outerHTML,
+              value: this.data[dataKey]
             })
           } else {
-            let subData = this.data[dataTag] &&  this.data[dataTag].length>0 && this.data[dataTag][0]
-            if(subData){
+            let subData = this.data[dataTag] && this.data[dataTag].length > 0 && this.data[dataTag][0]
+            if (subData) {
               this.replaceMe({
-                key:element.outerHTML,
-                value:subData[dataKey]
+                key: element.outerHTML,
+                value: subData[dataKey]
               })
             }
           }
         }
       })
     },
-    replaceNumMain(){
-      let reg = /大写金额\((.+?)\)/g;
-      let list = this.printTemplate.match(reg);
-      
-    },
-    replaceNum(dom){
-      
+    replaceNum(dom) {
       var stringToHTML = function (str) {
         var dom = document.createElement('div');
         dom.innerHTML = str;
@@ -212,9 +186,9 @@ const printOptionApi = {
             let subData = data.querySelectorAll('span') ? data.querySelectorAll('span')[0] : ''
             let [subDataTag, data_] = subData.getAttribute('data-tag') ? subData.getAttribute('data-tag').split('.') : []
             let value = subDataTag == 'headTable' ? this.getThousands(this.data[data_], place) : this.getThousands(this.data[subDataTag][0][data_], place)
-            this.printTemplate = this.printTemplate.replace( element, value)
+            this.printTemplate = this.printTemplate.replace(element, value)
           } else {
-            this.printTemplate = this.printTemplate.replace( element, this.getThousands(data, place))
+            this.printTemplate = this.printTemplate.replace(element, this.getThousands(data, place))
           }
         }
       }
@@ -237,14 +211,11 @@ const printOptionApi = {
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
           const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
-
           // 在页面中设置这个dom
           this.barcodeId = `barcode${id}`
           this.width = `${width}`
           this.height = `${height}`
-
           this.$nextTick(() => {
-
             this.getJsBarcode(value, '#barcode' + id, width, height)
             // 获取节点内容替换
             let dom = document.querySelector('#barcode' + id)
@@ -270,12 +241,10 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-
           // 在页面中设置这个dom
           this.qrcodeId = `qrCode${id}`
           this.width = `${width}`
           this.height = `${height}`
-
           this.$nextTick(() => {
             let base64Url = this.getJsQrcode(value, 'qrCode' + id, width, height)
             this.printTemplate = this.printTemplate.replace(item, `<img id='qrCode${id}'  width='${width}' height='${height}' src='${base64Url}'/>`)
@@ -370,13 +339,13 @@ const printOptionApi = {
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemPrintTime}', systemPrintTime)
       this.printTemplate = this.replaceAll(this.printTemplate, '{systemApprovalContent}', systemApprovalContent)
     },
-
     getThousands(value, place) {
+      if (!value) return ''
       place = place ? place : this.getPlace(value)
-      return parseFloat(value).toLocaleString('zh', {
-        minimumFractionDigits: place,
-        maximumFractionDigits: place
-      })
+      const numArr = value.toString().split('.');
+      numArr[0] = numArr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      numArr[1] = numArr[1] ? numArr[1].toString().substring(0, place) : ''
+      return numArr[1] ? numArr.join('.') : numArr[0];
     },
     getPlace(value) {
       if (!value || value.toString().indexOf(".") == -1) return 0
@@ -384,7 +353,6 @@ const printOptionApi = {
       var count = value.toString().length - index;
       return count
     },
-    
     replaceValue(data) {
       for (let key in data) {
         this.printTemplate = this.replaceAll(this.printTemplate, `{${key}}`, data[key] || '')
@@ -458,7 +426,6 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-
           // 先收集码生成的信息
           let info = {
             replaceStr: item,
@@ -467,7 +434,6 @@ const printOptionApi = {
             value
           }
           this.barTemp.push(info)
-
         }
       }
     },
@@ -497,10 +463,7 @@ const printOptionApi = {
             value
           }
           this.qrTemp.push(info)
-
-
         }
-
       }
     },
     getWidthHeight(item, type = 'width') {
@@ -561,7 +524,6 @@ const printOptionApi = {
         text: value, // 二维码内容
         correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
       })
-
       let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
       let base64Text = canvas.toDataURL("image/png");
       return base64Text
@@ -627,7 +589,6 @@ const printOptionApi = {
       iframe.onload = function () {
         let oldTitle = document.title;
         iframe.contentWindow.onafterprint = function (e) {
-
           let title = oldTitle.split('-')[0]
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
@@ -640,10 +601,7 @@ const printOptionApi = {
             data
           }).then((res) => {
           });
-
         };
-
-
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;

@@ -1,17 +1,7 @@
 <template>
-  <el-dialog
-    v-bind="$attrs"
-    :close-on-click-modal="false"
-    :modal-append-to-body="false"
-    v-on="$listeners"
-    @open="onOpen"
-    fullscreen
-    lock-scroll
-    class="JNPF-full-dialog"
-    :show-close="false"
-    :modal="false"
-    append-to-body
-  >
+  <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
+    v-on="$listeners" @open="onOpen" fullscreen lock-scroll class="JNPF-full-dialog"
+    :show-close="false" :modal="false" append-to-body>
     <div class="JNPF-full-dialog-header">
       <div class="header-title">
         <img src="@/assets/images/jnpf.png" class="header-logo" />
@@ -23,37 +13,27 @@
         <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
-
     <div v-if="showContainer">
       <!-- 主表使用 -->
       <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
       <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
-
       <!-- 子表使用 -->
       <div ref="barcodewrap"></div>
       <div ref="qrcodewrap"></div>
     </div>
-
     <div v-loading="loading">
       <div class="main" ref="tsPrint">
-        <div
-          class="print-content"
-          v-html="item"
-          v-for="(item, index) in batchData"
-          :key="index"
-        />
+        <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
       </div>
     </div>
   </el-dialog>
 </template>
-
 <script>
 import printOptionApi from "./printMinxin.js";
 import { getData } from "@/api/system/printDev";
 export default {
   mixins: [printOptionApi],
   props: ["id", "formId", "fullName"],
-
   data() {
     return {
       batchData: [],
@@ -83,7 +63,6 @@ export default {
         id: this.id,
         formId: this.formId,
       };
-
       this.loading = true;
       this.showContainer = true;
       getData(query).then(async (res) => {
@@ -95,16 +74,14 @@ export default {
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             // 给table加标识
             this.tagTable(domCurrent);
-            
-            if(!res.data.printData){
+            if (!res.data.printData) {
               this.printTemplate = domCurrent.innerHTML
-              this.batchData[index] =  this.printTemplate.replace(/\{(.*?)\}/g,"")
+              this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "")
               this.loading = false;
               break
             }
-
             await this.handleData(res.data, domCurrent, index);
-            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g,"");
+            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "");
             this.showContainer = false;
             this.loading = false;
           }
