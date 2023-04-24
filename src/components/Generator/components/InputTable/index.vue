@@ -339,7 +339,6 @@ export default {
                   } else {
                     endTime = e.endTime
                   }
-                  console.log(endTime)
                   item.config.startTime = startTime
                   item.config.endTime = endTime
                 }

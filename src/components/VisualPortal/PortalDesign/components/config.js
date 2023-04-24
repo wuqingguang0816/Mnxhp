@@ -362,7 +362,7 @@ export const systemComponents = [{
     autoRefresh: false,
     autoRefreshTime: 5,
   },
-  w: 6,
+  w: 20,
   h: 8,
   minW: 4,
   minH: 4,
