@@ -303,7 +303,7 @@ export default {
     fetchPortalList() {
       if (!this.portalData.length) {
         getPortalSelector().then(res => {
-          this.portalData = res.data.list
+          this.portalData = res.data.list.filter(o => o.children.length)
           this.tempData = this.portalData
         })
         return
