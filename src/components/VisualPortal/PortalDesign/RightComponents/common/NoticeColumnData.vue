@@ -2,11 +2,19 @@
   <el-dialog title="选项设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center dialog_height" lock-scroll width="1000px" append-to-body>
     <JNPF-table :data="list" ref="dragNoticeTable" :hasNO="false" row-key="id">
+      <el-table-column align="center" label="拖动" width="50" v-if="showType == 'pc' && type ==1">
+        <template>
+          <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+            title='点击拖动' />
+        </template>
+      </el-table-column>
       <el-table-column prop="fullName" label="名称">
         <template slot-scope="scope">
           <div style="display: flex;">
             <el-input v-model="scope.row.fullName" placeholder="请输入名称"
-              :disabled="type !=1?true:false" />
+              :disabled="type !=1?true:false" v-if="showType == 'pc'" />
+            <el-input v-model="scope.row.fullName" placeholder="请输入名称" disabled
+              v-if="showType == 'app'" />
             <el-select v-model="scope.row.classify" multiple placeholder="请选择类型"
               style="margin-left: 5px;" v-if="scope.row.filedName == 'classify'" filterable>
               <el-option v-for="item in classifyOptions" :key="item.enCode" :label="item.fullName"
@@ -174,10 +182,10 @@ export default {
       userOptions: [
         {
           value: '1',
-          fullName: '创建人员'
+          fullName: '创建人'
         }, {
           value: '2',
-          fullName: '发布人员'
+          fullName: '发布人'
         }],
     }
   },

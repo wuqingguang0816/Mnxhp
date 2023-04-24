@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="notice_r">
     <el-collapse-item title="公告通知设置" name="14">
-      <el-form-item label="风格类型" v-if="showType=='pc'">
+      <el-form-item label="风格类型" v-if="showType=='pc'" height="32px">
         <el-select v-model="activeData.option.styleType" placeholder="请选择风格类型"
           @change="renderKeyChange" filterable>
           <el-option v-for="(item, index) in styleTypeOptions" :key="index" :label="item.label"
@@ -175,3 +175,14 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.notice_r {
+  .el-form-item,
+  .el-form-item--small {
+    height: 32px;
+    .el-form-item__content {
+      height: 32px;
+    }
+  }
+}
+</style>
