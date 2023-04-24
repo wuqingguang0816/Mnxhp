@@ -1,7 +1,7 @@
 <template>
   <div class="popupSelect-container">
     <div class="el-select" @click="openDialog">
-      <el-input placeholder="请选择门户名称" v-model="title" readonly :validate-event="false"
+      <el-input placeholder="请选择门户名称" v-model="title" :validate-event="false" :disabled="disabled"
         @mouseenter.native="inputHovering = true" @mouseleave.native="inputHovering = false">
         <template slot="suffix">
           <i v-show="!showClose"
