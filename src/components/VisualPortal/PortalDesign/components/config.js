@@ -229,7 +229,7 @@ export const systemComponents = [{
       fullName: '类型',
       filedName: 'classify',
       fontSize: 12,
-      classify: ['1', '2'],
+      classify: [],
       fontWeight: false,
       fontColor: '#666666',
       show: true
@@ -259,7 +259,7 @@ export const systemComponents = [{
       fullName: '人员',
       filedName: 'user',
       fontSize: 12,
-      timeClassify: '发布人',
+      userClassify: '发布人',
       fontWeight: false,
       fontColor: '#666666',
       show: true
