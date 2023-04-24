@@ -25,7 +25,8 @@
           <el-input v-model="dataForm.content" placeholder="内容" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="全天" prop="allDay">
-          <el-switch v-model="dataForm.allDay" :active-value="1" :inactive-value="0">
+          <el-switch v-model="dataForm.allDay" :active-value="1" :inactive-value="0"
+            @change="change_providerType">
           </el-switch>
         </el-form-item>
         <el-form-item label="开始时间" prop="startDay">
@@ -376,6 +377,11 @@ export default {
       this.$store.dispatch('base/getDictionaryData', { sort: 'scheduleType' }).then((res) => {
         this.typeOptions = res
         if (this.typeOptions.length) this.dataForm.type = this.typeOptions[0].id
+      })
+    },
+    change_providerType() {
+      this.$nextTick(() => {
+        this.$refs.dataForm.clearValidate('duration')
       })
     },
     onMsgChange(id, item) {
