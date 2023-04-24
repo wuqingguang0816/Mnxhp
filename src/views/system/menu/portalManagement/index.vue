@@ -289,14 +289,14 @@ export default {
     vertical-align: middle;
     font-size: 16px;
   }
-  .JNPF-common-layout-main {
-    padding: 0;
-  }
+  // .JNPF-common-layout-main {
+  //   padding: 0 0 10px;
+  // }
   .menu-tab {
     height: 100%;
     >>> .el-tabs__content {
       padding: 0;
-      height: calc(100% - 40px);
+      height: calc(100% - 33px);
       .box {
         flex: 1;
         height: 100%;
@@ -308,6 +308,7 @@ export default {
     }
   }
 }
+
 .flow-form-main {
   .el-form {
     padding-top: 0;
