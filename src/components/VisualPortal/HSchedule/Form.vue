@@ -357,6 +357,7 @@ export default {
           this.dataForm.creatorUserId = this.userInfo.userId
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
+          this.dataForm.reminderTime = -2
           this.dataForm.duration = 60
           let time = this.jnpf.toDate(new Date(), "HH")
           this.dataForm.startTime = (Number(time) + 1) < 10 ? '0' + (Number(time) + 1) + ':00' : (Number(time) + 1) + ':00'
