@@ -83,11 +83,11 @@
       <el-tabs v-model="currentTab" class="top-tabs top-tabs_app">
         <el-tab-pane label="查询字段" name="search" />
         <el-tab-pane label="排序字段" name="sort" />
-        <el-tab-pane label="列表字段" name="field" />
-        <el-tab-pane label="列表属性" name="column" />
+        <el-tab-pane label="列表字段" name="column" />
+        <el-tab-pane label="列表属性" name="attr" />
       </el-tabs>
       <div class="field-box">
-        <div class="columnList" v-show="currentTab==='sort'">
+        <div class="columnList" v-if="currentTab==='sort'">
           <el-table :data="sortOptions" class="JNPF-common-table" height="100%"
             @selection-change="sortSelectionChange" ref="sortTable">
             <el-table-column prop="label" label="排序字段" v-if="webType!=4" />
@@ -95,7 +95,7 @@
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <div class="columnList" v-show="currentTab==='search'">
+        <div class="columnList" v-if="currentTab==='search'">
           <el-table :data="searchOptions" class="JNPF-common-table" height="100%"
             @selection-change="searchSelectionChange" ref="searchTable">
             <el-table-column prop="label" label="查询字段" v-if="webType!=4" />
@@ -103,7 +103,7 @@
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <div class="columnList" v-show="currentTab==='field'">
+        <div class="columnList" v-if="currentTab==='column'">
           <el-table :data="columnOptions" class="JNPF-common-table" height="100%"
             @selection-change="columnSelectionChange" ref="columnTable">
             <el-table-column prop="label" label="列表字段" v-if="webType!=4" />
@@ -111,7 +111,7 @@
             <el-table-column type="selection" width="55" align="center" />
           </el-table>
         </div>
-        <el-scrollbar class="right-scrollbar" v-show="currentTab==='column'">
+        <el-scrollbar class="right-scrollbar" v-show="currentTab==='attr'">
           <div class="setting-box">
             <el-form :model="columnData" label-width="80px" label-position="left">
               <el-divider>表格配置</el-divider>
@@ -300,7 +300,7 @@ export default {
   components: { draggable, FormScript, CustomBtn, Condition },
   data() {
     return {
-      currentTab: 'column',
+      currentTab: 'attr',
       alignOptions: ['left', 'center', 'right'],
       list: [],
       columnData: JSON.parse(JSON.stringify(defaultColumnData)),
@@ -369,6 +369,15 @@ export default {
       }
       this.columnData.columnBtnsList = list
     },
+    currentTab(val) {
+      this.$nextTick(() => {
+        if (this.$refs[val + 'Table']) {
+          this.columnData[val + 'List'].forEach(row => {
+            this.$refs[val + 'Table'].toggleRowSelection(row, true)
+          })
+        }
+      })
+    }
   },
   created() {
     if (typeof this.conf === 'object' && this.conf !== null) {
@@ -485,9 +494,9 @@ export default {
         if (!this.columnOptions.length) this.columnData.columnList = []
         if (!this.searchOptions.length) this.columnData.searchList = []
         this.$nextTick(() => {
-          this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
-          this.setListValue(this.columnData.searchList, this.searchOptions, "search")
-          this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+          this.columnData.columnList = this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+          this.columnData.searchList = this.setListValue(this.columnData.searchList, this.searchOptions, "search")
+          this.columnData.sortList = this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
         })
       })
     }
@@ -499,9 +508,9 @@ export default {
   mounted() {
     this.setSort()
     this.$nextTick(() => {
-      this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
-      this.setListValue(this.columnData.searchList, this.searchOptions, 'search')
-      this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+      this.columnData.columnList = this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+      this.columnData.searchList = this.setListValue(this.columnData.searchList, this.searchOptions, 'search')
+      this.columnData.sortList = this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
     })
   },
   methods: {
@@ -538,9 +547,7 @@ export default {
           }
         }
       }
-      res.forEach(row => {
-        this.$refs[type + 'Table'].toggleRowSelection(row, true)
-      })
+      return res
     },
     /**
       * 供父组件使用 获取列表JSON
