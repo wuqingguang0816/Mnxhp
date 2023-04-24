@@ -45,12 +45,7 @@
           <JNPF-UploadFz v-model="files" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="封面图片" prop="coverImage" tipLabel='门户公告通知缩略图展示，无设置则系统默认图片'>
-          <el-upload class="avatar-uploader" :headers="uploadHeaders"
-            :action="define.comUploadUrl+'/userAvatar'" :show-file-list="false"
-            :on-success="handleAvatarSuccess" accept="image/*">
-            <img v-if="dataForm.coverImage" :src="define.comUrl+dataForm.coverImage" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon" />
-          </el-upload>
+          <single-img v-model="dataForm.coverImage" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="正文" prop="bodyText">
           <JNPFQuill v-model="dataForm.bodyText" />
@@ -83,8 +78,9 @@
 <script>
 import { createNotice, updateNotice, getNoticeInfo, sendMessageConfig } from '@/api/system/message'
 import MsgDialog from "@/components/Process/PropPanel/msgDialog";
+import singleImg from '@/components/Upload/SingleImg'
 export default {
-  components: { MsgDialog },
+  components: { MsgDialog, singleImg },
   data() {
     return {
       uploadHeaders: { Authorization: this.$store.getters.token },
