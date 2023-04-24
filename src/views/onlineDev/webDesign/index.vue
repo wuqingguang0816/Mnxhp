@@ -252,6 +252,8 @@ export default {
     },
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
+      const type = key == 'pc' ? 'pcModuleParentId' : 'appModuleParentId'
+      this.$refs.releaseForm.clearValidate(type)
     },
     treeSelectChange(data, type) {
       const systemId = data[1].systemId
