@@ -301,10 +301,9 @@
                   <el-button class="upload"
                     v-if="item.value === 'upload'&&btnsList.indexOf('upload')!=-1"
                     @click="setUploaderTemplateJson">请设置导入模板</el-button>
-
                 </div>
               </el-checkbox-group>
-              <template v-if="btnsList.includes('batchPrint')">
+              <template v-if="btnsList.includes('batchPrint')&&btnsOption.includes('batchPrint')">
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
@@ -325,7 +324,6 @@
                   <el-input v-model="item.label" />
                 </el-checkbox>
               </el-checkbox-group>
-
               <template v-if="modelType==1">
                 <p class="btn-cap mt-10 mb-10">自定义按钮区
                 </p>
@@ -602,15 +600,15 @@ export default {
     }
   },
   watch: {
-    'columnData.ruleList':{
-      handler(){
+    'columnData.ruleList': {
+      handler() {
         let ruleData = this.$store.getters.ruleData;
-        if(ruleData && ruleData.length > 0 && this.columnData.ruleList.length == 0){
-          this.$set(this.columnData,'ruleList',JSON.parse(JSON.stringify(ruleData)))
+        if (ruleData && ruleData.length > 0 && this.columnData.ruleList.length == 0) {
+          this.$set(this.columnData, 'ruleList', JSON.parse(JSON.stringify(ruleData)))
         }
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true
     },
     btnsList(val) {
       let list = []
