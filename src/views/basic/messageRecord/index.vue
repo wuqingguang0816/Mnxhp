@@ -169,6 +169,7 @@ export default {
         }
         if (item.type == 4) {
           let bodyText = JSON.parse(res.data.bodyText)
+          if (bodyText.type == 3) return
           this.scheduleVisible = true
           this.$nextTick(() => {
             this.$refs.schedule.init(bodyText.id, '', bodyText.groupId)
