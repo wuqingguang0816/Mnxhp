@@ -25,7 +25,7 @@
     </el-form-item>
     <el-form-item label="">
       <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent"
-        @change="defaultCurrentChange" style="float: right;margin-right: 30px;">默认为当前系统时间
+        @change="defaultCurrentChange" style="float: right;margin-top: -15px;">默认为当前系统时间
       </el-checkbox>
     </el-form-item>
     <el-divider>规则</el-divider>

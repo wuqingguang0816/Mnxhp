@@ -208,9 +208,9 @@ export default {
 <style lang="scss" scoped>
 .input-number {
   width: 100%;
-  border-radius: 0px !important;
+  border-radius: 4px !important;
   >>> .el-input__inner {
-    border-radius: 0px !important;
+    border-radius: 4px !important;
   }
 }
 </style>
