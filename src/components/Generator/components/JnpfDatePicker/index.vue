@@ -101,8 +101,7 @@ export default {
       }
     }
   },
-  created() {
-  },
+  created() { },
   mounted() { },
   methods: {
     change(val) {
@@ -112,8 +111,10 @@ export default {
       return this.innerValue = ''
     }
   }
-
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.el-picker-panel__link-btn.el-button--text {
+  display: none;
+}
 </style>
