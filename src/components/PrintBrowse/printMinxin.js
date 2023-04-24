@@ -125,8 +125,8 @@ const printOptionApi = {
         })
       })
     },
-    replaceMe(data) {
-      this.printTemplate = this.printTemplate.replace(data.key, data.value)
+    replaceMe(key,value) {
+      this.printTemplate = this.printTemplate.replace(key,value)
     },
     replaceRemainData(dom) {
       let dataList = dom.querySelectorAll('span')
