@@ -48,8 +48,6 @@ export default {
   data() {
     return {
       innerValue: this.value,
-      innerStartTime: this.startTime,
-      innerEndTime: this.endTime
     }
   },
   watch: {
@@ -63,30 +61,24 @@ export default {
     readonly(val) {
       this.readOnly = val
     },
-    startTime(val) {
-      this.innerStartTime = val
-    },
-    endTime(val) {
-      this.innerEndTime = val
-    },
   },
   computed: {
     pickerOptions() {
-      if (this.innerStartTime) {
-        if (this.innerStartTime.split(':').length == 3) {
-          this.innerStartTime = this.innerStartTime
+      if (this.startTime) {
+        if (this.startTime.split(':').length == 3) {
+          this.startTime = this.startTime
         } else {
-          this.innerStartTime = this.innerStartTime + ':00'
+          this.startTime = this.startTime + ':00'
         }
       }
-      if (this.innerEndTime) {
-        if (this.innerEndTime.split(':').length == 3) {
-          this.innerEndTime = this.innerEndTime
+      if (this.endTime) {
+        if (this.endTime.split(':').length == 3) {
+          this.endTime = this.endTime
         } else {
-          this.innerEndTime = this.innerEndTime + ':00'
+          this.endTime = this.endTime + ':00'
         }
       }
-      let selectableRange = [`${this.innerStartTime || '00:00:00'} - ${this.innerEndTime || '23:59:59'}`]
+      let selectableRange = [`${this.startTime || '00:00:00'} - ${this.endTime || '23:59:59'}`]
       return { selectableRange }
     },
     readOnly() {
