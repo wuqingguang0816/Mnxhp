@@ -358,7 +358,7 @@ export default {
           this.dataForm.toUserIds = ''
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
-          this.dataForm.color = '188ae2'
+          this.dataForm.color = '#188ae2'
           this.dataForm.reminderTime = -2
           this.dataForm.duration = 60
           let time = this.jnpf.toDate(new Date(), "HH")
