@@ -355,6 +355,7 @@ export default {
           })
         } else {
           this.dataForm.creatorUserId = this.userInfo.userId
+          this.dataForm.toUserIds = ''
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
           this.dataForm.reminderTime = -2
