@@ -136,11 +136,11 @@ const printOptionApi = {
         if (dataTag && dataTag != 'null' && dataKey.startsWith("{")) {
           dataKey = dataKey.replace('{', '').replace('}', '')
           if (dataTag == 'headTable') {
-            this.replaceMe(element.outerHTML,this.data[dataKey])
+            this.replaceMe(element.outerHTML, this.data[dataKey])
           } else {
             let subData = this.data[dataTag] && this.data[dataTag].length > 0 && this.data[dataTag][0]
             if (subData) {
-              this.replaceMe(element.outerHTML,subData[dataKey])
+              this.replaceMe(element.outerHTML, subData[dataKey])
             }
           }
         }
@@ -329,12 +329,12 @@ const printOptionApi = {
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
       }
-      this.printTemplate = this.printTemplate.replace( '{systemPrinter}', systemPrinter)
-      this.printTemplate = this.printTemplate.replace( '{systemPrintTime}', systemPrintTime)
-      this.printTemplate = this.printTemplate.replace( '{systemApprovalContent}', systemApprovalContent)
+      this.printTemplate = this.printTemplate.replace('{systemPrinter}', systemPrinter)
+      this.printTemplate = this.printTemplate.replace('{systemPrintTime}', systemPrintTime)
+      this.printTemplate = this.printTemplate.replace('{systemApprovalContent}', systemApprovalContent)
     },
     getThousands(value, place) {
-      if (!value) return ''
+      if (!value && value !== 0) return ''
       place = place ? place : this.getPlace(value)
       const numArr = value.toString().split('.');
       numArr[0] = numArr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -367,7 +367,7 @@ const printOptionApi = {
             if (childItem) {
               childItem.innerHTML = template
             } else {
-              this.printTemplate = this.printTemplate.replace( item, template)
+              this.printTemplate = this.printTemplate.replace(item, template)
             }
           }
           let isArray = false
