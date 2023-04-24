@@ -77,11 +77,11 @@ export default {
         return
       }
       getAuthPortal(this.portalId, { platform: 'pc', systemId: this.systemId }).then(res => {
-        this.type = res.data.type || 0
-        this.linkType = res.data.linkType || 0
-        this.url = res.data.customUrl
-        this.enabledLock = res.data.enabledLock || 0
         if (res.data) {
+          this.type = res.data.type || 0
+          this.linkType = res.data.linkType || 0
+          this.url = res.data.customUrl || ''
+          this.enabledLock = res.data.enabledLock || 0
           if (res.data.type === 1) {
             if (res.data.customUrl && res.data.customUrl !== 1) {
               this.currentView = (resolve) => require([`@/views/${res.data.customUrl}`], resolve)
@@ -95,8 +95,8 @@ export default {
           }
         }
         this.ajaxing = false
-        this.initAutoRefresh()
         setTimeout(() => {
+          this.initAutoRefresh()
           this.loading = false
         }, 500);
       }).catch(() => {
@@ -128,24 +128,22 @@ export default {
     initAutoRefresh() {
       if (!this.layout.length) return
       this.timerList = []
-      if (this.refreshData.autoRefresh) {
-        var timer = setInterval(() => {
-          this.layout.forEach(ele => {
-            ele.renderKey = +new Date()
-            this.autoRefresh(ele)
-          });
-        }, this.refreshData.autoRefreshTime * 1000 * 60);
-        this.timerList.push(timer)
-      } else {
-        this.layout.forEach(ele => {
-          if (ele.refresh && ele.refresh.autoRefresh && ele.refresh.autoRefreshTime) {
+      const loop = (list, type = 1) => {
+        list.forEach(ele => {
+          if ((ele.refresh && ele.refresh.autoRefresh && ele.refresh.autoRefreshTime) || type == 2) {
             var timer = setInterval(() => {
               ele.renderKey = +new Date()
               this.autoRefresh(ele)
-            }, ele.refresh.autoRefreshTime * 1000 * 60);
+            }, type == 2 ? this.refreshData.autoRefreshTime * 1000 * 60 : ele.refresh.autoRefreshTime * 1000 * 60);
             this.timerList.push(timer)
           }
+          if (ele.children && ele.children.length) loop(ele.children, type)
         });
+      }
+      if (this.refreshData.autoRefresh) {
+        loop(this.layout, 2)
+      } else {
+        loop(this.layout)
       }
     },
     autoRefresh(item) {

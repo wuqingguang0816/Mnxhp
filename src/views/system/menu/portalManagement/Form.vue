@@ -4,14 +4,14 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
-      <el-form-item label="平台" prop="platform">
+      <el-form-item label="分类" prop="platform">
         <el-input v-model="dataForm.platform" disabled />
       </el-form-item>
       <el-form-item label="门户名称" prop="fullName">
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
           :systemId="dataForm.systemId" @change="portalChange" :disabled="dataForm.id?true:false" />
       </el-form-item>
-      <el-form-item label="分类" prop="category">
+      <el-form-item label="门户分类" prop="category">
         <el-select v-model="dataForm.category" placeholder="请选择分类" disabled>
           <el-option :key="item.id" :label="item.fullName" :value="item.id"
             v-for="item in categoryList" />

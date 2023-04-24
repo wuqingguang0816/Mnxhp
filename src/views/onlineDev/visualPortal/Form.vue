@@ -126,6 +126,8 @@ export default {
       this.btnLoading = false
       this.designBtnLoading = false
       this.dataForm.formData = null
+      this.dataForm.linkType = 0
+      this.dataForm.customUrl = ''
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {

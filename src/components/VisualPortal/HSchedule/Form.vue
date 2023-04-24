@@ -25,7 +25,8 @@
           <el-input v-model="dataForm.content" placeholder="内容" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="全天" prop="allDay">
-          <el-switch v-model="dataForm.allDay" :active-value="1" :inactive-value="0">
+          <el-switch v-model="dataForm.allDay" :active-value="1" :inactive-value="0"
+            @change="change_providerType">
           </el-switch>
         </el-form-item>
         <el-form-item label="开始时间" prop="startDay">
@@ -97,9 +98,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"' required>
-          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间"
-            :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
+        <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"'>
+          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间" clearable
+            format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -153,14 +154,14 @@ export default {
         callback(new Error('结束时间不能为空'));
       } else {
         if (this.dataForm.startDay == value && this.dataForm.startTime > this.dataForm.endTime) {
-          callback(new Error('结束时间应大于起始时间'));
+          callback(new Error('结束时间必须晚于开始时间'));
         }
         if (this.dataForm.startDay > value) {
-          callback(new Error('结束时间应大于起始时间'));
+          callback(new Error('结束时间必须晚于开始时间'));
         }
         callback();
       }
-    };
+    }
     return {
       visible: false,
       btnLoading: false,
@@ -208,7 +209,7 @@ export default {
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, validator: validatePass, trigger: 'change' }
+          { required: true, message: '结束重复时间不能为空', trigger: 'change' }
         ],
         send: [
           { required: true, message: '发送配置不能为空', trigger: 'change' }
@@ -369,12 +370,18 @@ export default {
       if (Number(time) == 24) {
         time = 0
       }
+      this.dataForm.endDay = this.dataForm.startDay
       this.dataForm.endTime = time < 10 ? '0' + time + ':' + arr[1] : time + ':' + arr[1]
     },
     getDictionaryData() {
       this.$store.dispatch('base/getDictionaryData', { sort: 'scheduleType' }).then((res) => {
         this.typeOptions = res
         if (this.typeOptions.length) this.dataForm.type = this.typeOptions[0].id
+      })
+    },
+    change_providerType() {
+      this.$nextTick(() => {
+        this.$refs.dataForm.clearValidate('duration')
       })
     },
     onMsgChange(id, item) {
@@ -398,7 +405,7 @@ export default {
           }
           if (this.dataForm.allDay == 1) {
             if (this.dataForm.startDay > this.dataForm.endDay) {
-              return this.$message({ message: '于开始时间不能大结束时间', type: 'error' })
+              return this.$message({ message: '开始时间不能大结束时间', type: 'error' })
             }
           }
           if (this.dataForm.repetition != -1 && (this.dataForm.startDay == this.dataForm.endDay)) {

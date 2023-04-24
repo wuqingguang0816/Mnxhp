@@ -50,13 +50,14 @@
                   </el-tooltip>
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list">
-                  <el-table-column prop="categoryName" label="分类" />
-                  <el-table-column prop="fullName" label="门户名称" />
-                  <el-table-column prop="description" label="说明" />
+                  <el-table-column prop="fullName" label="门户名称" min-width="200" />
+                  <el-table-column prop="categoryName" label="门户分类" width="150" />
+                  <el-table-column prop="description" label="说明" width="200"
+                    show-overflow-tooltip />
                   <el-table-column prop="creatorUser" label="创建人" width="120" />
                   <el-table-column prop="creatorTime" label="创建时间" width="120"
                     :formatter="jnpf.tableDateFormat" />
-                  <el-table-column prop="lastModifyTime" label="最后修改时间"
+                  <el-table-column prop="lastModifyTime" label="最后修改时间" width="120"
                     :formatter="jnpf.tableDateFormat" />
                   <el-table-column prop="sortCode" label="排序" width="70" align="center" />
                   <el-table-column prop="enabledMark" label="状态" width="70" align="center">

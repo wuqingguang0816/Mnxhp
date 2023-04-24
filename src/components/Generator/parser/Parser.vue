@@ -470,6 +470,9 @@ export default {
           }
         }
         if (config.jnpfKey === 'date') {
+          if (config.defaultCurrent) {
+            config.defaultValue = new Date().getTime()
+          }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
               cur.startTime = config.startTimeValue
@@ -704,7 +707,7 @@ export default {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '23:59:59'
                   if (endTime && (endTime.split(':').length == 3)) {
                     endTime = endTime
                   } else {
@@ -772,7 +775,7 @@ export default {
                   startTime = e.startTime
                 }
                 if (e.__config__.endTimeType == 2) {
-                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '00:00:00'
+                  endTime = this[this.formConf.formModel][e.__config__.endRelationField] || '23:59:59'
                   if (endTime && (endTime.split(':').length == 3)) {
                     endTime = endTime
                   } else {

@@ -339,6 +339,7 @@ export default {
                   } else {
                     endTime = e.endTime
                   }
+                  console.log(endTime)
                   item.config.startTime = startTime
                   item.config.endTime = endTime
                 }
@@ -743,10 +744,8 @@ export default {
     addItem() {
       if (this.config.addType == 1) {
         this.openSelectDialog()
-        console.log(2222)
       } else {
         this.addRow()
-        console.log(111)
       }
     },
     openSelectDialog() {

@@ -58,10 +58,10 @@
           </el-table-column>
           <el-table-column prop="expirationTime" label="失效时间" :formatter="jnpf.tableDateFormat"
             width="120" />
+          <el-table-column prop="creatorUser" label="创建人" width="120" />
           <el-table-column prop="creatorTime" label="创建时间" :formatter="jnpf.tableDateFormat"
             width="120" />
-          <el-table-column prop="creatorUser" label="创建人员" width="120" />
-          <el-table-column prop="releaseUser" label="发布人员" width="120" />
+          <el-table-column prop="releaseUser" label="发布人" width="120" />
           <el-table-column prop="releaseTime" label="发布时间" :formatter="jnpf.tableDateFormat"
             width="120" />
           <el-table-column prop="enabledMark" label="状态" width="100" align="center">

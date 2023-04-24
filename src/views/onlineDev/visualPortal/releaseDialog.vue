@@ -114,13 +114,15 @@ export default {
     },
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
+      const type = key == 'pc' ? 'pcModuleParentId' : 'appModuleParentId'
+      this.$refs.releaseForm.clearValidate(type)
     },
     // 发布菜单
     release() {
       if (!this.releaseQuery.pc && !this.releaseQuery.app) return this.$message.error('请至少选择一种门户同步方式')
       this.releaseBtnLoading = true
       this.releaseQuery.pcSystemId = this.releaseQuery.pcModuleParentId.toString()
-      this.releaseQuery.appSystemId = this.releaseQuery.pcModuleParentId.toString()
+      this.releaseQuery.appSystemId = this.releaseQuery.appModuleParentId.toString()
       Release(this.currRow.id, this.releaseQuery).then(res => {
         this.$message({
           type: 'success',
