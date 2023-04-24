@@ -91,6 +91,10 @@ export default {
       type: String,
       default: ''
     },
+    platform: {
+      type: String,
+      default: 'Web'
+    }
   },
   model: {
     prop: 'value',
@@ -127,6 +131,10 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
+      this.listQuery = {
+        ...this.listQuery,
+        platform: this.platform
+      }
       getPortalManageSelector(this.systemId, this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total

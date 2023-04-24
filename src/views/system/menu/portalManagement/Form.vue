@@ -9,7 +9,8 @@
       </el-form-item>
       <el-form-item label="门户名称" prop="fullName">
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
-          :systemId="dataForm.systemId" @change="portalChange" :disabled="dataForm.id?true:false" />
+          :systemId="dataForm.systemId" @change="portalChange" :disabled="dataForm.id?true:false"
+          :platform='dataForm.platform' />
       </el-form-item>
       <el-form-item label="门户分类" prop="category">
         <el-select v-model="dataForm.category" placeholder="请选择分类" disabled>
