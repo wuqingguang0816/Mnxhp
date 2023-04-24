@@ -3,8 +3,9 @@
     <el-form-item label="控件标题">
       <el-input v-model="activeData.__config__.label" placeholder="请输入控件标题" />
     </el-form-item>
-    <el-form-item type="textarea" label="标题提示">
-      <el-input :rows="2" v-model="activeData.__config__.tipLabel" placeholder="请输入标题提示" />
+    <el-form-item label="标题提示">
+      <el-input type="textarea" :rows="2" v-model="activeData.__config__.tipLabel"
+        placeholder="请输入标题提示" />
     </el-form-item>
     <el-form-item label="计算公式">
       <div @click="expDialogVisible = true" class="pane-calc-preview">

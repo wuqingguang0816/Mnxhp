@@ -86,7 +86,7 @@
       v-if="(activeData.__config__.jnpfKey==='userSelect' && (activeData.selectType == 'all' || activeData.selectType == 'custom')) || activeData.__config__.jnpfKey==='depSelect' || activeData.__config__.jnpfKey==='comSelect' ">
       <el-checkbox label="true" v-model="activeData.__config__.defaultCurrent"
         @change="defaultCurrentChange(activeData.__config__.defaultCurrent, activeData.__config__.jnpfKey)"
-        style="float: right;margin-right: 30px;">
+        style="float: right;margin-top: -15px;">
         <span v-if="activeData.__config__.jnpfKey==='userSelect'">
           默认为当前登录用户
         </span>
