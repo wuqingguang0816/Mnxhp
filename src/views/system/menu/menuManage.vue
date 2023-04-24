@@ -227,7 +227,7 @@ export default {
       this.$emit('close', isRefresh)
     },
     init(data) {
-      this.title = data.fullName
+      this.title = data.fullName + '的菜单管理'
       this.systemId = data.id
       this.initData();
     },

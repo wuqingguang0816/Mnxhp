@@ -45,7 +45,7 @@
           <el-table-column prop="fullName" label="名称" show-overflow-tooltip min-width="200" />
           <el-table-column prop="enCode" label="编码" width="200" />
           <el-table-column prop="category" label="分类" width="150" />
-          <el-table-column prop="webType" label="类型" width="100">
+          <el-table-column prop="webType" label="类型" width="100" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.webType == 4">数据视图</span>
               <span v-else-if="scope.row.enableFlow">流程表单</span>

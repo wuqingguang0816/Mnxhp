@@ -4,9 +4,6 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
-      <el-form-item label="分类" prop="platform">
-        <el-input v-model="dataForm.platform" disabled />
-      </el-form-item>
       <el-form-item label="门户名称" prop="fullName">
         <portalDialog :value="dataForm.portalId" :title="dataForm.fullName"
           :systemId="dataForm.systemId" @change="portalChange" :disabled="dataForm.id?true:false"
