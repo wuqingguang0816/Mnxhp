@@ -135,7 +135,7 @@
       </template>
       <span slot="footer" class="dialog-footer">
         <el-button @click="updateVisible = false">{{$t('common.cancelButton')}}</el-button>
-        <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
+        <el-button type="primary" @click="dataFormSubmit(1)" :loading="btnLoading">
           {{$t('common.confirmButton')}}</el-button>
       </span>
     </el-dialog>
@@ -344,7 +344,6 @@ export default {
       this.delVisible = false
       this.updateVisible = false
       this.repetitionType = false
-      this.dataForm.duration = 60
       this.getDictionaryData()
       this.dataForm.endTime = ''
       this.$nextTick(() => {
@@ -358,6 +357,7 @@ export default {
           this.dataForm.creatorUserId = this.userInfo.userId
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
+          this.dataForm.duration = 60
           let time = this.jnpf.toDate(new Date(), "HH")
           this.dataForm.startTime = (Number(time) + 1) < 10 ? '0' + (Number(time) + 1) + ':00' : (Number(time) + 1) + ':00'
           this.dataForm.endTime = (Number(time) + 2) < 10 ? '0' + (Number(time) + 2) + ':00' : (Number(time) + 2) + ':00'
@@ -394,7 +394,10 @@ export default {
       this.dataForm.send = id
       this.dataForm.sendName = item.fullName
     },
-    dataFormSubmit() {
+    dataFormSubmit(type) {
+      if (type == 1) {
+        if (!this.checked) return this.$message.warning('请选择日程')
+      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (!this.allDay) {
@@ -453,7 +456,7 @@ export default {
         if (!this.delVisible) {
           this.delVisible = true
         } else {
-          if (!this.checked) return this.$message('请选择日程')
+          if (!this.checked) return this.$message.warning('请选择日程')
           ScheduleDelete(this.dataForm.id, this.checked).then(res => {
             this.$message({
               message: res.msg,
