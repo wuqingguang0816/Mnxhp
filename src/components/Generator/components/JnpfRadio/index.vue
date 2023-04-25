@@ -70,14 +70,14 @@ export default {
       this.$emit('input', val)
       this.$emit('change', val)
     },
-    value(val) {
-      this.innerValue = val
+    value: {
+      handler(val) {
+        this.innerValue = val
+      },
+      immediate: true
     },
   },
   computed: {},
-  created() {
-    this.$emit('change', this.innerValue)
-  },
   mounted() { },
   methods: {}
 

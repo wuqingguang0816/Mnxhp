@@ -49,14 +49,14 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      this.innerValue = val
+    value: {
+      handler(val) {
+        this.innerValue = val
+      },
+      immediate: true
     },
   },
   computed: {},
-  created() {
-    this.onChange()
-  },
   mounted() { },
   methods: {
     onChange() {
