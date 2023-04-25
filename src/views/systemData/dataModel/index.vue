@@ -133,10 +133,6 @@ export default {
   },
   methods: {
     search() {
-      this.getTableData()
-    },
-    reset() {
-      this.keyword = '';
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,
@@ -144,6 +140,10 @@ export default {
         sidx: ''
       }
       this.getTableData()
+    },
+    reset() {
+      this.keyword = '';
+      this.search()
     },
     initData() {
       this.listLoading = true
