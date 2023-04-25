@@ -254,7 +254,6 @@ export default {
       return data.__config__.jnpfKey !== 'table'
     },
     dateTypeChange(val) {
-      this.activeData['value-format'] = val
       this.getTargetOptions()
     },
     startType(val) {

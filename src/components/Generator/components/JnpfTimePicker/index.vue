@@ -1,7 +1,7 @@
 <template>
   <el-time-picker v-model="innerValue" :placeholder="placeholder" :value-format="valueFormat"
     :picker-options='pickerOptions' :format="format" :disabled="disabled" :clearable="clearable"
-    :readonly="readOnly"></el-time-picker>
+    @change="change" :readonly="readOnly"></el-time-picker>
 </template>
 <script>
 export default {
@@ -51,12 +51,11 @@ export default {
     }
   },
   watch: {
-    innerValue(val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
-    },
-    value(val) {
-      this.innerValue = val
+    value: {
+      handler(val) {
+        this.innerValue = val
+      },
+      immediate: true
     },
     readonly(val) {
       this.readOnly = val
@@ -89,8 +88,11 @@ export default {
   },
   created() { },
   mounted() { },
-  methods: {}
+  methods: {
+    change() {
+      this.$emit('input', this.innerValue)
+      this.$emit('change', this.innerValue)
+    }
+  }
 }
 </script>
-<style lang="scss" scoped>
-</style>
