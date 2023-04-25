@@ -35,9 +35,9 @@
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="10">
             <el-time-select placeholder="请选择开始时间" v-model="dataForm.startTime" :picker-options="{
-       start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
+       start: '00:00',step: '00:05',end: '23:55'}" class="jnpf-el-row" v-if="dataForm.allDay==0">
             </el-time-select>
           </el-col>
         </el-form-item>
@@ -55,10 +55,12 @@
               :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
-          <el-col :span="2">
-            <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
-       start: '00:00',step: '00:05',end: '23:55'}" style="width:166px;" v-if="dataForm.allDay==0">
-            </el-time-select>
+          <el-col :span="10">
+            <el-form-item label="" prop="endTime">
+              <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
+       start: '00:00',step: '00:05',end: '23:55'}" class="jnpf-el-row" v-if="dataForm.allDay==0">
+              </el-time-select>
+            </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="创建人" prop="creatorUserId">
@@ -189,7 +191,7 @@ export default {
         color: '#188ae2'
       },
       repetitionType: false,
-      checked: '',
+      checked: 1,
       delVisible: false,
       updateVisible: false,
       dataRule: {
@@ -334,7 +336,7 @@ export default {
     ...mapGetters(['userInfo'])
   },
   created() {
-
+    this.getDictionaryData()
   },
   methods: {
     init(id, startTime) {
@@ -344,14 +346,13 @@ export default {
       this.delVisible = false
       this.updateVisible = false
       this.repetitionType = false
-      this.getDictionaryData()
+      this.checked = 1
       this.dataForm.endTime = ''
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           ScheduleInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
-            if (this.dataForm.repetition != "1") return this.repetitionType = true
+            if (this.dataForm.repetition != "1") this.repetitionType = true
           })
         } else {
           this.dataForm.creatorUserId = this.userInfo.userId
@@ -361,6 +362,17 @@ export default {
           this.dataForm.color = '#188ae2'
           this.dataForm.reminderTime = -2
           this.dataForm.duration = 60
+          this.dataForm.content = ''
+          this.dataForm.title = ''
+          this.dataForm.allDay = 0
+          this.dataForm.type = ''
+          this.dataForm.repetition = '1'
+          this.dataForm.repeatTime = ''
+          this.dataForm.userName = ''
+          this.dataForm.urgent = '1'
+          this.dataForm.reminderType = '1'
+          this.dataForm.send = ''
+          this.dataForm.sendName = ''
           let time = this.jnpf.toDate(new Date(), "HH")
           this.dataForm.startTime = (Number(time) + 1) < 10 ? '0' + (Number(time) + 1) + ':00' : (Number(time) + 1) + ':00'
           this.dataForm.endTime = (Number(time) + 2) < 10 ? '0' + (Number(time) + 2) + ':00' : (Number(time) + 2) + ':00'
@@ -496,5 +508,8 @@ export default {
   >>> .el-dialog__body {
     padding: 20px 21px 2px !important;
   }
+}
+.jnpf-el-row {
+  width: 100% !important;
 }
 </style>
