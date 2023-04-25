@@ -29,7 +29,8 @@
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             <span slot="label" v-if="head.__config__.tipLabel">{{head.__config__['label']}}
               <el-tooltip placement="top" :content=head.__config__.tipLabel>
-                <a class='el-icon-question el-tooltip-question'></a>
+                <a class='el-icon-question el-tooltip-question'
+                  style="color: #a0acb7;opacity: 0.8;"></a>
               </el-tooltip>
             </span>
             <span v-if="!head.__config__['tipLabel']">{{ head.__config__['label'] }}</span>
@@ -234,7 +235,6 @@ export default {
               item.config.endTime = endTime
             }
             if (e.opType === 'setTime') {
-              let format = e.format
               let startTime = ''
               let endTime = ''
               if (e.__config__.startRelationField && e.__config__.startTimeType == 2) {
@@ -246,7 +246,7 @@ export default {
                   startTime = startTime + ':00'
                 }
               } else {
-                startTime = e.startTime
+                startTime = e.startTime || '00:00:00'
               }
               if (e.__config__.endRelationField && e.__config__.endTimeType == 2) {
                 endTime = this.formData[e.__config__.endRelationField] || '23:59:59'
@@ -256,7 +256,7 @@ export default {
                   endTime = endTime + ':00'
                 }
               } else {
-                endTime = e.endTime
+                endTime = e.endTime || '23:59:59'
               }
               item.config.startTime = startTime
               item.config.endTime = endTime
@@ -274,7 +274,7 @@ export default {
             const e = currRelations[key][i];
             const config = e.__config__
             const jnpfKey = config.jnpfKey
-            let defaultValue = ''
+            let defaultValue = null
             if (['checkbox', 'cascader'].includes(jnpfKey) || (['select', 'treeSelect', 'popupSelect', 'popupTableSelect', 'userSelect'].includes(jnpfKey) && e.multiple)) {
               defaultValue = []
             }
@@ -283,8 +283,7 @@ export default {
               let item = row[j];
               const vModel = item.jnpfKey === 'popupSelect' ? item.__vModel__.substring(0, item.__vModel__.indexOf('_jnpfRelation_')) : item.__vModel__
               if (e.__vModel__ === vModel) {
-                item.value = defaultValue
-                this.handleRelation(item, rowIndex)
+
                 if (e.opType === 'setOptions') {
                   item.options = []
                   let query = {
@@ -342,6 +341,9 @@ export default {
                   item.config.startTime = startTime
                   item.config.endTime = endTime
                 }
+                if (item.value == defaultValue) return
+                item.value = defaultValue
+                this.handleRelation(item, rowIndex)
               }
             }
           }
