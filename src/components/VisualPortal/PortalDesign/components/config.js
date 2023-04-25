@@ -702,7 +702,7 @@ export const basicComponents = [{
     describe: false,
     showName: true,
     dataFontSize: 14,
-    dataFontColor: '#303133',
+    dataFontColor: '#606266',
     dataFontWeight: false,
     nameFontSize: 14,
     nameFontColor: '#303133',
