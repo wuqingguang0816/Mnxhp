@@ -3,7 +3,7 @@
     <div class="JNPF-common-title" v-if="config.__config__.showTitle && config.__config__.label">
       <span slot="label" v-if="config.__config__.tipLabel">{{config.__config__.label}}
         <el-tooltip placement="top" :content=config.__config__.tipLabel>
-          <a class='el-icon-question el-tooltip-question'></a>
+          <a class='el-icon-question el-tooltip-question' style="color: #a0acb7;opacity: 0.8;"></a>
         </el-tooltip>
       </span>
       <h2 v-else>{{config.__config__.label}}</h2>
