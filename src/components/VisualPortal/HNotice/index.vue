@@ -172,10 +172,10 @@ export default {
       styleJson['font-size'] = this.activeData.option.tableFontSize + 'px'
       styleJson['color'] = this.activeData.option.tableFontColor
       if (rowIndex % 2 == 0) {
-        styleJson.background = this.activeData.option.tableOddLineColor ? this.activeData.option.tableOddLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeOddLineColor ? this.activeData.option.noticeOddLineColor : this.activeData.option.tableBgColor
         return styleJson
       } else {
-        styleJson.background = this.activeData.option.tableEvenLineColor ? this.activeData.option.tableEvenLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeEventLineColor ? this.activeData.option.noticeEventLineColor : this.activeData.option.tableBgColor
         return styleJson
       }
     },

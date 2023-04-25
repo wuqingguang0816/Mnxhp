@@ -218,7 +218,7 @@ export const systemComponents = [{
     tableFontColor: '#666666',
     noticeBgColor: '',
     noticeOddLineColor: '',
-    noticeEvenyLineColor: '',
+    noticeEventLineColor: '',
     describe: false,
     showText: true,
     textFontSize: 14,
