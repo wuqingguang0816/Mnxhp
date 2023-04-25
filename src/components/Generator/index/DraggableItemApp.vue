@@ -248,7 +248,7 @@ const layouts = {
       if (element.__config__.tipLabel) {
         toolTip = <span slot="label">{element.header}
           <el-tooltip placement="top" content={element.__config__.tipLabel}>
-            <a class='el-icon-warning-outline content-name'></a>
+            <a class='el-icon-question el-tooltip-question content-name'></a>
           </el-tooltip>
         </span >
       }
@@ -275,7 +275,7 @@ const layouts = {
       if (element.__config__.tipLabel) {
         toolTip = <span slot="label">{element.__config__.label}
           <el-tooltip placement="top" content={element.__config__.tipLabel}>
-            <a class='el-icon-warning-outline content-name'></a>
+            <a class='el-icon-question el-tooltip-question content-name'></a>
           </el-tooltip>
         </span >
       }

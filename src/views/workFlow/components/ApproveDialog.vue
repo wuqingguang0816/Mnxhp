@@ -34,12 +34,12 @@
               <el-radio-group v-model="dataForm.rejectType" class="form-item-content">
                 <el-radio :label="1">重新审批
                   <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
-                    <i class="el-icon-warning-outline"></i>
+                    <i class="el-icon-question el-tooltip-question"></i>
                   </el-tooltip>
                 </el-radio>
                 <el-radio :label="2">直接提交给我
                   <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
-                    <i class="el-icon-warning-outline"></i>
+                    <i class="el-icon-question el-tooltip-question"></i>
                   </el-tooltip>
                 </el-radio>
               </el-radio-group>

@@ -67,7 +67,7 @@
     <el-form-item>
       <span slot="label">是否唯一
         <el-tooltip content="输入值唯一性校验" placement="top">
-          <a class="el-icon-warning-outline"></a>
+          <a class="el-icon-question el-tooltip-question"></a>
         </el-tooltip>
       </span>
       <el-switch v-model="activeData.__config__.unique" />

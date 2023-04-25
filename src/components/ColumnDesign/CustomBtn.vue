@@ -5,7 +5,7 @@
     <span slot="title" class="dialog-title">
       <span>按钮事件配置
         <el-tooltip content="小程序不支持在线JS脚本" placement="top-start">
-          <a class="el-icon-warning-outline"></a>
+          <a class="el-icon-question el-tooltip-question"></a>
         </el-tooltip>
       </span>
     </span>

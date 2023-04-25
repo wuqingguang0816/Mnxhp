@@ -102,7 +102,7 @@
             <div class="cap">
               <span slot="label">SQL语句
                 <el-tooltip content="支持SQL语句&存储过程语句" placement="top">
-                  <a class="el-icon-warning-outline"></a>
+                  <a class="el-icon-question el-tooltip-question"></a>
                 </el-tooltip>
               </span>
               <div style="float:right;cursor:pointer">
@@ -142,7 +142,7 @@
           <div class="cap">
             <span>接口参数
               <el-tooltip content="接收方式:Body/json" placement="top">
-                <a class="el-icon-warning-outline"></a>
+                <a class="el-icon-question el-tooltip-question"></a>
               </el-tooltip>
             </span>
           </div>

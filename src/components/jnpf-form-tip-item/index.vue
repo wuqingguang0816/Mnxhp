@@ -27,7 +27,7 @@ export default {
     },
     tipIcon: {
       type: String,
-      default: 'el-icon-warning-outline'
+      default: 'el-icon-question el-tooltip-question'
     }
   }
 }

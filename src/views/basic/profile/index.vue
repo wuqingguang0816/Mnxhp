@@ -13,7 +13,7 @@
         <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的组织
             <el-tooltip content="用户可以自行切换组织信息，我的组织默认只能进行单选" placement="right">
-              <a class="el-icon-warning-outline"></a>
+              <a class="el-icon-question el-tooltip-question"></a>
             </el-tooltip>
           </h2>
         </div>
@@ -38,7 +38,7 @@
         <div class="JNPF-common-title mb-10">
           <h2 class="bold">我的岗位
             <el-tooltip content="用户可以自行切换我的组织内的岗位信息，我的岗位默认只能进行单选" placement="right">
-              <a class="el-icon-warning-outline"></a>
+              <a class="el-icon-question el-tooltip-question"></a>
             </el-tooltip>
           </h2>
         </div>
