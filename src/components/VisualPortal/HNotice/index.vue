@@ -83,7 +83,7 @@
                   </div>
                 </div>
                 <div v-else
-                  :style="{background: activeData.option.noticeEvenyLineColor ? activeData.option.noticeEvenyLineColor : activeData.option.noticeBgColor }"
+                  :style="{background: activeData.option.noticeEventLineColor ? activeData.option.noticeEventLineColor : activeData.option.noticeBgColor }"
                   class="portal-list-item">
                   <div class="item-image-box" v-if="activeData.option.showImage">
                     <img v-if="item.category == '公告'"
@@ -172,10 +172,10 @@ export default {
       styleJson['font-size'] = this.activeData.option.tableFontSize + 'px'
       styleJson['color'] = this.activeData.option.tableFontColor
       if (rowIndex % 2 == 0) {
-        styleJson.background = this.activeData.option.noticeOddLineColor ? this.activeData.option.noticeOddLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeOddLineColor ? this.activeData.option.noticeOddLineColor : this.activeData.option.noticeBgColor
         return styleJson
       } else {
-        styleJson.background = this.activeData.option.noticeEventLineColor ? this.activeData.option.noticeEventLineColor : this.activeData.option.tableBgColor
+        styleJson.background = this.activeData.option.noticeEventLineColor ? this.activeData.option.noticeEventLineColor : this.activeData.option.noticeBgColor
         return styleJson
       }
     },
