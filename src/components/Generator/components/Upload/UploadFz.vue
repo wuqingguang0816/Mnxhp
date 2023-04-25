@@ -4,8 +4,8 @@
       <el-button size="small" icon="el-icon-upload" @click="uploadFile" :disabled="disabled">
         {{buttonText}}
       </el-button>
-      <el-button type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"><i
-          class="el-icon-download"></i>全部下载</el-button>
+      <a type="text" @click="downloadAll" style="float:right;" v-if="fileList.length" class="el-button el-button--text el-button--small"><i
+          class="el-icon-download"></i>全部下载</a>
       <div class="el-upload__tip" v-if="showTip">
         只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
       </div>
