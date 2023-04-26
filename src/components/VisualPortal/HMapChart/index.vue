@@ -215,7 +215,7 @@ export default {
           fontWeight: option.titleSubtextStyleFontWeight ? 'bolder' : '',
         },
         left: option.titleLeft,
-        backgroundColor: option.titleText || option.titleSubtext ? option.titleBgColor : 'rgba(255,255,255,0)',
+        backgroundColor: option.titleText || option.titleSubtext ? option.titleBgColor || '#fff' : '#fff',
       }
       let tooltip = {
         show: this.option.tooltipShow,
