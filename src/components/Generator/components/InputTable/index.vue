@@ -343,7 +343,7 @@ export default {
                 }
                 if (item.value == defaultValue) return
                 item.value = defaultValue
-                this.handleRelation(item, rowIndex)
+                this.$nextTick(() => this.handleRelation(item, rowIndex));
               }
             }
           }
