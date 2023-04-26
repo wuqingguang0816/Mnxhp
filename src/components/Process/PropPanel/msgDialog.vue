@@ -79,7 +79,7 @@ export default {
       default: ''
     },
     messageSource: {
-      type: String,
+      type: Number,
       default: 1
     },
     clearable: {
