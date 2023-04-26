@@ -300,6 +300,7 @@ export default {
       this.templateId = ''
       this.flowId = ''
       this.urgent = ''
+      this.flowOptions = []
       this.flowCategory = ''
       this.creatorUserId = ''
       this.listQuery = {
