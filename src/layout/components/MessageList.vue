@@ -37,6 +37,8 @@
                 v-if="item.type == 1"></i>
               <i class="icon-ym icon-ym-generator-notice JNPF-messageList-item-icon notice-icon"
                 v-else-if="item.type == 3"></i>
+              <i class="icon-ym icon-ym-portal-schedule JNPF-messageList-item-icon schedule-icon"
+                v-else-if="item.type == 4"></i>
               <i class="icon-ym icon-ym icon-ym-generator-flow JNPF-messageList-item-icon flow-icon"
                 v-else></i>
             </el-badge>
@@ -321,6 +323,9 @@ export default {
       }
       .notice-icon {
         background-color: #e09f0c !important;
+      }
+      .schedule-icon {
+        background-color: #7777ff !important;
       }
       .JNPF-messageList-item-icon {
         background-color: #1890ff;
