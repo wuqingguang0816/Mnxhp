@@ -366,6 +366,7 @@ export default {
           this.dataForm.title = ''
           this.dataForm.allDay = 0
           this.dataForm.type = ''
+          if (this.typeOptions.length) this.dataForm.type = this.typeOptions[0].id
           this.dataForm.repetition = '1'
           this.dataForm.repeatTime = ''
           this.dataForm.userName = ''
