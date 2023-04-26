@@ -1604,7 +1604,8 @@
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
                         @click="refreshPrintOptions" :underline="false">
-                        <i class="el-icon-refresh el-icon--right"></i></el-link>
+                        <i class="el-icon-refresh el-icon--right"
+                          style="color: #a0acb7;opacity: 0.8;"></i></el-link>
                       <el-divider></el-divider>
                     </div>
                   </JNPF-TreeSelect>
@@ -1613,7 +1614,8 @@
                   <div slot="label" class="has-free-approver ">
                     <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
                         content="允许在审批单中增加临时审批人" placement="top">
-                        <a class="el-icon-question el-tooltip-question form-item-approver"></a>
+                        <a class="el-icon-question el-tooltip-question form-item-approver"
+                          style="color: #a0acb7;opacity: 0.8;"></a>
                       </el-tooltip>
                     </el-checkbox>
                   </div>
