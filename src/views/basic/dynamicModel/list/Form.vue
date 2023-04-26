@@ -121,14 +121,14 @@ import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDe
 import Parser from '@/components/Generator/parser/Parser'
 import PrintBrowse from '@/components/PrintBrowse'
 import { deepClone } from '@/utils'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   components: { Parser, PrintBrowse, PrintDialog },
   data() {
     return {
-      printId:'',
-      printDialogVisible:false,
+      printId: '',
+      printDialogVisible: false,
       visible: false,
       key: +new Date(),
       formConf: {},
@@ -160,6 +160,7 @@ export default {
   },
   methods: {
     goBack() {
+      this.destroyStyle()
       this.visible = false
       this.$emit('refreshDataList', this.refreshDataList)
     },
@@ -167,12 +168,14 @@ export default {
       this.printDialogVisible = false
       this.printId = id;
       this.printBrowseVisible = true;
+      this.destroyStyle()
+      this.$emit('refreshDataList')
     },
     print() {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
       this.printDialogVisible = true
       this.$nextTick(() => {
-        if(this.formConf.printId.length>1){
+        if (this.formConf.printId.length > 1) {
           this.$refs.printDialog.init(this.formConf.printId)
           return
         }
@@ -292,14 +295,14 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if(flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
-              if(item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
+            if (flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
+              if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val
-              }else if(item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
-                if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
-                  val = item.multiple == true?[this.userInfo.organizeIdList]:this.userInfo.organizeIdList
-                }else {
+              } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent == true) {
+                if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+                  val = item.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+                } else {
                   val = []
                 }
                 item.__config__.defaultValue = val
@@ -358,6 +361,7 @@ export default {
                   })
                 } else {
                   this.visible = false
+                  this.destroyStyle()
                   this.btnLoading = false
                   this.$emit('refreshDataList', true)
                 }
@@ -395,6 +399,11 @@ export default {
     dataFormSubmit(type) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm(type)
+    },
+    destroyStyle() {
+      if (document.getElementById('styleId')) {
+        document.getElementById('styleId').remove()
+      }
     }
   }
 }
