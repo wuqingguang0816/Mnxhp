@@ -516,13 +516,14 @@ export default {
     },
     readyMap(key, { name, value, geoJson }) {
       if (value == this.currMapCode) return
+      this.code = value
       this.currMapCode = ''
       if (key == 1) {
         this.geoJson ? this.resetChart() : this.initMap()
         this.clearHashMap()
       } else {
         this.initCurrOption()
-        echarts.registerMap('10000', geoJson);
+        echarts.registerMap(value, geoJson);
         this.chart.setOption(this.currOption, true)
         this.zoom = key
         this.setHashMap(name, value, geoJson)
