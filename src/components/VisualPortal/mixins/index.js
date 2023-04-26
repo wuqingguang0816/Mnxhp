@@ -221,7 +221,7 @@ export default {
             fontWeight: this.option.titleSubtextStyleFontWeight ? 'bolder' : '',
           },
           left: this.option.titleLeft,
-          backgroundColor: this.option.titleText || this.option.titleSubtext ? this.option.titleBgColor : 'rgba(255,255,255,0)',
+          backgroundColor: this.option.titleText || this.option.titleSubtext ? this.option.titleBgColor || '#fff' : '#fff',
         },
         //提示
         tooltip: {
