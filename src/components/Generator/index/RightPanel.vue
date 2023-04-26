@@ -528,7 +528,8 @@
           <el-form-item>
             <span slot="label">并发锁定
               <el-tooltip content="并发提交表单时候，加乐观锁机制以保证数据提交准确性" placement="top">
-                <a class="el-icon-question el-tooltip-question"></a>
+                <a class="el-icon-question el-tooltip-question"
+                  style="color: #a0acb7;opacity: 0.8;"></a>
               </el-tooltip>
             </span>
             <el-switch v-model="formConf.concurrencyLock" />
@@ -550,7 +551,8 @@
               <div class="per-cell" :class="{'last':!formConf.hasPrintBtn}">
                 <el-checkbox v-model="formConf.hasPrintBtn">打印
                   <el-tooltip content="启用流程后,操作按钮以流程节点为准" placement="top">
-                    <a class="el-icon-question el-tooltip-question"></a>
+                    <a class="el-icon-question el-tooltip-question"
+                      style="color: #a0acb7;opacity: 0.8;"></a>
                   </el-tooltip>
                 </el-checkbox>
                 <el-input v-model="formConf.printButtonText" />
