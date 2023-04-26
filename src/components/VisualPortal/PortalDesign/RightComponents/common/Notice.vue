@@ -95,7 +95,7 @@
             <el-color-picker v-model="activeData.option.noticeOddLineColor" />
           </el-form-item>
           <el-form-item label="偶行颜色">
-            <el-color-picker v-model="activeData.option.noticeEvenyLineColor" />
+            <el-color-picker v-model="activeData.option.noticeEventLineColor" />
           </el-form-item>
           <el-form-item :label="activeData.option.styleType==1?'列数据':'行数据'">
             <el-button
