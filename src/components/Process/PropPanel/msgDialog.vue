@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getMsgTemplate, getMsgSelector } from '@/api/msgCenter/sendConfig'
+import { getMsgTemplate } from '@/api/msgCenter/sendConfig'
 export default {
   name: 'PopupSelect',
   props: {
@@ -78,9 +78,9 @@ export default {
       type: String,
       default: ''
     },
-    type: {
+    messageSource: {
       type: String,
-      default: ''
+      default: 1
     },
     clearable: {
       type: Boolean,
@@ -126,8 +126,8 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      let method = this.type == 5 ? getMsgSelector : getMsgTemplate
-      method(this.listQuery).then(res => {
+      this.listQuery.messageSource = this.messageSource || 1
+      getMsgTemplate(this.listQuery).then(res => {
         this.list = res.data.list
         this.total = res.data.pagination.total
         this.listLoading = false
