@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-bind="$attrs" :close-on-click-modal="false" :modal-append-to-body="false"
-    append-to-body v-on="$listeners" @open="onOpen" @close="onClose"
+    append-to-body v-on="$listeners" @open="onOpen" @close="close"
     class="JNPF-dialog JNPF-dialog_center" title="预览" :width="formConf.generalWidth">
     <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm" />
     <div slot="footer">
@@ -34,6 +34,7 @@ export default {
     onClose() {
     },
     close(e) {
+      this.destroyStyle()
       this.$emit('update:visible', false)
     },
     handelConfirm() {
@@ -60,6 +61,11 @@ export default {
         callback()
       }
     },
+    destroyStyle() {
+      if (document.getElementById('styleId')) {
+        document.getElementById('styleId').remove()
+      }
+    }
   }
 }
 </script>
