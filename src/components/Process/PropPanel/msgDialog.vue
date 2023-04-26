@@ -9,7 +9,7 @@
           <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close"
             @click.stop="clear"></i>
         </template>
-        <el-button @click.stop="goMsgConfig()" slot="append" v-if="type != 5">
+        <el-button @click.stop="goMsgConfig()" slot="append" v-if="messageSource != 5">
           添加配置</el-button>
       </el-input>
     </div>
