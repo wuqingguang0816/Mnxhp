@@ -103,9 +103,6 @@ export default {
         this.innerValue = val
       } else if (val >= this.startTime && !this.endTime) {
         this.innerValue = val
-        this.$emit('input', val)
-        this.$emit('change', val)
-        return
       } else {
         this.innerValue = ''
       }
