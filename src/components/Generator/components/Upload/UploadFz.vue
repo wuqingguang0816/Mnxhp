@@ -4,8 +4,8 @@
       <el-button size="small" icon="el-icon-upload" @click="uploadFile" :disabled="disabled">
         {{buttonText}}
       </el-button>
-      <a type="text" @click="downloadAll" style="float:right;" v-if="fileList.length" class="el-button el-button--text el-button--small"><i
-        class="el-icon-download"></i>全部下载</a>
+      <a type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"
+        class="el-button el-button--text el-button--small"><i class="el-icon-download"></i>全部下载</a>
     </template>
     <template v-if="fileList.length">
       <ul class="el-upload-list el-upload-list el-upload-list--text">

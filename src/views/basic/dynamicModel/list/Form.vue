@@ -160,6 +160,7 @@ export default {
   },
   methods: {
     goBack() {
+      this.destroyStyle()
       this.visible = false
       this.$emit('refreshDataList', this.refreshDataList)
     },
@@ -347,6 +348,7 @@ export default {
                   })
                 } else {
                   this.visible = false
+                  this.destroyStyle()
                   this.btnLoading = false
                   this.$emit('refreshDataList', true)
                 }
@@ -384,6 +386,11 @@ export default {
     dataFormSubmit(type) {
       if (this.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })
       this.$refs.dynamicForm && this.$refs.dynamicForm.submitForm(type)
+    },
+    destroyStyle() {
+      if (document.getElementById('styleId')) {
+        document.getElementById('styleId').remove()
+      }
     }
   }
 }
