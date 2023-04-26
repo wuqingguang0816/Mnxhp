@@ -168,8 +168,6 @@ export default {
       this.printDialogVisible = false
       this.printId = id;
       this.printBrowseVisible = true;
-      this.destroyStyle()
-      this.$emit('refreshDataList')
     },
     print() {
       if (this.isPreview) return this.$message({ message: '功能预览不支持打印', type: 'warning' })
