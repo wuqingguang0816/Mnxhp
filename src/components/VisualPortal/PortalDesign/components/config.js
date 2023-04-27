@@ -259,7 +259,7 @@ export const systemComponents = [{
       fullName: '人员',
       filedName: 'user',
       fontSize: 12,
-      userClassify: '发布人',
+      userClassify: '2',
       fontWeight: false,
       fontColor: '#666666',
       show: true
