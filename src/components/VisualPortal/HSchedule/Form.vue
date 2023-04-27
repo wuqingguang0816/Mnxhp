@@ -116,7 +116,7 @@
     <el-dialog title="删除确认" :close-on-click-modal="false" :visible.sync="delVisible"
       class="JNPF-dialog JNPF-dialog_center dialog-form" lock-scroll width="380px" append-to-body>
       <div style="margin-bottom: 20px;">此为重复日程，将删除（含参与人）应用于</div>
-      <template v-for="(item, i) in tableList">
+      <template v-for="(item, i) in deleteList">
         <div :key="i" style="margin-bottom: 10px;color: #303133">
           <el-radio :label="item.id" v-model="checked">&nbsp;</el-radio>{{item.fullName}}
         </div>
@@ -265,10 +265,19 @@ export default {
           id: 2,
           fullName: '此日程及后续'
         },
-        //  {
-        //   id: 3,
-        //   fullName: '所有日程'
-        // }
+      ],
+      deleteList: [
+        {
+          id: 1,
+          fullName: '此日程'
+        }, {
+          id: 2,
+          fullName: '此日程及后续'
+        },
+        {
+          id: 3,
+          fullName: '所有日程'
+        }
       ],
       reminderTimeList: [
         {
