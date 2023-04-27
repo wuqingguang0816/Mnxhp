@@ -303,7 +303,7 @@
                     @click="setUploaderTemplateJson">请设置导入模板</el-button>
                 </div>
               </el-checkbox-group>
-              <template v-if="btnsList.includes('batchPrint')&&btnsOption.includes('batchPrint')">
+              <template v-if="btnsList.includes('batchPrint')">
                 <el-form-item label="" label-width="104px">
                   <JNPF-TreeSelect key="sel" :options="printTplList" v-model="columnData.printIds"
                     multiple placeholder="请选择打印模板" lastLevel clearable node-key="id">
