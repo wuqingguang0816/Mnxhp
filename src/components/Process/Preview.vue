@@ -221,7 +221,7 @@ $bg-color: #fff;
 .scale-slider {
   right: 10px;
   z-index: 199;
-  float: right;
+  position: fixed;
 
   .btn {
     display: inline-block;
