@@ -55,7 +55,7 @@ export function exportTemplate(id) {
 // 获取门户下拉框列表
 export function getPortalSelector(type) {
   return request({
-    url: '/api/visualdev/Portal/Selector',
+    url: '/api/visualdev/Portal/Selector/?platform=web',
     method: 'GET',
     data: { type }
   })
