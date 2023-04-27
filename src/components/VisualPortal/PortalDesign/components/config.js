@@ -213,7 +213,7 @@ export const systemComponents = [{
     headerLeft: 'center',
     headerBgColor: '#F4F6F8',
     tableIndex: true,
-    tableCount: 5,
+    noticeCount: 5,
     tableFontSize: 14,
     tableFontColor: '#666666',
     noticeBgColor: '',

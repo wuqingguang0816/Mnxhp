@@ -51,10 +51,10 @@
             <el-switch v-model="activeData.option.tableIndex">
             </el-switch>
           </el-form-item>
-          <el-form-item label="显示条数">
-            <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="5"
-              :max="99999" />
-          </el-form-item>
+          <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
+            <el-input-number v-model="activeData.option.noticeCount" controls-position="right"
+              :min="5" :max="99999" />
+          </jnpf-form-tip-item>
           <el-form-item label="字体大小">
             <el-input-number v-model="activeData.option.tableFontSize" controls-position="right"
               :min="12" :max="25" />
@@ -84,10 +84,10 @@
             <el-switch v-model="activeData.option.showImage">
             </el-switch>
           </el-form-item>
-          <el-form-item label="显示条数">
+          <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
             <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="5"
               :max="99999" />
-          </el-form-item>
+          </jnpf-form-tip-item>
           <el-form-item label="背景色">
             <el-color-picker v-model="activeData.option.noticeBgColor" />
           </el-form-item>
@@ -114,10 +114,10 @@
           <el-button @click="showColumnData(activeData.option.appColumnList)">设置</el-button>
         </el-form-item>
         <Refresh :refresh="activeData.refresh" />
-        <el-form-item label="显示条数">
+        <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
           <el-input-number v-model="activeData.option.tableCount" controls-position="right" :min="1"
             :max="99999" @change="renderKeyChange" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <NoticeColumnData v-if="columnVisible" ref="noticeColumnData" :showType='showType'
         @columnList='columnList' />
