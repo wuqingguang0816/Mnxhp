@@ -428,10 +428,11 @@ export default {
               return this.$message({ message: '开始时间不能大结束时间', type: 'error' })
             }
           }
+          console.log(this.dataForm)
           if (this.dataForm.repetition != -1 && (this.dataForm.startDay == this.dataForm.endDay)) {
             if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束结束重复', type: 'error' })
           }
-          if (this.dataForm.repetition != "1" && this.dataForm.startTime > this.dataForm.repeatTime) return this.$message({ message: '结束重复时间必须晚于开始时间', type: 'error' })
+          if (this.dataForm.repetition != -1 && (this.dataForm.startDay > this.dataForm.repeatTime)) return this.$message({ message: '结束重复时间必须晚于开始时间', type: 'error' })
           const formMethod = this.dataForm.id ? ScheduleUpdate : ScheduleCreate
           if (this.dataForm.id && this.repetitionType) {
             if (!this.updateVisible) {
