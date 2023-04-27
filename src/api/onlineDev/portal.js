@@ -64,8 +64,7 @@ export function getPortalSelector(type) {
 export function SetDefault(id) {
   return request({
     url: `/api/visualdev/Portal/${id}/Actions/SetDefault/?platform=web`,
-    method: 'PUT',
-    data
+    method: 'PUT'
   })
 }
 // 获取门户展示数据(权限)
