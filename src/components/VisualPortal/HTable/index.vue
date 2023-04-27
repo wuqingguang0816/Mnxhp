@@ -146,6 +146,7 @@ export default {
     }
   },
   watch: {
+
   },
   created() {
     this.initData()
@@ -173,7 +174,7 @@ export default {
           this.list = this.activeData.option.rowData
         }
       } else {
-        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.appCount)
+        this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
         this.list = this.activeData.option.appColumnList
       }
       if (this.activeData.dataType === 'dynamic') {
@@ -181,9 +182,13 @@ export default {
         if (!propsApi) return this.option.defaultValue = ''
         getDataInterfaceRes(propsApi).then(res => {
           this.defaultValue = res.data
-          this.defaultValue = this.showType === 'pc' ? this.defaultValue.slice(0, this.activeData.option.tableCount) : this.defaultValue.slice(0, this.activeData.option.appCount)
+          this.defaultValue = this.defaultValue.slice(0, this.activeData.option.tableCount)
         })
       }
+    },
+    sliceCount() {
+      let defaultValue = JSON.parse(JSON.stringify(this.activeData.option.defaultValue))
+      return defaultValue
     }
   }
 }

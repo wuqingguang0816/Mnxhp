@@ -85,8 +85,8 @@
             </el-switch>
           </el-form-item>
           <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
-            <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="1"
-              :max="99999" />
+            <el-input-number v-model="activeData.option.noticeCount" controls-position="right"
+              :min="1" :max="99999" />
           </jnpf-form-tip-item>
           <el-form-item label="背景色">
             <el-color-picker v-model="activeData.option.noticeBgColor" />
@@ -115,8 +115,8 @@
         </el-form-item>
         <Refresh :refresh="activeData.refresh" />
         <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
-          <el-input-number v-model="activeData.option.noticeCount" controls-position="right"
-            :min="1" :max="99999" @change="renderKeyChange" />
+          <el-input-number v-model="activeData.option.appCount" controls-position="right" :min="1"
+            :max="99999" @change="renderKeyChange" />
         </jnpf-form-tip-item>
       </template>
       <NoticeColumnData v-if="columnVisible" ref="noticeColumnData" :showType='showType'

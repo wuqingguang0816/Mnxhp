@@ -162,6 +162,9 @@ export default {
     }
   },
   watch: {
+    'activeData.option.noticeCount'() {
+      this.initData()
+    }
   },
   created() {
     this.initData()
