@@ -61,9 +61,9 @@ export function getPortalSelector(type) {
   })
 }
 // 切换用户门户默认显示
-export function SetDefault(id, data) {
+export function SetDefault(id) {
   return request({
-    url: `/api/visualdev/Portal/${id}/Actions/SetDefault`,
+    url: `/api/visualdev/Portal/${id}/Actions/SetDefault/?platform=web`,
     method: 'PUT',
     data
   })

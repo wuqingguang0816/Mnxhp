@@ -355,6 +355,7 @@ export default {
             if (this.dataForm.repetition != "1") this.repetitionType = true
           })
         } else {
+          this.$refs['dataForm'].resetFields()
           this.dataForm.creatorUserId = this.userInfo.userId
           this.dataForm.toUserIds = []
           this.dataForm.startDay = startTime || ''

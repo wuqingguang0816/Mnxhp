@@ -51,7 +51,7 @@ export default {
       if (this.activeId == id) return
       this.loading = true
       this.loadingText = '切换门户中'
-      SetDefault(id, { platform: "web" }).then(res => {
+      SetDefault(id).then(res => {
         this.activeId = id
         this.$emit('refresh', id)
         this.loading = false
