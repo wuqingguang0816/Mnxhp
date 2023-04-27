@@ -15,7 +15,7 @@
           <div class="JNPF-common-title mb-20">
             <h2 class="bold">账户信息
               <el-tooltip effect="dark" content="新用户初始密码默认是0000" placement="top">
-                <a class="el-icon-question el-tooltip-question"></a>
+                <a class="el-icon-question tooltip-question"></a>
               </el-tooltip>
             </h2>
           </div>

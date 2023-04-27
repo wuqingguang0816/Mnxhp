@@ -8,12 +8,12 @@
           <el-radio-group v-model="dataForm.dataType">
             <el-radio label="1">仅新增数据
               <el-tooltip content="导入数据只能进行新增，同一条数据无法重复导入" placement="top-start">
-                <a class="el-icon-question el-tooltip-question"></a>
+                <a class="el-icon-question tooltip-question"></a>
               </el-tooltip>
             </el-radio>
             <el-radio label="2">更新和新增数据
               <el-tooltip content="允许新增数据的同时支持导入数据更新" placement="top-start">
-                <a class="el-icon-question el-tooltip-question"></a>
+                <a class="el-icon-question tooltip-question"></a>
               </el-tooltip>
             </el-radio>
           </el-radio-group>

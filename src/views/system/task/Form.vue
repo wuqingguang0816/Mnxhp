@@ -42,7 +42,7 @@
                 <el-radio label="1">数据接口</el-radio>
                 <el-radio label="3">本地任务
                   <el-tooltip content="获取在程序中事先写好的本地方法" placement="top">
-                    <i class="el-icon-question el-tooltip-question"></i>
+                    <i class="el-icon-question tooltip-question"></i>
                   </el-tooltip>
                 </el-radio>
               </el-radio-group>

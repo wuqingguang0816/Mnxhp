@@ -2685,7 +2685,8 @@ textarea.el-textarea__inner {
   min-width: 180px !important;
 }
 
-.el-tooltip-question {
-  color: #a0acb7;
+.tooltip-question {
+  color: #a0acb7 !important;
   opacity: 0.8;
+
 }

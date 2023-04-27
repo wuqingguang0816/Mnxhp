@@ -144,7 +144,7 @@ const layouts = {
       if (scheme.__config__.tipLabel) {
         toolTip = <span slot="label">{scheme.header}
           <el-tooltip placement="top" content={scheme.__config__.tipLabel}>
-            <a class='el-icon-question el-tooltip-question' style='margin-left:4px'></a>
+            <a class='el-icon-question tooltip-question' style='margin-left:4px'></a>
           </el-tooltip>
         </span >
       }

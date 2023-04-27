@@ -127,14 +127,14 @@
                             短信变量
                             <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
                               placement="top">
-                              <a class="el-icon-question el-tooltip-question"></a>
+                              <a class="el-icon-question tooltip-question"></a>
                             </el-tooltip>
                           </p>
                           <p v-else>
                             变量
                             <el-tooltip content="内容在微信公众号管理后台维护，绑定模板变量，如：{first.DATA}。"
                               placement="top">
-                              <a class="el-icon-question el-tooltip-question"></a>
+                              <a class="el-icon-question tooltip-question"></a>
                             </el-tooltip>
                           </p>
                         </template>
