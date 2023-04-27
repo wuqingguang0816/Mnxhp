@@ -61,10 +61,11 @@ export function getPortalSelector(type) {
   })
 }
 // 切换用户门户默认显示
-export function SetDefault(id) {
+export function SetDefault(id, data) {
   return request({
     url: `/api/visualdev/Portal/${id}/Actions/SetDefault`,
-    method: 'PUT'
+    method: 'PUT',
+    data
   })
 }
 // 获取门户展示数据(权限)
