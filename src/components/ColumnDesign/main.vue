@@ -600,6 +600,13 @@ export default {
     }
   },
   watch: {
+    'columnData.type': {
+      handler(val) {
+        if (val == 5) this.columnData.printIds = []
+      },
+      deep: true,
+      immediate: true
+    },
     'columnData.ruleList': {
       handler() {
         let ruleData = this.$store.getters.ruleData;

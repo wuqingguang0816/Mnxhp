@@ -51,7 +51,7 @@
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
           :rows="4" />
         <CommonWordsDialog ref="commonWordsDialog" @change="common" />
       </el-form-item>
