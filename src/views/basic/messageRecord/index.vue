@@ -51,6 +51,7 @@
                   <span v-if="scope.row.type==1">公告</span>
                   <span v-if="scope.row.type==2">流程</span>
                   <span v-if="scope.row.type==3">系统</span>
+                  <span v-if="scope.row.type==4">日程</span>
                 </template>
               </el-table-column>
               <el-table-column prop="releaseUser" label="发送人员" width="120">

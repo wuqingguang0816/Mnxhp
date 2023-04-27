@@ -408,6 +408,7 @@ export default {
     reset() {
       this.list = []
       this.nodeOptions = []
+      this.flowOptions = []
       this.pickerVal = []
       this.listQuery = {
         keyword: '',

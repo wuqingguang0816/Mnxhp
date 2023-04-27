@@ -264,8 +264,7 @@
                     <div slot="label">请求路径
                       <el-tooltip placement="top"
                         content='请求自带参数：taskId、taskNodeId，返回结构：JSON对象{"handleId":"id1,id2"}'>
-                        <a class="el-icon-question el-tooltip-question"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question"></a>
                       </el-tooltip>
                     </div>
                     <el-input v-model="subFlowForm.getUserUrl" placeholder="请输入http或https接口地址">
@@ -309,8 +308,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">异常处理
                   <el-tooltip content="子流程发起节点人员异常时遵循该规则" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <div class="form-item-content">
@@ -335,8 +333,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">子流程发起
                   <el-tooltip content="该子流程被发起的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="subFlowForm.launchMsgConfig.on"
@@ -406,8 +403,7 @@
               <el-form-item label="发起设置" v-if="flowType!=1">
                 <div slot="label" class="form-item-label">发起设置
                   <el-tooltip content="谁可以发起 默认所有人,需要设置请选择" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <div class="form-item-content">
@@ -438,8 +434,7 @@
                   <el-form-item>
                     <div slot="label">抄送人范围
                       <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
-                        <a class="el-icon-question el-tooltip-question"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="startForm.extraCopyRule" filterable>
@@ -518,8 +513,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">异常处理
                   <el-tooltip content="审批节点内设置的审批人员异常时遵循该规则" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <div class="form-item-content">
@@ -540,8 +534,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">手写签名
                   <el-tooltip content="发起人在进行流程撤回操作时需手写签名" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="startForm.hasSign" />
@@ -549,8 +542,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">意见填写
                   <el-tooltip content="发起人在进行流程撤回操作需填写意见" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="startForm.hasOpinion" />
@@ -558,8 +550,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">审核汇总
                   <el-tooltip content="流程流转记录会按部门及岗位进行汇总展示" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="startForm.isSummary" />
@@ -574,8 +565,7 @@
               <el-form-item label="流程评论">
                 <div slot="label" class="form-item-label">流程评论
                   <el-tooltip content="流程内涉及的用户均可进行意见评论" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="startForm.isComment" />
@@ -583,8 +573,7 @@
               <el-form-item label="批量审批">
                 <div slot="label" class="form-item-label">批量审批
                   <el-tooltip content="流程待审批工单可进行批量操作" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="startForm.isBatchApproval" />
@@ -781,8 +770,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">流程待办
                   <el-tooltip content="流程处于等待的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.waitMsgConfig.on"
@@ -839,8 +827,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">流程结束
                   <el-tooltip content="流程结束的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.endMsgConfig.on"
@@ -897,8 +884,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点同意
                   <el-tooltip content="所有节点审核人同意的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.approveMsgConfig.on"
@@ -955,8 +941,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点退回
                   <el-tooltip content="所有节点审核人退回的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.rejectMsgConfig.on"
@@ -1013,8 +998,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点抄送
                   <el-tooltip content="所有节点抄送的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.copyMsgConfig.on"
@@ -1071,8 +1055,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点超时
                   <el-tooltip content="所有节点超时的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.overTimeMsgConfig.on"
@@ -1123,8 +1106,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点提醒
                   <el-tooltip content="所有节点提醒的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.noticeMsgConfig.on"
@@ -1205,8 +1187,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">超时设置
                   <el-tooltip content="超过设置的节点处理限定时间即为超时" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.overTimeConfig.on"
@@ -1234,8 +1215,7 @@
                 <el-row>
                   <el-checkbox v-model="startForm.overTimeConfig.overNotice">超时通知
                     <el-tooltip content="勾选后才能进行超时消息发送（站内信系统默认发送，第三方超时消息需在流程通知内配置）" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -1243,8 +1223,7 @@
                   <el-checkbox v-model="startForm.overTimeConfig.overAutoApprove">超时自动审批
                     <el-tooltip content="当前审批节点表单必填字段为空会使工单流转失败，下一审批节点设置候选人员、选择分支时当前审批节点规则失效"
                       placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -1258,8 +1237,7 @@
                 <el-row>
                   <el-checkbox v-model="startForm.overTimeConfig.overEvent">超时事件
                     <el-tooltip content="请在流程事件内配置超时事件" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -1274,8 +1252,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">提醒设置
                   <el-tooltip content="还未到达设置的节点处理限定时间即为提醒" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="startForm.noticeConfig.on"
@@ -1303,16 +1280,14 @@
                 <el-row>
                   <el-checkbox v-model="startForm.noticeConfig.overNotice">提醒通知
                     <el-tooltip content="勾选后才能进行提醒消息发送（站内信系统默认发送，第三方超时消息需在流程通知内配置）" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="startForm.noticeConfig.overEvent">提醒事件
                     <el-tooltip content="请在流程事件内配置提醒事件" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">
@@ -1339,8 +1314,7 @@
                 <el-form-item>
                   <div slot="label" class="form-item-label">表单配置
                     <el-tooltip content="审批节点不配置表单，默认引用发起节点表单" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </div>
                   <div class="form-item-content">
@@ -1352,8 +1326,7 @@
                   <div slot="label" class="form-item-label">数据传递
                     <el-tooltip content="不设置传递规则时字段名称相同自动赋值；设置传递规则时相同名称字段会自动赋值字段后再按传递规则赋值"
                       placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </div>
                   <div class="form-item-content hand" @click="openApproverTransmitRuleBox">
@@ -1426,8 +1399,7 @@
                     <div slot="label">请求路径
                       <el-tooltip placement="top"
                         content='请求自带参数：taskId、taskNodeId，返回结构：JSON对象{"handleId":"id1,id2"}'>
-                        <a class="el-icon-question el-tooltip-question"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question"></a>
                       </el-tooltip>
                     </div>
                     <el-input v-model="approverForm.getUserUrl" placeholder="请输入http或https接口地址">
@@ -1451,8 +1423,7 @@
                     v-if="approverForm.assigneeType === 6">
                     <div slot="label">审批人范围
                       <el-tooltip content="指定成员增加人员选择范围附加条件" placement="top">
-                        <a class="el-icon-question el-tooltip-question"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraRule" filterable>
@@ -1476,8 +1447,7 @@
               <el-form-item label="会签比例" v-if="approverForm.counterSign==1">
                 <div slot="label" class="form-item-label">会签比例
                   <el-tooltip content="会签通过比例" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.countersignRatio"
@@ -1490,28 +1460,24 @@
               <el-form-item label="退回设置">
                 <div slot="label" class="form-item-label">退回设置
                   <el-tooltip content="纯表单流程设置退回到发起节点无效" placement="top">
-                    <i class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></i>
+                    <i class="el-icon-question tooltip-question"></i>
                   </el-tooltip>
                 </div>
                 <el-radio-group v-model="approverForm.rejectType" class="form-item-content"
                   @input="radioInput">
                   <el-radio :label="1">重新审批
                     <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
-                      <i class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></i>
+                      <i class="el-icon-question tooltip-question"></i>
                     </el-tooltip>
                   </el-radio>
                   <el-radio :label="2">从当前节点审批
                     <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
-                      <i class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></i>
+                      <i class="el-icon-question tooltip-question"></i>
                     </el-tooltip>
                   </el-radio>
                   <el-radio :label="3">自定义审批
                     <el-tooltip content="由用户选择重新审批或从当前节点审批" placement="top">
-                      <i class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></i>
+                      <i class="el-icon-question tooltip-question"></i>
                     </el-tooltip>
                   </el-radio>
                 </el-radio-group>
@@ -1548,8 +1514,7 @@
                   <el-form-item>
                     <div slot="label">抄送人范围
                       <el-tooltip content="抄送人员增加人员选择范围附加条件" placement="top">
-                        <a class="el-icon-question el-tooltip-question"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question"></a>
                       </el-tooltip>
                     </div>
                     <el-select v-model="approverForm.extraCopyRule" filterable>
@@ -1604,8 +1569,7 @@
                       </el-link>
                       <el-link type="info" style="position: absolute;right:8px;top: 18px;"
                         @click="refreshPrintOptions" :underline="false">
-                        <i class="el-icon-refresh el-icon--right"
-                          style="color: #a0acb7;opacity: 0.8;"></i></el-link>
+                        <i class="el-icon-refresh el-icon--right"></i></el-link>
                       <el-divider></el-divider>
                     </div>
                   </JNPF-TreeSelect>
@@ -1614,8 +1578,7 @@
                   <div slot="label" class="has-free-approver ">
                     <el-checkbox v-model="approverForm.hasFreeApproverBtn">加签<el-tooltip
                         content="允许在审批单中增加临时审批人" placement="top">
-                        <a class="el-icon-question el-tooltip-question form-item-approver"
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class="el-icon-question tooltip-question form-item-approver"></a>
                       </el-tooltip>
                     </el-checkbox>
                   </div>
@@ -1629,8 +1592,7 @@
                 <div slot="label" class="form-item-label">自动同意
                   <el-tooltip content="当前审批节点表单必填字段为空工单流转时不做校验，下一审批节点设置候选人员、选择分支、异常节点时当前审批节点规则失效"
                     placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="approverForm.hasAgreeRule" />
@@ -1649,8 +1611,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">手写签名
                   <el-tooltip content="审批人在进行审批操作时需手写签名" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="approverForm.hasSign" />
@@ -1658,8 +1619,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">意见填写
                   <el-tooltip content="审批人在进行审批操作需填写意见" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-switch v-model="approverForm.hasOpinion" />
@@ -1951,8 +1911,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">节点同意
                   <el-tooltip content="当前节点审核人同意的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.approveMsgConfig.on"
@@ -2009,8 +1968,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点退回
                   <el-tooltip content="当前节点审核人退回的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.rejectMsgConfig.on"
@@ -2067,8 +2025,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点抄送
                   <el-tooltip content="当前节点抄送的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.copyMsgConfig.on"
@@ -2125,8 +2082,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点超时
                   <el-tooltip content="当前节点超时的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.overTimeMsgConfig.on"
@@ -2177,8 +2133,7 @@
               <el-form-item>
                 <div slot="label" class="form-item-label">节点提醒
                   <el-tooltip content="当前节点提醒的时候" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.noticeMsgConfig.on"
@@ -2267,8 +2222,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">超时设置
                   <el-tooltip content="超过设置的节点处理限定时间即为超时" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.overTimeConfig.on"
@@ -2296,8 +2250,7 @@
                 <el-row>
                   <el-checkbox v-model="approverForm.overTimeConfig.overNotice">超时通知
                     <el-tooltip content="勾选后才能进行超时消息发送（站内信系统默认发送，第三方超时消息需在节点通知内配置）" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -2305,8 +2258,7 @@
                   <el-checkbox v-model="approverForm.overTimeConfig.overAutoApprove">超时自动审批
                     <el-tooltip content="当前审批节点表单必填字段为空工单流转时不做校验，下一审批节点设置候选人员、选择分支、异常节点时当前审批节点规则失效"
                       placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -2320,8 +2272,7 @@
                 <el-row>
                   <el-checkbox v-model="approverForm.overTimeConfig.overEvent">超时事件
                     <el-tooltip content="请在节点事件内配置超时事件" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
@@ -2336,8 +2287,7 @@
               <el-form-item class="mt-10">
                 <div slot="label" class="form-item-label">提醒设置
                   <el-tooltip content="还未到达设置的节点处理限定时间即为提醒" placement="top">
-                    <a class="el-icon-question el-tooltip-question"
-                      style="color: #a0acb7;opacity: 0.8;"></a>
+                    <a class="el-icon-question tooltip-question"></a>
                   </el-tooltip>
                 </div>
                 <el-select class="form-item-content" v-model="approverForm.noticeConfig.on"
@@ -2365,16 +2315,14 @@
                 <el-row>
                   <el-checkbox v-model="approverForm.noticeConfig.overNotice">提醒通知
                     <el-tooltip content="勾选后才能进行提醒消息发送（站内信系统默认发送，第三方超时消息需在节点通知内配置）" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                 </el-row>
                 <el-row>
                   <el-checkbox v-model="approverForm.noticeConfig.overEvent">提醒事件
                     <el-tooltip content="请在节点事件内配置提醒事件" placement="top">
-                      <a class="el-icon-question el-tooltip-question"
-                        style="color: #a0acb7;opacity: 0.8;"></a>
+                      <a class="el-icon-question tooltip-question"></a>
                     </el-tooltip>
                   </el-checkbox>
                   <el-row :gutter="20">

@@ -16,10 +16,22 @@
       <el-switch v-model="activeData['show-summary']" />
     </el-form-item>
     <el-form-item label="合计字段" v-if="activeData['show-summary']">
-      <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
+      <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段"
+        @change="summaryFieldChange">
         <template v-for="(item,i) in activeData.__config__.children">
           <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
             v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey) && item.__vModel__" />
+        </template>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="千位分隔" v-if="activeData['show-summary']">
+      <el-switch v-model="activeData.thousands" />
+    </el-form-item>
+    <el-form-item label="分隔字段" v-if="activeData.thousands">
+      <el-select v-model="activeData.thousandsField" multiple placeholder="请选择合计字段">
+        <template v-for="(item,i) in thousandsOptions">
+          <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__">
+          </el-option>
         </template>
       </el-select>
     </el-form-item>
@@ -38,15 +50,24 @@ const defaultAddTableConf = {
   hasPage: true,
   pageSize: 20,
   columnOptions: [],
-  relationOptions: []
+  relationOptions: [],
 }
-
 export default {
   props: ['activeData'],
   components: { Form },
   data() {
     return {
-      formVisible: false
+      formVisible: false,
+      thousandsOptions: [],
+
+    }
+  },
+  watch: {
+    'activeData.__config__.children': {
+      handler(val) {
+        this.summaryFieldChange(this.activeData.summaryField)
+      },
+      immediate: true
     }
   },
   methods: {
@@ -62,6 +83,13 @@ export default {
     },
     updateConf(data) {
       this.activeData.addTableConf = data
+    },
+    summaryFieldChange(val) {
+      let list = []
+      val.forEach(element => {
+        list.push(this.activeData.__config__.children.filter(o => o.__vModel__ == element)[0])
+      });
+      this.thousandsOptions = list
     }
   }
 }

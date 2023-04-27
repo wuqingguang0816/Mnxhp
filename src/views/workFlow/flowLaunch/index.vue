@@ -364,6 +364,7 @@ export default {
       this.flowId = ''
       this.status = ''
       this.urgent = ''
+      this.flowOptions = []
       this.flowCategory = ''
       this.listQuery = {
         currentPage: 1,

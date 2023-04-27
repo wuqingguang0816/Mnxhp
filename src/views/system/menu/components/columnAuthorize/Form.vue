@@ -30,7 +30,7 @@
               <template v-if="item.value!=0">
                 <span>{{item.label}}<el-tooltip :content="`与主表是一对${item.value==1?'一':'多'}的主从关系`"
                     placement="top-start">
-                    <i class="el-icon-question el-tooltip-question" style="margin-left:5px"></i>
+                    <i class="el-icon-question tooltip-question" style="margin-left:5px"></i>
                   </el-tooltip></span>
               </template>
             </el-option>

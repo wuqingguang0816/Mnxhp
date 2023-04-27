@@ -3,7 +3,7 @@
     <div class="JNPF-common-title" v-if="config.__config__.showTitle && config.__config__.label">
       <span slot="label" v-if="config.__config__.tipLabel">{{config.__config__.label}}
         <el-tooltip placement="top" :content=config.__config__.tipLabel>
-          <a class='el-icon-question el-tooltip-question' style="color: #a0acb7;opacity: 0.8;"></a>
+          <a class='el-icon-question tooltip-question'></a>
         </el-tooltip>
       </span>
       <h2 v-else>{{config.__config__.label}}</h2>
@@ -29,8 +29,7 @@
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
             <span slot="label" v-if="head.__config__.tipLabel">{{head.__config__['label']}}
               <el-tooltip placement="top" :content=head.__config__.tipLabel>
-                <a class='el-icon-question el-tooltip-question'
-                  style="color: #a0acb7;opacity: 0.8;"></a>
+                <a class='el-icon-question tooltip-question'></a>
               </el-tooltip>
             </span>
             <span v-if="!head.__config__['tipLabel']">{{ head.__config__['label'] }}</span>
@@ -343,7 +342,7 @@ export default {
                 }
                 if (item.value == defaultValue) return
                 item.value = defaultValue
-                this.handleRelation(item, rowIndex)
+                this.$nextTick(() => this.handleRelation(item, rowIndex));
               }
             }
           }

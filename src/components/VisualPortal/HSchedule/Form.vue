@@ -146,7 +146,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import MsgDialog from "./msgDialog";
+import MsgDialog from "@/components/Process/PropPanel/msgDialog";
 import { ScheduleInfo, ScheduleUpdate, ScheduleCreate, ScheduleDelete } from '@/api/onlineDev/schedule'
 export default {
   components: { MsgDialog },
@@ -355,6 +355,7 @@ export default {
             if (this.dataForm.repetition != "1") this.repetitionType = true
           })
         } else {
+          this.$refs['dataForm'].resetFields()
           this.dataForm.creatorUserId = this.userInfo.userId
           this.dataForm.toUserIds = []
           this.dataForm.startDay = startTime || ''

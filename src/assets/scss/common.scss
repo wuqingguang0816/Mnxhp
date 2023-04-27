@@ -1085,7 +1085,7 @@
   .approve-result {
     position: absolute;
     right: 10px;
-    top: 100px;
+    top: 135px;
     z-index: 100;
     width: 100px;
     height: 100px;
@@ -2685,7 +2685,8 @@ textarea.el-textarea__inner {
   min-width: 180px !important;
 }
 
-.el-tooltip-question {
-  color: #a0acb7;
+.tooltip-question {
+  color: #a0acb7 !important;
   opacity: 0.8;
+
 }

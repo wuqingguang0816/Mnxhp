@@ -34,12 +34,12 @@
               <el-radio-group v-model="dataForm.rejectType" class="form-item-content">
                 <el-radio :label="1">重新审批
                   <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->B->C" placement="top">
-                    <i class="el-icon-question el-tooltip-question"></i>
+                    <i class="el-icon-question tooltip-question"></i>
                   </el-tooltip>
                 </el-radio>
                 <el-radio :label="2">直接提交给我
                   <el-tooltip content="若流程为A->B->C,C退回至A，则C->A->C" placement="top">
-                    <i class="el-icon-question el-tooltip-question"></i>
+                    <i class="el-icon-question tooltip-question"></i>
                   </el-tooltip>
                 </el-radio>
               </el-radio-group>
@@ -51,7 +51,7 @@
         <user-select v-model="copyIds" placeholder="请选择" multiple />
       </el-form-item>
       <el-form-item label="审批意见" prop="handleOpinion" v-if="properties&&properties.hasOpinion">
-        <el-input v-model="candidateForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
+        <el-input v-model="dataForm.handleOpinion" placeholder="请输入审批意见" type="textarea"
           :rows="4" />
         <CommonWordsDialog ref="commonWordsDialog" @change="common" />
       </el-form-item>

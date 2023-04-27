@@ -70,7 +70,6 @@ export default {
       this.activeData.propsName = ''
     },
     propsApiChange(val, item) {
-      console.log(item)
       if (val) {
         this.activeData.propsApi = val
         this.activeData.propsName = item.fullName

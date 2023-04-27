@@ -156,12 +156,12 @@
                       :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="更新周期" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateCycle" :precision="0" :step="1"
-                      controls-position="right" /> 天
+                    <el-input-number v-model="baseForm.updateCycle" :precision="0" :step="1" :min="1"
+                      controls-position="right" @blur="initConfig"/> 天
                   </el-form-item>
                   <el-form-item label="提前" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateInAdvance" :precision="0" :step="1"
-                      controls-position="right" /> 天提醒更新
+                    <el-input-number v-model="baseForm.updateInAdvance" :precision="0" :step="1"  :min="1"
+                      controls-position="right" @blur="initConfig"/> 天提醒更新
                   </el-form-item>
 
                   <el-form-item label="密码强度限制">
@@ -189,7 +189,7 @@
                   </el-form-item>
                   <el-form-item label="禁用个数" v-if="baseForm.disableOldPassword">
                     <el-input-number v-model="baseForm.disableTheNumberOfOldPasswords" :min="1"
-                      :precision="0" :step="1" controls-position="right" /> 个
+                      :precision="0" :step="1" controls-position="right" @blur="initConfig"/> 个
                   </el-form-item>
                   <el-form-item label="修改初始密码提醒" label-width="130px">
                     <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword"
@@ -572,6 +572,11 @@ export default {
     this.initData()
   },
   methods: {
+    initConfig(){
+      if(!this.baseForm.disableTheNumberOfOldPasswords) this.baseForm.disableTheNumberOfOldPasswords = 1
+      if(!this.baseForm.updateCycle) this.baseForm.updateCycle = 1
+      if(!this.baseForm.updateInAdvance) this.baseForm.updateInAdvance = 1
+    },
     initData() {
       this.listLoading = true
       this.$nextTick(() => {

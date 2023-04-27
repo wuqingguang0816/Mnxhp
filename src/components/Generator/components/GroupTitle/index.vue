@@ -2,7 +2,7 @@
   <p class="groupTitle" :style="{'text-align':contentPosition}">{{content}}
     <span slot="label" v-if="tipLabel">
       <el-tooltip placement="top" :content=tipLabel>
-        <a class='el-icon-question el-tooltip-question' style="color: #a0acb7;opacity: 0.8;"></a>
+        <a class='el-icon-question tooltip-question'></a>
       </el-tooltip>
     </span>
   </p>

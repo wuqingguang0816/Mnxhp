@@ -1064,6 +1064,8 @@ export const selectComponents = [
       relationOptions: []
     },
     summaryField: [],
+    thousands: false,
+    thousandsField: [],
     tableConf: {},
     defaultValue: []
   },

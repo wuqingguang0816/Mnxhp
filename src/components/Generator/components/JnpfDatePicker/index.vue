@@ -51,32 +51,24 @@ export default {
     return {
       innerValue: this.value,
       key: +new Date(),
-      innerStartTime: this.startTime,
-      innerEndTime: this.endTime
+
     }
   },
   watch: {
-    innerValue(val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
-    },
-    value(val) {
-      this.innerValue = val
+    value: {
+      handler(val) {
+        this.innerValue = val
+      },
+      immediate: true
     },
     format() {
       this.key = +new Date()
-    },
-    startTime(val) {
-      this.innerStartTime = val
-    },
-    endTime(val) {
-      this.innerEndTime = val
     },
   },
   computed: {
     readOnly() {
       if (this.readonly) return true
-      if (this.innerStartTime && this.innerEndTime && (this.innerStartTime > this.innerEndTime)) return true
+      if (this.startTime && this.endTime && (this.startTime > this.endTime)) return true
       return false
     },
     pickerOptions() {
@@ -84,19 +76,19 @@ export default {
       return {
         disabledDate(time) {
           let format = that.format === 'yyyy' ? 'yyyy-01-01 00:00:00' : that.format === 'yyyy-MM' ? 'yyyy-MM-01 00:00:00' : 'yyyy-MM-dd 00:00:00'
-          if (that.innerStartTime) {
-            let innerStartTime = that.jnpf.toDate(that.innerStartTime, format)
-            that.innerStartTime = new Date(innerStartTime).getTime()
+          if (that.startTime) {
+            let startTime = that.jnpf.toDate(that.startTime, format)
+            that.startTime = new Date(startTime).getTime()
           }
-          if (that.innerEndTime) {
-            let innerEndTime = that.jnpf.toDate(that.innerEndTime, 'yyyy-MM-dd 23:59:59')
-            that.innerEndTime = new Date(innerEndTime).getTime()
+          if (that.endTime) {
+            let endTime = that.jnpf.toDate(that.endTime, 'yyyy-MM-dd 23:59:59')
+            that.endTime = new Date(endTime).getTime()
           }
           const timeVal = time.getTime()
-          if (!that.innerStartTime && !that.innerEndTime) return false
-          if (that.innerStartTime && that.innerEndTime) return timeVal < that.innerStartTime || timeVal > that.innerEndTime
-          if (that.innerEndTime) return timeVal > that.innerEndTime
-          return timeVal < that.innerStartTime
+          if (!that.startTime && !that.endTime) return false
+          if (that.startTime && that.endTime) return timeVal < that.startTime || timeVal > that.endTime
+          if (that.endTime) return timeVal > that.endTime
+          return timeVal < that.startTime
         }
       }
     }
@@ -105,10 +97,17 @@ export default {
   mounted() { },
   methods: {
     change(val) {
-      if (!this.innerStartTime && !this.innerStartTime) return this.innerValue = val
-      if (val >= this.innerStartTime && this.innerEndTime && val <= this.innerEndTime) return this.innerValue = val
-      if (val >= this.innerStartTime && !this.innerEndTime) return this.innerValue = val
-      return this.innerValue = ''
+      if (!this.startTime && !this.startTime) {
+        this.innerValue = val
+      } else if (val >= this.startTime && this.endTime && val <= this.endTime) {
+        this.innerValue = val
+      } else if (val >= this.startTime && !this.endTime) {
+        this.innerValue = val
+      } else {
+        this.innerValue = ''
+      }
+      this.$emit('input', this.innerValue)
+      this.$emit('change', this.innerValue)
     }
   }
 }

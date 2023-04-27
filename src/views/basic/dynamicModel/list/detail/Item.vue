@@ -124,8 +124,7 @@
           <template slot="header">
             <span slot="label" v-if="item.__config__.tipLabel">{{item.header}}
               <el-tooltip placement="top" :content=item.__config__.tipLabel>
-                <a class='el-icon-question el-tooltip-question'
-                  style="color: #a0acb7;opacity: 0.8;"></a>
+                <a class='el-icon-question tooltip-question'></a>
               </el-tooltip>
             </span>
             <span v-if="!item.__config__['tipLabel']">{{ item.header}}</span>
@@ -147,8 +146,7 @@
           <div class="JNPF-common-title" v-if="item.__config__.showTitle">
             <span slot="label" v-if="item.__config__.tipLabel">{{item.__config__.label}}
               <el-tooltip placement="top" :content=item.__config__.tipLabel>
-                <a class='el-icon-question el-tooltip-question'
-                  style="color: #a0acb7;opacity: 0.8;"></a>
+                <a class='el-icon-question tooltip-question'></a>
               </el-tooltip>
             </span>
             <h2 v-else>{{item.__config__.label}}</h2>
@@ -216,8 +214,7 @@
                     <span slot="label"
                       v-if="column.__config__.tipLabel">{{column.__config__['label']}}
                       <el-tooltip placement="top" :content=column.__config__.tipLabel>
-                        <a class='el-icon-question el-tooltip-question'
-                          style="color: #a0acb7;opacity: 0.8;"></a>
+                        <a class='el-icon-question tooltip-question'></a>
                       </el-tooltip>
                     </span>
                     <span

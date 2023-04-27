@@ -4,7 +4,7 @@
       <template v-if="tipLabel">
         <el-tooltip placement="top">
           <div slot="content" v-html="tipLabel"></div>
-          <a :class="tipIcon"></a>
+          <a :class="tipIcon + ' tooltip-question'"></a>
         </el-tooltip>
       </template>
       <a v-if="!tipLabel && label" class="empty-icon"></a>
@@ -27,7 +27,7 @@ export default {
     },
     tipIcon: {
       type: String,
-      default: 'el-icon-question el-tooltip-question'
+      default: 'el-icon-question'
     }
   }
 }

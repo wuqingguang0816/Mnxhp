@@ -67,7 +67,7 @@
           <el-col :span="12" v-if="dataForm.remindCategory == 2">
             <jnpf-form-tip-item label="发送配置" prop="sendConfigId">
               <msg-dialog :value="dataForm.sendConfigId" :title="dataForm.sendConfigName"
-                @change="onMsgChange" :messageSource="5" type="5" :key="key" />
+                @change="onMsgChange" :messageSource="5" :key="key" />
             </jnpf-form-tip-item>
           </el-col>
         </el-row>

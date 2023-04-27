@@ -215,7 +215,7 @@ export default {
           fontWeight: option.titleSubtextStyleFontWeight ? 'bolder' : '',
         },
         left: option.titleLeft,
-        backgroundColor: option.titleText || option.titleSubtext ? option.titleBgColor : 'rgba(255,255,255,0)',
+        backgroundColor: option.titleText || option.titleSubtext ? option.titleBgColor || '#fff' : '#fff',
       }
       let tooltip = {
         show: this.option.tooltipShow,
@@ -516,13 +516,14 @@ export default {
     },
     readyMap(key, { name, value, geoJson }) {
       if (value == this.currMapCode) return
+      this.code = value
       this.currMapCode = ''
       if (key == 1) {
         this.geoJson ? this.resetChart() : this.initMap()
         this.clearHashMap()
       } else {
         this.initCurrOption()
-        echarts.registerMap('10000', geoJson);
+        echarts.registerMap(value, geoJson);
         this.chart.setOption(this.currOption, true)
         this.zoom = key
         this.setHashMap(name, value, geoJson)

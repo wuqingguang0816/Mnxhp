@@ -333,6 +333,7 @@ export default {
       let obj = this.columnOptions.filter(o => o.__vModel__ == val)[0]
       item.jnpfKey = obj.__config__.jnpfKey
       item.attr = obj
+      item.formMultiple = item.jnpfKey === 'cascader' ? obj.props.props.multiple : obj.multiple
       if (item.jnpfKey === 'cascader') item.attr.props.props.multiple = false
       let config = item.attr.__config__
       if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
