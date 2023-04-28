@@ -36,7 +36,7 @@ export default {
   methods: {
     getData() {
       getEmail().then(res => {
-        this.list = res.data.list.slice(0, 7)
+        this.list = res.data.list ? res.data.list.slice(0, 7) : []
       })
     }
   }
