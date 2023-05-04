@@ -84,6 +84,10 @@
     width: 100% !important;
   }
 
+  .fc .fc-scroller {
+    overflow: hidden scroll !important;
+  }
+
   .fc-daygrid-body,
   .fc-scrollgrid-sync-table {
     height: 100% !important;
@@ -139,6 +143,7 @@
   .fc-view-harness th {
     height: 85px !important;
   }
+
 }
 
 .list-week {

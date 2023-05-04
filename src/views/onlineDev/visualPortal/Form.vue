@@ -21,7 +21,7 @@
           </el-select>
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="类型" prop="type">
-          <el-radio-group v-model="dataForm.type" size="mini">
+          <el-radio-group v-model="dataForm.type" size="mini" @change="changeType">
             <el-radio-button :label="0">门户设计</el-radio-button>
             <el-radio-button :label="1">配置路径</el-radio-button>
           </el-radio-group>
@@ -143,9 +143,12 @@ export default {
         }
       })
     },
+    changeType() {
+      this.dataForm.enabledLock = 1
+      this.dataForm.customUrl = ''
+    },
     changeLinkType() {
       this.dataForm.customUrl = ''
-      this.dataForm.enabledLock = 1
     },
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
