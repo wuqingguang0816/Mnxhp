@@ -218,7 +218,7 @@
               <el-divider>表格配置</el-divider>
               <el-form-item label="数据过滤" v-if="webType != 4">
                 <el-button style="width: 100%;" @click="filterPanelShow">
-                {{ this.columnData.ruleList && this.columnData.ruleList.length > 0 ? '编辑过滤条件' : '添加过滤条件' }}
+                  {{ this.columnData.ruleList && this.columnData.ruleList.length > 0 ? '编辑过滤条件' : '添加过滤条件' }}
                 </el-button>
               </el-form-item>
               <Condition ref="conditionpane" :modelType="modelType" :columnData="columnData"
@@ -602,20 +602,20 @@ export default {
   watch: {
     'columnData.type': {
       handler(val) {
-        if(val == 5) this.columnData.printIds = []
+        if (val == 5) this.columnData.printIds = []
       },
       deep: true,
       immediate: true
     },
-    'columnData.ruleList':{
-      handler(){
+    'columnData.ruleList': {
+      handler() {
         let ruleData = this.$store.getters.ruleData;
-        if(ruleData && ruleData.length > 0 && this.columnData.ruleList.length == 0){
-          this.$set(this.columnData,'ruleList',JSON.parse(JSON.stringify(ruleData)))
+        if (ruleData && ruleData.length > 0 && this.columnData.ruleList.length == 0) {
+          this.$set(this.columnData, 'ruleList', JSON.parse(JSON.stringify(ruleData)))
         }
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true
     },
     btnsList(val) {
       let list = []
@@ -1011,6 +1011,7 @@ export default {
     toggleType(val) {
       if (this.columnData.type == val) return;
       this.columnData.type = val;
+      this.columnData.childTableStyle = 1
       this.updateBtnsList(val)
     },
     updateBtnsList(val) {
