@@ -126,7 +126,6 @@ export default {
       this.btnLoading = false
       this.designBtnLoading = false
       this.dataForm.formData = null
-
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
@@ -146,6 +145,7 @@ export default {
     },
     changeLinkType() {
       this.dataForm.customUrl = ''
+      this.dataForm.enabledLock = 1
     },
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
