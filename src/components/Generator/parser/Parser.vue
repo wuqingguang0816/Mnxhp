@@ -470,9 +470,6 @@ export default {
           }
         }
         if (config.jnpfKey === 'date') {
-          if (config.defaultCurrent) {
-            config.defaultValue = new Date().getTime()
-          }
           if (config.startTimeRule) {
             if (config.startTimeType == 1) {
               cur.startTime = config.startTimeValue
