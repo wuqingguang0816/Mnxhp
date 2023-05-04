@@ -22,7 +22,8 @@
             <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
               :i="item.i" :key="item.i" :maxH="item.maxH" :minH="item.minH" :minW="item.minW"
               :maxW="item.maxW" :class="{'active-item': item.i===activeId}"
-              @resized="resizedEvent(item.i,item)" @click.native="handleClick(item)">
+              @resized="resizedEvent(item.i,item)" @moved="movedEvent"
+              @click.native="handleClick(item)">
               <parser :item="item" :activeId="activeId" />
               <div class="mask" v-if="!noNeedMaskList.includes(item.jnpfKey)"></div>
               <span title="复制" class="drawing-item-copy" @click="addComponent(item,'copy')">
@@ -267,6 +268,10 @@ export default {
         }
       }
       loop(item)
+      this.addLocalRecord(this.layout)
+    },
+    movedEvent() {
+      this.addLocalRecord(this.layout)
     }
   }
 }
