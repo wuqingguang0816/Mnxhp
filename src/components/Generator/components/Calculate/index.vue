@@ -10,7 +10,7 @@
 </template>
 <script>
 import { mergeNumberOfExps, validExp, toRPN, calcRPN, debounce } from '../../utils'
-import { getAmountChinese } from "@/components/Generator/utils/index"
+import { getAmountChinese, thousandsFormat } from "@/components/Generator/utils/index"
 export default {
   model: {
     prop: 'value',
@@ -87,10 +87,7 @@ export default {
         }
       }
       if (this.thousands) {
-        this.innerValue = parseFloat(this.innerValue).toLocaleString('zh', {
-          minimumFractionDigits: this.precision,
-          maximumFractionDigits: this.precision
-        })
+        this.innerValue = thousandsFormat(this.innerValue)
       }
       if (this.isAmountChinese) this.amountChineseName = getAmountChinese(this.setValue)
     }
