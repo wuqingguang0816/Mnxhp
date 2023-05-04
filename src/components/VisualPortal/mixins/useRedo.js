@@ -22,7 +22,9 @@ export default {
       this.recordLimit = limit;
     },
     addRecord(item) {
-      if (!this.getCanRedo) this.recordList.splice(this.currentRecordIndex + 1);
+      if (this.currentRecordIndex + 1 < this.recordList.length) {
+        this.recordList.splice(this.currentRecordIndex + 1);
+      }
       this.recordList.push(JSON.parse(JSON.stringify(item)));
       this.currentRecordIndex++;
       if (this.recordList.length > this.recordLimit) {
