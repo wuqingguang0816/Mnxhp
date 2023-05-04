@@ -77,10 +77,9 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="安全设置" name="second">
-          <el-alert title="注意：系统登录安全、黑名单IP限制" type="warning" :closable="false" show-icon />
           <el-tabs tab-position="left" style="height:100%" v-model="secondTab" class="secondTab">
             <el-tab-pane label="登录策略">
-              <el-row class="mt-20">
+              <el-row>
                 <el-col :span="18">
                   <el-form-item label="登录方式">
                     <el-select v-model="baseForm.singleLogin" placeholder="请选择">
@@ -149,21 +148,20 @@
               </el-row>
             </el-tab-pane>
             <el-tab-pane label="密码策略">
-              <el-row class="mt-20">
+              <el-row>
                 <el-col :span="18">
                   <el-form-item label="密码定期更新">
                     <el-switch v-model="baseForm.passwordIsUpdatedRegularly" :active-value="1"
                       :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="更新周期" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateCycle" :precision="0" :step="1" :min="1"
-                      controls-position="right" @blur="initConfig"/> 天
+                    <el-input-number v-model="baseForm.updateCycle" :precision="0" :step="1"
+                      :min="1" controls-position="right" @blur="initConfig" /> 天
                   </el-form-item>
                   <el-form-item label="提前" v-if="baseForm.passwordIsUpdatedRegularly">
-                    <el-input-number v-model="baseForm.updateInAdvance" :precision="0" :step="1"  :min="1"
-                      controls-position="right" @blur="initConfig"/> 天提醒更新
+                    <el-input-number v-model="baseForm.updateInAdvance" :precision="0" :step="1"
+                      :min="1" controls-position="right" @blur="initConfig" /> 天提醒更新
                   </el-form-item>
-
                   <el-form-item label="密码强度限制">
                     <el-switch v-model="baseForm.passwordStrengthLimit" :active-value="1"
                       :inactive-value="0" />
@@ -182,20 +180,18 @@
                     <el-checkbox v-model="baseForm.containsCharacters" :true-label="1"
                       :false-label="0">包含字符</el-checkbox>
                   </el-form-item>
-
                   <el-form-item label="禁用旧密码">
                     <el-switch v-model="baseForm.disableOldPassword" :active-value="1"
                       :inactive-value="0" />
                   </el-form-item>
                   <el-form-item label="禁用个数" v-if="baseForm.disableOldPassword">
                     <el-input-number v-model="baseForm.disableTheNumberOfOldPasswords" :min="1"
-                      :precision="0" :step="1" controls-position="right" @blur="initConfig"/> 个
+                      :precision="0" :step="1" controls-position="right" @blur="initConfig" /> 个
                   </el-form-item>
                   <el-form-item label="修改初始密码提醒" label-width="130px">
                     <el-switch v-model="baseForm.mandatoryModificationOfInitialPassword"
                       :active-value="1" :inactive-value="0" />
                   </el-form-item>
-
                   <el-form-item>
                     <el-button type="primary" size="small" :loading="btnLoading" class="saveBtn"
                       @click="submitForm()">保 存</el-button>
@@ -208,7 +204,7 @@
         <el-tab-pane label="同步设置" name="third">
           <el-tabs tab-position="left" style="height:100%" v-model="thirdTab" class="thirdTab">
             <el-tab-pane name="1" label="企业微信">
-              <el-row :gutter="20" style="margin-top: 15px">
+              <el-row :gutter="20">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="qyhCorpId">
                     <el-input v-model="baseForm.qyhCorpId" clearable placeholder="请输入CorpId" />
@@ -276,7 +272,7 @@
               </el-row>
             </el-tab-pane>
             <el-tab-pane name="2" label="阿里钉钉">
-              <el-row :gutter="20" style="margin-top: 15px">
+              <el-row :gutter="20">
                 <el-col :span="12" :offset="6" :pull="6">
                   <el-form-item label="企业号Id" prop="dingAgentId">
                     <el-input v-model="baseForm.dingAgentId" clearable placeholder="请输入AgentId" />
@@ -338,8 +334,7 @@
           </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="管理员设置" name="fourth">
-          <el-alert title="注意：设为超级管理员后该用户拥有系统最高权限" type="warning" :closable="false" show-icon />
-          <el-row :gutter="20" style="margin-top: 15px">
+          <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="超级管理员">
                 <user-select v-model="adminIds" placeholder="请选择超级管理员" multiple />
@@ -354,7 +349,7 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="流程设置" name="process">
-          <el-row class="mt-20">
+          <el-row>
             <el-col :span="18">
               <jnpf-form-tip-item label-width="120px" label="链接时效性" prop="title"
                 tipLabel="审批链接是否有效：审批链接发送时间 + 审批链接时效性">
@@ -572,10 +567,10 @@ export default {
     this.initData()
   },
   methods: {
-    initConfig(){
-      if(!this.baseForm.disableTheNumberOfOldPasswords) this.baseForm.disableTheNumberOfOldPasswords = 1
-      if(!this.baseForm.updateCycle) this.baseForm.updateCycle = 1
-      if(!this.baseForm.updateInAdvance) this.baseForm.updateInAdvance = 1
+    initConfig() {
+      if (!this.baseForm.disableTheNumberOfOldPasswords) this.baseForm.disableTheNumberOfOldPasswords = 1
+      if (!this.baseForm.updateCycle) this.baseForm.updateCycle = 1
+      if (!this.baseForm.updateInAdvance) this.baseForm.updateInAdvance = 1
     },
     initData() {
       this.listLoading = true
@@ -806,7 +801,7 @@ export default {
     height: calc(100vh - 120px);
   }
   >>> .el-tabs--border-card > .el-tabs__content {
-    padding: 30px 36px 10px 36px;
+    padding: 30px;
   }
   .saveBtn {
     width: 100px;
