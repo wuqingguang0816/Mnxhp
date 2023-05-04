@@ -126,7 +126,7 @@ export default {
       this.btnLoading = false
       this.designBtnLoading = false
       this.dataForm.formData = null
-      this.dataForm.linkType = 0
+
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
@@ -140,6 +140,7 @@ export default {
           })
         } else {
           this.dataForm.customUrl = ''
+          this.dataForm.linkType = 0
         }
       })
     },
