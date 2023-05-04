@@ -122,7 +122,7 @@ export const layoutComponents = [
         children: []
       }
     ],
-    active: 0,
+    active: '0',
     type: "",
     "tab-position": "top",
     w: 6,
