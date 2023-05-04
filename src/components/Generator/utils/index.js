@@ -495,6 +495,7 @@ export function numberThousandth(number, precision) {
   }
 }
 export function thousandsFormat(num) {
+  if (!num && num !== 0) return ''
   const numArr = num.toString().split('.');
   numArr[0] = numArr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return numArr.join('.');

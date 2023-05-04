@@ -13,7 +13,7 @@
       <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
     </el-form-item>
     <el-form-item label="合计设置">
-      <el-switch v-model="activeData['show-summary']" />
+      <el-switch v-model="activeData['show-summary']" @change="summaryChange" />
     </el-form-item>
     <el-form-item label="合计字段" v-if="activeData['show-summary']">
       <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段"
@@ -30,7 +30,7 @@
     <el-form-item label="分隔字段" v-if="activeData.thousands">
       <el-select v-model="activeData.thousandsField" multiple placeholder="请选择合计字段">
         <template v-for="(item,i) in thousandsOptions">
-          <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__">
+          <el-option :key="i" :label="item.label" :value="item.__vModel__">
           </el-option>
         </template>
       </el-select>
@@ -68,6 +68,9 @@ export default {
         this.summaryFieldChange(this.activeData.summaryField)
       },
       immediate: true
+    },
+    'activeData.summaryField'(val) {
+      this.activeData.thousandsField = []
     }
   },
   methods: {
@@ -84,12 +87,24 @@ export default {
     updateConf(data) {
       this.activeData.addTableConf = data
     },
+    summaryChange(val) {
+      if (!val) this.activeData.thousands = false
+    },
     summaryFieldChange(val) {
+      this.thousandsOptions = []
       let list = []
       val.forEach(element => {
-        list.push(this.activeData.__config__.children.filter(o => o.__vModel__ == element)[0])
+        let item = this.activeData.__config__.children.filter(o => o.__vModel__ == element)[0]
+        if (item) list.push(item)
       });
       this.thousandsOptions = list
+      if (list && list.length) {
+        this.thousandsOptions = this.thousandsOptions.map(o => (
+          {
+            ...o,
+            label: o.__config__.label
+          }))
+      }
     }
   }
 }

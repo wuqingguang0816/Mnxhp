@@ -41,14 +41,22 @@ export default {
   },
   data() {
     return {
-      innerValue: this.value,
+      innerValue: 0,
       amountChineseName: ''
+    }
+  },
+  watch: {
+    value: {
+      handler(val) {
+        this.innerValue = val
+        this.thousandSeparator()
+      },
+      immediate: true
     }
   },
   computed: {},
   created() {
     this.amountChinese(this.innerValue)
-    this.thousandSeparator()
   },
   mounted() {
   },

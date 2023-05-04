@@ -284,6 +284,19 @@
                   </el-select>
                 </el-form-item>
               </div>
+              <div>
+                <el-form-item label="千位分隔">
+                  <el-switch v-model="columnData.thousands"></el-switch>
+                </el-form-item>
+                <el-form-item label="分隔字段" v-if="columnData.thousands">
+                  <el-select v-model="columnData.thousandsField" placeholder="请选择千位分隔符字段" clearable
+                    multiple filterable>
+                    <template v-for="(item,i) in thousandsOptions">
+                      <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__" />
+                    </template>
+                  </el-select>
+                </el-form-item>
+              </div>
               <el-form-item label="子表样式"
                 v-if="(columnData.type==1||columnData.type==2)&&webType != 4">
                 <el-select v-model="columnData.childTableStyle" placeholder="请选择子表样式">
@@ -441,6 +454,8 @@ const defaultColumnData = {
   childTableStyle: 1, // 子表样式
   showSummary: false, // 合计配置
   summaryField: [], // 合计字段
+  thousands: false,//千位分割
+  thousandsField: [],//千位字段
   columnList: [], // 字段列表
   columnOptions: [], // 字段列表
   defaultColumnList: [], // 所有可选择字段列表
@@ -548,6 +563,7 @@ export default {
       printTplList: [],
       searchOptions: [],
       groupFieldOptions: [],
+      thousandsOptions: [],
       treeFieldOptions: [],
       btnsList: [],
       columnBtnsList: [],
@@ -674,6 +690,7 @@ export default {
       let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
       let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
       this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
+      this.thousandsOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0 && (o.__config__.jnpfKey == 'numInput' || o.__config__.jnpfKey == 'calculate'))
       this.treeFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0 && o.__config__.jnpfKey == 'treeSelect')
       this.columnOptions = columnOptions.map(o => ({
         label: o.__config__.label,

@@ -109,7 +109,7 @@ import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import SelectDialog from '@/components/SelectDialog/index'
-
+import { thousandsFormat } from "@/components/Generator/utils/index"
 export default {
   name: 'input-table',
   components: { SelectDialog },
@@ -784,6 +784,7 @@ export default {
         const sumVal = data.reduce((sum, d) => sum + this.getCmpValOfRow(d, column.property), 0)
         sums[index] = Number.isNaN(sumVal) ? '' : sumVal
         if (sums[index] && !Number.isInteger(sums[index])) sums[index] = sums[index].toFixed(2)
+        if (this.config.thousands && this.config.thousandsField.includes(column.property)) sums[index] = thousandsFormat(Number(sums[index]))
       })
       return sums
     },

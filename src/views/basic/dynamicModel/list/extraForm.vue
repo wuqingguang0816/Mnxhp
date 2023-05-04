@@ -86,7 +86,6 @@ export default {
         for (let i = 0; i < list.length; i++) {
           let item = list[i]
           if (item.__vModel__) {
-            if (this.dataForm.id && (item.__config__.jnpfKey === 'date' || item.__config__.jnpfKey === 'time')) item.__config__.custom = true
             if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
               item.__config__.defaultValue = new Date().getTime()
             } else if (item.__config__.jnpfKey === 'comSelect' && item.__config__.defaultCurrent) {

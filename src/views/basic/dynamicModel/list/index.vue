@@ -100,11 +100,11 @@
                 <template slot-scope="scope">
                   <template v-if="scope.row.rowEdit">
                     <template v-if="item.jnpfKey==='numInput'">
-                      <el-input-number v-model="scope.row[item.prop]"
+                      <JnpfInputNumber v-model="scope.row[item.prop]"
                         :placeholder="item.placeholder" :min="item.min" :max="item.max"
                         :step="item.step" :precision="item.precision"
                         :controls-position="item['controls-position']" :disabled="item.disabled"
-                        style="width:100%" />
+                        style="width:100%" :thousands="item.thousands" />
                     </template>
                     <template v-else-if="['rate','slider'].includes(item.jnpfKey)">
                       <el-input-number v-model="scope.row[item.prop]" placeholder="请输入"
@@ -259,6 +259,10 @@
                         type="primary">
                         {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
                     </template>
+                    <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
+                      <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
+                      </JnpfNumber>
+                    </template>
                     <template v-else>
                       {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
                     </template>
@@ -287,6 +291,12 @@
                                 type="primary">
                                 {{ scope.row[childTable.vModel]}}
                               </el-link>
+                            </template>
+                            <template
+                              v-else-if="childTable.jnpfKey==='numInput' ||childTable.jnpfKey==='calculate'">
+                              <JnpfNumber v-model="scope.row[childTable.vModel]"
+                                :thousands="childTable.thousands">
+                              </JnpfNumber>
                             </template>
                             <template v-else>
                               {{ scope.row[childTable.vModel]}}
@@ -325,6 +335,16 @@
                       @click.native="toDetail(item.modelId,scope.row[`${item.prop}_id`])"
                       type="primary">
                       {{ scope.row[item.prop] }}</el-link>
+                  </template>
+                </el-table-column>
+              </template>
+              <template v-else-if="item.jnpfKey==='numInput' ||item.jnpfKey==='calculate'">
+                <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
+                  :fixed="getFixed(item, i)" :width="item.width" :key="i"
+                  :sortable="item.sortable?'custom':item.sortable">
+                  <template slot-scope="scope">
+                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands">
+                    </JnpfNumber>
                   </template>
                 </el-table-column>
               </template>
@@ -512,7 +532,7 @@ import SuperQuery from '@/components/SuperQuery'
 import CandidateForm from '@/views/workFlow/components/CandidateForm'
 import CustomBox from '@/components/JNPFCustom'
 import { mapGetters } from "vuex";
-import { getDateDay, getLaterData, getBeforeData, getBeforeTime, getLaterTime } from '@/components/Generator/utils/index.js'
+import { getDateDay, getLaterData, getBeforeData, getBeforeTime, getLaterTime, thousandsFormat } from '@/components/Generator/utils/index.js'
 export default {
   name: 'dynamicModel',
   components: { PrintDialog, PrintBrowse, Form, extraForm, ExportBox, Search, Detail, FlowBox, ChildTableColumn, SuperQuery, CandidateForm, CustomBox, RelevanceDetail },
@@ -592,7 +612,8 @@ export default {
       refreshTree: true,
       flowList: [],
       flowListVisible: false,
-      currFlow: {}
+      currFlow: {},
+      key2: +new Date()
     }
   },
   computed: {
@@ -621,7 +642,9 @@ export default {
       if (this.columnData.printIds && this.columnData.printIds.length > 0) {
         this.getPrintListOptions(this.columnData.printIds)
       }
+
       if (this.columnData.type === 3) {
+
         this.columnData.columnList = this.columnData.columnList.filter(o => o.prop != this.columnData.groupField)
       }
       if (this.config.enableFlow == 1) {
@@ -748,6 +771,7 @@ export default {
                 return prev;
               }
             }, 0).toFixed(2);
+            if (this.columnData.thousands && this.columnData.thousandsField.includes(column.property)) sums[index] = thousandsFormat(Number(sums[index]))
           } else {
             sums[index] = '';
           }

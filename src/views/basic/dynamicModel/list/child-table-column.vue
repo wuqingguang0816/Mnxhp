@@ -11,6 +11,11 @@
               {{ item[headItem.vModel] }}
             </el-link>
           </div>
+          <div class="cell"
+            v-else-if="headItem.jnpfKey==='numInput' ||headItem.jnpfKey==='calculate'">
+            <JnpfNumber v-model="item[headItem.vModel]" :thousands="headItem.thousands">
+            </JnpfNumber>
+          </div>
           <div class="cell" v-else>
             {{ item[headItem.vModel] }}
           </div>
@@ -27,6 +32,11 @@
               @click.native="toDetail(headItem.modelId,item[`${headItem.vModel}_id`])">
               {{ item[headItem.vModel] }}
             </el-link>
+          </div>
+          <div class="cell"
+            v-else-if="headItem.jnpfKey==='numInput' ||headItem.jnpfKey==='calculate'">
+            <JnpfNumber v-model="item[headItem.vModel]" :thousands="headItem.thousands">
+            </JnpfNumber>
           </div>
           <div class="cell" v-else>
             {{ item[headItem.vModel] }}
