@@ -41,7 +41,7 @@
         </template>
         <template v-if="dataForm.type==0">
           <jnpf-form-tip-item label="锁定" prop="enabledLock"
-            tip-label="启用：不允许拖拽移动控件；禁用：允许用户在PC门户上拖拽大小及移动控件。">
+            tip-label="启用：不允许拖拽移动控件；禁用：允许用户在PC门户上拖拽大小及移动控件。禁用后再选择启用，将导致门户初始化，请谨慎操作。">
             <el-switch v-model="dataForm.enabledLock" :active-value="1" :inactive-value="0" />
           </jnpf-form-tip-item>
         </template>

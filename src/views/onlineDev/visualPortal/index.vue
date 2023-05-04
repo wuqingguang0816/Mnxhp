@@ -30,8 +30,8 @@
             <el-col :span="6">
               <el-form-item label="锁定">
                 <el-select v-model="enabledLock" placeholder="请选择锁定类型" clearable>
-                  <el-option label="启用" :value="1" />
-                  <el-option label="禁用" :value="0" />
+                  <el-option label="是" :value="1" />
+                  <el-option label="否" :value="0" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -74,7 +74,7 @@
           </el-table-column>
           <el-table-column prop="enabledLock" label="锁定" width="70" align="center">
             <template slot-scope="scope">
-              <p>{{scope.row.enabledLock==1?'是':'否'}}</p>
+              <p>{{scope.row.type==1?'':scope.row.enabledLock==1?'是':'否'}}</p>
             </template>
           </el-table-column>
           <el-table-column prop="creatorUser" label="创建人" width="120" />
