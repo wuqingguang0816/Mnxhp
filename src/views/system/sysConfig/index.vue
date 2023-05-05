@@ -167,7 +167,7 @@
                     <el-checkbox v-model="baseForm.passwordLengthMin" :true-label="1"
                       :false-label="0">最小长度</el-checkbox>
                     <el-input-number v-model="baseForm.passwordLengthMinNumber" :precision="0" :min="1"
-                      :step="1" controls-position="right"/><br />
+                      :step="1" controls-position="right"  @blur="initConfig"/><br />
                     <el-checkbox v-model="baseForm.containsNumbers" :true-label="1"
                       :false-label="0">包含数字</el-checkbox><br />
                     <el-checkbox v-model="baseForm.includeLowercaseLetters" :true-label="1"
@@ -570,6 +570,7 @@ export default {
       if(!this.baseForm.disableTheNumberOfOldPasswords) this.baseForm.disableTheNumberOfOldPasswords = 1
       if(!this.baseForm.updateCycle) this.baseForm.updateCycle = 1
       if(!this.baseForm.updateInAdvance) this.baseForm.updateInAdvance = 1
+      if(!this.baseForm.passwordLengthMinNumber) this.baseForm.passwordLengthMinNumber = 1
     },
     initData() {
       this.listLoading = true
