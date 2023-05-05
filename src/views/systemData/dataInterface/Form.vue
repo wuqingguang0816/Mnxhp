@@ -89,6 +89,8 @@
                   {{ data.fieldName?data.field + '(' + data.fieldName + ')':data.field}}
                 </span>
                 <span class="text" v-else>
+                  <i
+                    :class="data.type == 1 ? 'icon-ym icon-ym-view' : 'icon-ym icon-ym-generator-tableGrid'" />
                   {{ data.tableName?data.table + '(' + data.tableName + ')':data.table}}
                 </span>
               </span>
@@ -293,7 +295,7 @@ import {
   updateDataInterface,
 } from '@/api/systemData/dataInterface'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { DataModelList, DataModelFieldList } from '@/api/systemData/dataModel'
+import { DataModelListAll, DataModelFieldList } from '@/api/systemData/dataModel'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
 import FieldForm from './FieldForm'
@@ -478,7 +480,7 @@ export default {
     },
     getTableList() {
       this.treeLoading = true
-      DataModelList(this.dataForm.dbLinkId, { keyword: this.keyword }).then(res => {
+      DataModelListAll(this.dataForm.dbLinkId, { keyword: this.keyword }).then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
       })

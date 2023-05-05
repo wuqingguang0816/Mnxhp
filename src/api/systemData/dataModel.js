@@ -8,6 +8,14 @@ export function DataModelList(id, data) {
     data
   })
 }
+// 获取数据库表列表+视图
+export function DataModelListAll(id, data) {
+  return request({
+    url: `/api/system/DataModel/${id}/TableAll`,
+    method: 'get',
+    data
+  })
+}
 // 添加数据表
 export function DataModelCreate(linkId, data) {
   return request({
@@ -32,7 +40,7 @@ export function DataModelDelete(linkId, id) {
   })
 }
 // 获取数据库表字段列表
-export function DataModelFieldList(linkId, table, type) {
+export function DataModelFieldList(linkId, table, type = '0') {
   return request({
     url: `/api/system/DataModel/${linkId}/Tables/${table}/Fields?type=${type}`,
     method: 'get'
