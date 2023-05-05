@@ -428,11 +428,9 @@ export default {
       }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (!this.allDay) {
+          if (this.dataForm.allDay == 0) {
             if (!this.dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
-          }
-          if (!this.allDay && this.dataForm.duration == -1) {
-            if (!this.dataForm.endTime) return this.$message({ message: '结束日期不能为空', type: 'error' })
+            if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束日期不能为空', type: 'error' })
           }
           if (this.dataForm.allDay == 1) {
             if (this.dataForm.startDay > this.dataForm.endDay) {
