@@ -37,7 +37,7 @@
           <el-col :span="12">
             <el-form-item label="状态" prop="enabledMark">
               <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0"
-                disabled="false" />
+                :disabled="false" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -62,7 +62,7 @@
                   <el-table-column prop="enabledMark" label="状态" width="100">
                     <template slot-scope="scope">
                       <el-switch v-model="scope.row.enabledMark" :active-value="1"
-                        :inactive-value="0" disabled="false" />
+                        :inactive-value="0" :disabled="false" />
                     </template>
                   </el-table-column>
                   <el-table-column label="操作" width="150">
@@ -154,7 +154,7 @@ export default {
     handleView(id) {
       this.viewVisible = true
       this.$nextTick(() => {
-        this.$refs.View.init(id, this.msgTypeList)
+        this.$refs.View.init(id, this.messageTypeList)
       })
     },
   }
