@@ -784,7 +784,7 @@ export default {
         const sumVal = data.reduce((sum, d) => sum + this.getCmpValOfRow(d, column.property), 0)
         sums[index] = Number.isNaN(sumVal) ? '' : sumVal
         if (sums[index] && !Number.isInteger(sums[index])) sums[index] = sums[index].toFixed(2)
-        if (this.config.thousands && this.config.thousandsField.includes(column.property)) sums[index] = thousandsFormat(Number(sums[index]))
+        if (this.config.thousands && this.config.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
       })
       return sums
     },

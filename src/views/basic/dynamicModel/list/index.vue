@@ -771,7 +771,7 @@ export default {
                 return prev;
               }
             }, 0).toFixed(2);
-            if (this.columnData.thousands && this.columnData.thousandsField.includes(column.property)) sums[index] = thousandsFormat(Number(sums[index]))
+            if (this.columnData.thousands && this.columnData.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
           } else {
             sums[index] = '';
           }
