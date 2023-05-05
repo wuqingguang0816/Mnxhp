@@ -189,7 +189,8 @@ export default {
       })
     },
     initData() {
-      this.activeData.option.columnData.forEach((o, i) => {
+      let sysType = this.showType === 'app' ? 'appColumnList' : 'rowData'
+      this.activeData.option[sysType].forEach((o, i) => {
         if (o.classify && o.classify.length) {
           this.typeList = o.classify
         }
