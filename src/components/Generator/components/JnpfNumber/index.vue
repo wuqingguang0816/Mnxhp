@@ -55,13 +55,12 @@ export default {
     }
   },
   computed: {},
-  created() {
-    this.amountChinese(this.innerValue)
-  },
+  created() { },
   mounted() {
   },
   methods: {
     thousandSeparator() {
+      if (this.isAmountChinese) this.amountChineseName = getAmountChinese(this.innerValue)
       if (this.thousands) {
         this.innerValue = thousandsFormat(this.innerValue)
       } else {
@@ -69,12 +68,7 @@ export default {
       }
       return this.innerValue
     },
-    amountChinese(val) {
-      if (!this.isAmountChinese) return
-      this.amountChineseName = getAmountChinese(val)
-    }
   }
-
 }
 </script>
 <style lang="scss" scoped>
