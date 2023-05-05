@@ -103,7 +103,7 @@ export default {
         excerpt: ""
       },
       sendConfiguredList: [],
-      remindCategoryList: [{ 'fullName': '站内信', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
+      remindCategoryList: [{ 'fullName': '默认', 'enCode': 1 }, { 'fullName': '自定义', 'enCode': 2 }, { 'fullName': '不提醒', 'enCode': 3 }],
       categoryList: [],
       toUserIds: [],
       files: [],
