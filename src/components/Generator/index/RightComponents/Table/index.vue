@@ -28,7 +28,7 @@
       <el-switch v-model="activeData.thousands" />
     </el-form-item>
     <el-form-item label="分隔字段" v-if="activeData.thousands">
-      <el-select v-model="activeData.thousandsField" multiple placeholder="请选择合计字段">
+      <el-select v-model="activeData.thousandsField" multiple placeholder="请选择千位分隔符字段">
         <template v-for="(item,i) in thousandsOptions">
           <el-option :key="i" :label="item.label" :value="item.__vModel__">
           </el-option>
