@@ -83,73 +83,71 @@
                 tipLabel='参数格式：{参数名}'>
                 <p v-html="dataForm.content"></p>
               </jnpf-form-tip-item>
-              <jnpf-form-tip-item label="消息内容" prop="content" v-else-if="dataForm.messageType != 1
+              <jnpf-form-tip-item label="消息内容" prop="content" v-else-if="dataForm.messageType != 1"
                 tipLabel='参数格式：{参数名}'>
                 <p>{{dataForm.content}}</p>
               </jnpf-form-tip-item>
             </div>
-            <div class=" right-pane" v-else>
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <jnpf-form-tip-item label="模版编号" prop="templateCode"
-                      :tipLabel="dataForm.messageType==3?'阿里云：请在【阿里云管理后台-模板管理】⻚⾯查看模板CODE<br/>腾讯云：请在【腾讯云管理后台-正⽂模板管理】⻚⾯查看模板ID':'在【微信公众号管理后台-广告与服务-模板消息】⻚⾯查看模板ID'">
-                      <p>{{dataForm.templateCode}}</p>
-                    </jnpf-form-tip-item>
-                  </el-col>
-                  <el-col :span="12" :offset="12"></el-col>
-                  <el-col :span="12" v-if="dataForm.messageType == 7">
-                    <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
-                      <p>{{dataForm.wxSkip==1?'小程序':'页面'}}</p>
-                    </jnpf-form-tip-item>
-                  </el-col>
-                  <el-col :span="12" v-if="dataForm.messageType == 7&&dataForm.wxSkip == 1">
-                    <jnpf-form-tip-item label="关联小程序ID" prop="xcxAppId" label-width="126px"
-                      tipLabel="在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
-                      <p>{{dataForm.xcxAppId}}</p>
-                    </jnpf-form-tip-item>
-                  </el-col>
-                </el-row>
-                <div class="msg-pane">
-                  <div class="list">
-                    <el-table :data="smsList" ref="dragTable" row-key="id" size='mini'
-                      height="100%">
-                      <el-table-column label="序号" type="index" width="50"></el-table-column>
-                      <el-table-column prop="name">
-                        <template slot="header">
-                          <p v-if="dataForm.messageType==3">
-                            短信变量
-                            <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
-                              placement="top">
-                              <a class="el-icon-question tooltip-question"></a>
-                            </el-tooltip>
-                          </p>
-                          <p v-else>
-                            变量
-                            <el-tooltip content="内容在微信公众号管理后台维护，绑定模板变量，如：{first.DATA}。"
-                              placement="top">
-                              <a class="el-icon-question tooltip-question"></a>
-                            </el-tooltip>
-                          </p>
-                        </template>
-                        <template slot-scope="scope">
-                          <p>{{scope.row.smsField}}</p>
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="参数">
-                        <template slot-scope="scope">
-                          <p style="line-height:36px">{{scope.row.field}}</p>
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="标题" v-if="dataForm.messageType==7">
-                        <template slot-scope="scope">
-                          <el-checkbox v-model="scope.row.isTitle" disabled
-                            @change='changeKey($event,scope.row)' :true-label="1"
-                            :false-label="0" />
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </div>
+            <div class="right-pane" v-else>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <jnpf-form-tip-item label="模版编号" prop="templateCode"
+                    :tipLabel="dataForm.messageType==3?'阿里云：请在【阿里云管理后台-模板管理】⻚⾯查看模板CODE<br/>腾讯云：请在【腾讯云管理后台-正⽂模板管理】⻚⾯查看模板ID':'在【微信公众号管理后台-广告与服务-模板消息】⻚⾯查看模板ID'">
+                    <p>{{dataForm.templateCode}}</p>
+                  </jnpf-form-tip-item>
+                </el-col>
+                <el-col :span="12" :offset="12"></el-col>
+                <el-col :span="12" v-if="dataForm.messageType == 7">
+                  <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
+                    <p>{{dataForm.wxSkip==1?'小程序':'页面'}}</p>
+                  </jnpf-form-tip-item>
+                </el-col>
+                <el-col :span="12" v-if="dataForm.messageType == 7&&dataForm.wxSkip == 1">
+                  <jnpf-form-tip-item label="关联小程序ID" prop="xcxAppId" label-width="126px"
+                    tipLabel="在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
+                    <p>{{dataForm.xcxAppId}}</p>
+                  </jnpf-form-tip-item>
+                </el-col>
+              </el-row>
+              <div class="msg-pane">
+                <div class="list">
+                  <el-table :data="smsList" ref="dragTable" row-key="id" size='mini' height="100%">
+                    <el-table-column label="序号" type="index" width="50"></el-table-column>
+                    <el-table-column prop="name">
+                      <template slot="header">
+                        <p v-if="dataForm.messageType==3">
+                          短信变量
+                          <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
+                            placement="top">
+                            <a class="el-icon-question tooltip-question"></a>
+                          </el-tooltip>
+                        </p>
+                        <p v-else>
+                          变量
+                          <el-tooltip content="内容在微信公众号管理后台维护，绑定模板变量，如：{first.DATA}。"
+                            placement="top">
+                            <a class="el-icon-question tooltip-question"></a>
+                          </el-tooltip>
+                        </p>
+                      </template>
+                      <template slot-scope="scope">
+                        <p>{{scope.row.smsField}}</p>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="参数">
+                      <template slot-scope="scope">
+                        <p style="line-height:36px">{{scope.row.field}}</p>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="标题" v-if="dataForm.messageType==7">
+                      <template slot-scope="scope">
+                        <el-checkbox v-model="scope.row.isTitle" disabled
+                          @change='changeKey($event,scope.row)' :true-label="1" :false-label="0" />
+                      </template>
+                    </el-table-column>
+                  </el-table>
                 </div>
+              </div>
             </div>
           </div>
         </el-col>
