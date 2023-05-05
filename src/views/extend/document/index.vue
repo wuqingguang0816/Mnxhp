@@ -62,9 +62,9 @@
             </el-table-column>
             <el-table-column prop="creatorTime" label="创建日期" :formatter="jnpf.tableDateFormat"
               width="120" />
-            <el-table-column label="操作" fixed="right" width="150">
+            <el-table-column label="操作" fixed="right" width="150" align="reght">
               <template slot-scope="scope">
-                <el-button type="text" v-if="scope.row.isPreview!=null" @click="handlepreview(scope.row)">预览 </el-button>
+                <el-button type="text" @click="handlepreview(scope.row)" :disabled="scope.row.isPreview==null">预览 </el-button>
                 <el-button size="mini" type="text" @click="handleDownLoad(scope.row.id)"
                   :disabled="!scope.row.type">下载</el-button>
                 <el-dropdown>

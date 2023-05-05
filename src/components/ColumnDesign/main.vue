@@ -1056,6 +1056,7 @@ export default {
     toggleType(val) {
       if (this.columnData.type == val) return;
       this.columnData.type = val;
+      this.columnData.childTableStyle = 1
       this.updateBtnsList(val)
     },
     updateBtnsList(val) {
