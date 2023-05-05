@@ -115,8 +115,7 @@
                   <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content"
-                  v-else-if="dataForm.messageType != 1||dataForm.messageSource != 1"
-                  tipLabel='参数格式：{参数名}'>
+                  v-else-if="dataForm.messageType != 1" tipLabel='参数格式：{参数名}'>
                   <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
                     :rows="19" />
                 </jnpf-form-tip-item>
