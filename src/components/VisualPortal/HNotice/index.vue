@@ -189,7 +189,7 @@ export default {
       })
     },
     initData() {
-      let sysType = this.showType === 'app' ? 'appColumnList' : 'rowData'
+      let sysType = this.showType === 'app' ? 'appColumnList' : this.showType === 'pc' && this.activeData.option.styleType != 1 ? 'rowData' : 'columnData'
       this.activeData.option[sysType].forEach((o, i) => {
         if (o.classify && o.classify.length) {
           this.typeList = o.classify
