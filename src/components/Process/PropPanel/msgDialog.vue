@@ -80,7 +80,7 @@ export default {
     },
     messageSource: {
       type: Number,
-      default: 1
+      default: 2
     },
     clearable: {
       type: Boolean,
