@@ -8,9 +8,9 @@
         v-show="currentTab==='app'" />
       <div class="head-tabs">
         <el-button icon="icon-ym icon-ym-pc" :class="{'unActive-btn':currentTab!=='pc'}" type="text"
-          @click="currentTab='pc'" size="medium">桌面端</el-button>
+          @click="currentTabChange('pc')" size="medium">桌面端</el-button>
         <el-button icon="icon-ym icon-ym-mobile" :class="{'unActive-btn':currentTab!=='app'}"
-          type="text" @click="currentTab='app'" size="medium">移动端</el-button>
+          type="text" @click="currentTabChange('app')" size="medium">移动端</el-button>
       </div>
     </div>
     <div class="column-empty-info" v-show="webType!=2&&webType!=4">
@@ -52,6 +52,10 @@ export default {
   created() {
   },
   methods: {
+    currentTabChange(tab){
+      this.currentTab = tab
+      this.$store.state.generator.ruleData = []
+    },
     /**
       * 供父组件使用 获取列表JSON
     */
