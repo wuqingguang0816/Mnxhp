@@ -1,8 +1,8 @@
 <template>
   <el-date-picker :type="type === 'year' ? 'monthrange' : (type + 'range')" v-model="innerValue"
-    placeholder="请选择" :value-format="valueFormat" :picker-options='pickerOptions' style="width:100%"
-    :start-placeholder="startPlaceholder" :end-placeholder="endPlaceholder"
-    :format="format"></el-date-picker>
+    placeholder="请选择" :value-format="valueFormat" :range-separator="separator"
+    :picker-options='pickerOptions' style="width:100%" :start-placeholder="startPlaceholder"
+    :end-placeholder="endPlaceholder" :format="format"></el-date-picker>
 </template>
 <script>
 export default {
@@ -16,10 +16,16 @@ export default {
       default: undefined
     },
     valueFormat: {
+
       default: undefined
     },
     format: {
-      default: undefined
+      type: String,
+      default: 'yyyy-MM-dd HH:mm:ss'
+    },
+    separator: {
+      type: String,
+      default: '-'
     },
     startTime: {
       default: undefined
@@ -67,6 +73,7 @@ export default {
   computed: {
   },
   created() {
+
   },
   mounted() {
   },

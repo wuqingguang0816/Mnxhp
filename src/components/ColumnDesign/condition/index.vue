@@ -149,15 +149,16 @@
                 ">
                 <template v-if="item.symbol == 'between'">
                   <JnpfDateRangePicker v-model="item.fieldValue" clearable :disabled="item.disabled"
-                    key="year1" placeholder="请选择" :type="item.type"
-                    :valueFormat="item['value-format']" range-separator="至" @input="input()"
-                    start-placeholder="开始日期" end-placeholder="结束日期" style="width: 100%;"
-                    :format="item.format">
+                    key="year1" placeholder="请选择" separator="至"
+                    :type="item.jnpfKey==='createTime' ||item.jnpfKey==='modifyTime'?'datetime': item.type"
+                    valueFormat="timestamp" @input="input()" startPlaceholder="开始日期"
+                    endPlaceholder="结束日期" style="width: 100%;" :format="item.format">
                   </JnpfDateRangePicker>
                 </template>
                 <JnpfDatePicker v-else v-model="item.fieldValue" clearable :disabled="item.disabled"
-                  key="year2" placeholder="请选择" :type="item.type" @input="input()"
-                  :valueFormat="item['value-format']"
+                  key="year2" placeholder="请选择"
+                  :type="item.jnpfKey==='createTime' ||item.jnpfKey==='modifyTime'?'datetime': item.type"
+                  @input="input()" valueFormat="timestamp"
                   :format="item.format || 'yyyy-MM-dd HH:mm:ss'">
                 </JnpfDatePicker>
               </template>
