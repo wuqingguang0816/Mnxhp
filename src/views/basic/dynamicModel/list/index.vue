@@ -343,8 +343,7 @@
                   :fixed="getFixed(item, i)" :width="item.width" :key="i"
                   :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
-                    <JnpfNumber v-model="scope.row[item.__vModel__]"
-                      :thousands="columnData.thousands">
+                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands">
                     </JnpfNumber>
                   </template>
                 </el-table-column>
