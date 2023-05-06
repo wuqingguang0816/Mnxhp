@@ -494,6 +494,7 @@ export default {
         }
         if (vModel === prop) {
           activeRow[i].value = value
+          this.handleRelation(activeRow[i], this.activeRowIndex)
           break
         }
       }
