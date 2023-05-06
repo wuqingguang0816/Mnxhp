@@ -1730,7 +1730,8 @@ export const chartComponents = [{
     defaultValue: [],
     layout: 1,
     sortable: 1,
-    showNumber: undefined
+    showNumber: undefined,
+    appShowNumber: undefined,
   },
   refresh: {
     autoRefresh: false,

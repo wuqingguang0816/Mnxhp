@@ -87,8 +87,10 @@
         </el-radio-group>
       </el-form-item>
       <jnpf-form-tip-item label="显示条数" tipLabel='置空时，则显示全部数据'>
-        <el-input-number v-model="activeData.option.showNumber" controls-position="right" :min="0"
-          :max="500" />
+        <el-input-number v-if="showType=='pc'" v-model="activeData.option.showNumber"
+          controls-position="right" :min="0" :max="500" />
+        <el-input-number v-else v-model="activeData.option.appShowNumber" controls-position="right"
+          :min="0" :max="500" />
       </jnpf-form-tip-item>
     </template>
     <template v-if="activeData.jnpfKey == 'text'">
