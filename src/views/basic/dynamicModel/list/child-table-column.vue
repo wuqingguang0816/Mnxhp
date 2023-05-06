@@ -91,7 +91,6 @@ export default {
     }
   },
   computed: {
-
     fewData() {
       if (!this.data) return []
       return this.data.slice(0, this.defaultNumber)
