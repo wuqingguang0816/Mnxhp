@@ -272,11 +272,11 @@
               </template>
               <div v-if="columnData.type==1||columnData.type==2||columnData.type==4">
                 <el-form-item label="合计配置">
-                  <el-switch v-model="columnData.showSummary" @change="summaryChange"></el-switch>
+                  <el-switch v-model="columnData.showSummary"></el-switch>
                 </el-form-item>
                 <el-form-item label="合计字段" v-if="columnData.showSummary">
                   <el-select v-model="columnData.summaryField" placeholder="请选择合计字段" clearable
-                    multiple filterable @change="summaryFieldChange">
+                    multiple filterable>
                     <template v-for="(item,i) in groupFieldOptions">
                       <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
                         v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey)" />
@@ -284,9 +284,8 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div
-                v-if="(columnData.type==1||columnData.type==2||columnData.type==4) && columnData.showSummary">
-                <el-form-item label="千位分隔">
+              <div v-if="columnData.type!=4">
+                <el-form-item label=" 千位分隔">
                   <el-switch v-model="columnData.thousands"></el-switch>
                 </el-form-item>
                 <el-form-item label="分隔字段" v-if="columnData.thousands">
@@ -624,15 +623,6 @@ export default {
       deep: true,
       immediate: true
     },
-    groupFieldOptions: {
-      handler(val) {
-        this.summaryFieldChange(this.columnData.summaryField)
-      },
-      immediate: true
-    },
-    'activeData.summaryField'(val) {
-      this.columnData.thousandsField = []
-    },
     'columnData.ruleList': {
       handler() {
         let ruleData = this.$store.getters.ruleData;
@@ -699,6 +689,7 @@ export default {
       this.list = list
       let columnOptions = list.filter(o => noColumnShowList.indexOf(o.__config__.jnpfKey) < 0 || o.__config__.isStorage == 2)
       let searchOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0)
+      this.thousandsOptions = list.filter(o => noSearchList.indexOf(o.__config__.jnpfKey) < 0 && (o.__config__.jnpfKey == 'numInput' || o.__config__.jnpfKey == 'calculate'))
       this.groupFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0)
       this.treeFieldOptions = list.filter(o => o.__vModel__.indexOf('-') < 0 && o.__config__.jnpfKey == 'treeSelect')
       this.columnOptions = columnOptions.map(o => ({
@@ -810,25 +801,6 @@ export default {
     },
     open(url) {
       window.open(url, "_blank");
-    },
-    summaryChange(val) {
-      if (!val) this.columnData.thousands = false
-    },
-    summaryFieldChange(val) {
-      this.thousandsOptions = []
-      let list = []
-      val.forEach(element => {
-        let item = this.groupFieldOptions.filter(o => o.__vModel__ == element)[0]
-        if (item) list.push(item)
-      });
-      this.thousandsOptions = list
-      if (list && list.length) {
-        this.thousandsOptions = this.thousandsOptions.map(o => (
-          {
-            ...o,
-            label: o.__config__.label
-          }))
-      }
     },
     openPrint() {
       let routeUrl = this.$router.resolve({

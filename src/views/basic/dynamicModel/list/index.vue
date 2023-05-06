@@ -260,7 +260,8 @@
                         {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
                     </template>
                     <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
-                      <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
+                      <JnpfNumber v-model="scope.row[item.prop]"
+                        :thousands="item.thousands&&item.thousandsField.includes(item.prop)">
                       </JnpfNumber>
                     </template>
                     <template v-else>
@@ -295,7 +296,7 @@
                             <template
                               v-else-if="childTable.jnpfKey==='numInput' ||childTable.jnpfKey==='calculate'">
                               <JnpfNumber v-model="scope.row[childTable.vModel]"
-                                :thousands="childTable.thousands">
+                                :thousands="childTable.thousands&&childTable.thousandsField.includes(childTable.vModel)">
                               </JnpfNumber>
                             </template>
                             <template v-else>
@@ -343,7 +344,8 @@
                   :fixed="getFixed(item, i)" :width="item.width" :key="i"
                   :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
-                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands">
+                    <JnpfNumber v-model="scope.row[item.__vModel__]"
+                      :thousands="columnData.thousands&&columnData.thousandsField.includes(item.prop)">
                     </JnpfNumber>
                   </template>
                 </el-table-column>

@@ -273,7 +273,7 @@
 </template>
 <script>
 import { getDownloadUrl } from '@/api/common'
-
+import { thousandsFormat } from '@/components/Generator/utils/index.js'
 export default {
   name: 'Item',
   props: {
@@ -342,7 +342,8 @@ export default {
             } else {
               return prev;
             }
-          }, 0);
+          }, 0).toFixed(2);
+          if (this.item.thousands && this.item.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
         } else {
           sums[index] = '';
         }
