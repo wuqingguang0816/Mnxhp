@@ -259,11 +259,6 @@
                         type="primary">
                         {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
                     </template>
-                    <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
-                      <JnpfNumber v-model="scope.row[item.prop]"
-                        :thousands="item.thousands&&item.thousandsField.includes(item.prop)">
-                      </JnpfNumber>
-                    </template>
                     <template v-else>
                       {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
                     </template>
