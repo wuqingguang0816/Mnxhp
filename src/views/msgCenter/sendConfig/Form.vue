@@ -195,9 +195,10 @@ export default {
       })
     },
     addTemplateData(row, index) {
+      if (!this.dataForm.messageSource) return this.$message({ message: '请选择消息来源', type: 'error' })
       this.templateVisible = true
       this.$nextTick(() => {
-        this.$refs.TemplateRef.init(row, index)
+        this.$refs.TemplateRef.init(row, index, this.dataForm.messageSource)
       })
     },
     addEditTemplate(e, index) {

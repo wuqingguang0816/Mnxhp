@@ -13,7 +13,8 @@
       </el-form-item>
       <el-form-item label="模板名称" prop="templateName">
         <template-dialog :value="dataForm.templateId" :title="dataForm.templateName"
-          :messageType="dataForm.messageType" @change="onTemplateChange" />
+          :messageType="dataForm.messageType" :messageSource="messageSource"
+          @change="onTemplateChange" />
       </el-form-item>
       <el-form-item label="模板编码" prop="templateCode">
         <el-input v-model="dataForm.templateCode" placeholder="模板编码" disabled clearable></el-input>
@@ -74,12 +75,14 @@ export default {
       msgTypeList: [],
       visible: false,
       btnLoading: false,
-      editIndex: ''
+      editIndex: '',
+      messageSource: ''
     }
   },
   methods: {
-    init(row, index) {
+    init(row, index, messageSource) {
       this.editIndex = index
+      this.messageSource = messageSource
       this.getConfig()
       this.visible = true
       this.$nextTick(() => {

@@ -93,6 +93,10 @@ export default {
     messageType: {
       type: [String, Number],
       default: 0
+    },
+    messageSource: {
+      type: [String, Number],
+      default: ''
     }
   },
   model: {
@@ -132,7 +136,10 @@ export default {
     initData() {
       this.listLoading = true
       if (this.type == 2) this.listQuery.type = this.messageType
-      if (this.type != 2) this.listQuery.messageType = this.messageType
+      if (this.type != 2) {
+        this.listQuery.messageType = this.messageType
+        this.listQuery.messageSource = this.messageSource
+      }
       const formMethod = this.type == 2 ? getConfigList : getMsgTemplateList
       formMethod(this.listQuery).then(res => {
         this.list = res.data.list
