@@ -13,8 +13,7 @@
           </div>
           <div class="cell"
             v-else-if="headItem.jnpfKey==='numInput' ||headItem.jnpfKey==='calculate'">
-            <JnpfNumber v-model="item[headItem.vModel]"
-              :thousands="thousands&&thousandsField.includes(headItem.vModel)">
+            <JnpfNumber v-model="item[headItem.vModel]" :thousands="headItem.thousands">
             </JnpfNumber>
           </div>
           <div class="cell" v-else>
@@ -36,8 +35,7 @@
           </div>
           <div class="cell"
             v-else-if="headItem.jnpfKey==='numInput' ||headItem.jnpfKey==='calculate'">
-            <JnpfNumber v-model="item[headItem.vModel]"
-              :thousands="thousands&&thousandsField.includes(headItem.vModel)">
+            <JnpfNumber v-model="item[headItem.vModel]" :thousands="headItem.thousands">
             </JnpfNumber>
           </div>
           <div class="cell" v-else>
@@ -66,14 +64,6 @@ export default {
       default: () => []
     },
     head: {
-      type: Array,
-      default: () => []
-    },
-    thousands: {
-      type: Boolean,
-      default: false
-    },
-    thousandsField: {
       type: Array,
       default: () => []
     },

@@ -259,6 +259,10 @@
                         type="primary">
                         {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
                     </template>
+                    <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
+                      <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
+                      </JnpfNumber>
+                    </template>
                     <template v-else>
                       {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
                     </template>
@@ -291,7 +295,7 @@
                             <template
                               v-else-if="childTable.jnpfKey==='numInput' ||childTable.jnpfKey==='calculate'">
                               <JnpfNumber v-model="scope.row[childTable.vModel]"
-                                :thousands="childTable.thousands&&childTable.thousandsField.includes(childTable.vModel)">
+                                :thousands="childTable.thousands">
                               </JnpfNumber>
                             </template>
                             <template v-else>
@@ -317,9 +321,7 @@
                     <template slot-scope="scope">
                       <child-table-column :data="scope.row[item.prop]" :head="item.children"
                         @toggleExpand="toggleExpand(scope.row,`${item.prop}Expand`)"
-                        :thousands="columnData.thousands"
-                        :thousandsField="columnData.thousandsField" @toDetail="toDetail"
-                        :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
+                        @toDetail="toDetail" :expand="scope.row[`${item.prop}Expand`]" v-if="!ii" />
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -342,7 +344,7 @@
                   :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
                     <JnpfNumber v-model="scope.row[item.__vModel__]"
-                      :thousands="columnData.thousands&&columnData.thousandsField.includes(item.prop)">
+                      :thousands="columnData.thousands">
                     </JnpfNumber>
                   </template>
                 </el-table-column>
