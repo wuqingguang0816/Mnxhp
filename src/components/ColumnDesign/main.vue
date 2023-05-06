@@ -630,7 +630,7 @@ export default {
       },
       immediate: true
     },
-    'activeData.summaryField'(val) {
+    'columnData.summaryField'(val) {
       this.columnData.thousandsField = []
     },
     'columnData.ruleList': {
