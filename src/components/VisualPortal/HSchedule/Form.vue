@@ -407,7 +407,8 @@ export default {
         if (this.typeOptions.length) this.dataForm.type = this.typeOptions[0].id
       })
     },
-    change_providerType() {
+    change_providerType(val) {
+      if (val) this.dataForm.endDay = this.dataForm.startDay
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate('duration')
       })
