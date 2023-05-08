@@ -90,7 +90,7 @@
                 </span>
                 <span class="text" v-else>
                   <i
-                    :class="data.type == 1 ? 'icon-ym icon-ym-generator-popup-attr' : 'icon-ym icon-ym-generator-tableGrid'" />
+                    :class="data.type == 1 ? 'icon-ym icon-ym-view' : 'icon-ym icon-ym-generator-tableGrid'" />
                   {{ data.tableName?data.table + '(' + data.tableName + ')':data.table}}
                 </span>
               </span>
