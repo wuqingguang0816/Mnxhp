@@ -96,15 +96,6 @@ export default {
   },
   methods: {
     change(val) {
-      if (!this.startTime && !this.startTime) {
-        this.innerValue = val
-      } else if (val >= this.startTime && this.endTime && val <= this.endTime) {
-        this.innerValue = val
-      } else if (val >= this.startTime && !this.endTime) {
-        this.innerValue = val
-      } else {
-        this.innerValue = ''
-      }
       this.$emit('input', this.innerValue)
       this.$emit('change', this.innerValue)
     }
