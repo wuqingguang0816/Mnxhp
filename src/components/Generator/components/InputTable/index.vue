@@ -340,9 +340,10 @@ export default {
                   item.config.startTime = startTime
                   item.config.endTime = endTime
                 }
-                if (item.value == defaultValue) return
-                item.value = defaultValue
-                this.$nextTick(() => this.handleRelation(item, rowIndex));
+                if (item.value != defaultValue) {
+                  item.value = defaultValue
+                  this.$nextTick(() => this.handleRelation(item, rowIndex));
+                }
               }
             }
           }

@@ -64,7 +64,6 @@ export default {
   computed: {
     realStartTime() {
       if (!this.startTime) return null
-      console.log(this.startTime);
       if (this.startTime.split(':').length == 3) {
         return this.startTime
       } else {
