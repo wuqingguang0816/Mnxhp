@@ -18,7 +18,7 @@
             <template v-for="(item, i) in list">
               <el-table-column :prop="item.filedName" :label="item.fullName" :align="item.align"
                 :width="item.width" :key="i" :sortable="item.sortable"
-                :fixed='item.fixed=="none"?"":item.fixed' />
+                :fixed='item.fixed=="none"?false:item.fixed' />
             </template>
           </JNPF-table>
         </template>
