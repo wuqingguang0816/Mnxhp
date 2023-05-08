@@ -49,7 +49,7 @@
                   </div>
                   <div class="item-r">
                     <div class="item-r-inner">
-                      <div v-if="list[0].show">
+                      <div v-if="list[0].show" class="item-r-inner-type">
                         <el-tag v-if="item.category == '公告'" size="mini" :hit="false"
                           color="#ebe6ff" style="color: #9016f3;">公告</el-tag>
                         <el-tag v-else-if="item.category == '通知'" :hit="false"
@@ -94,7 +94,7 @@
                   </div>
                   <div class="item-r">
                     <div class="item-r-inner">
-                      <div v-if="list[0].show">
+                      <div v-if="list[0].show" class="item-r-inner-type">
                         <el-tag v-if="item.category == '公告'" size="mini" :hit="false"
                           color="#ebe6ff" style="color: #9016f3;">公告</el-tag>
                         <el-tag v-else-if="item.category == '通知'" :hit="false"
@@ -274,12 +274,16 @@ export default {
           .item-r-inner {
             display: flex;
             margin-bottom: 5px;
+            align-items: center;
+            .item-r-inner-type {
+              padding-right: 10px;
+            }
             .item-r-title {
               overflow: hidden;
               flex: 1;
               white-space: nowrap;
               text-overflow: ellipsis;
-              padding: 0 10px;
+              padding-right: 10px;
             }
           }
           .item-r-content {
