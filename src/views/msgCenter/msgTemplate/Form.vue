@@ -30,7 +30,7 @@
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
               <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
-                :disabled="this.dataForm.id?true:false" filterable>
+                :disabled="this.dataForm.id?true:false" filterable @change="onMessageSourceChange">
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -92,7 +92,7 @@
                         </template>
                       </el-table-column>
                       <el-table-column label="操作" width="70">
-                        <template slot-scope="scope" v-if="scope.row.field!='@flowLink'">
+                        <template slot-scope="scope" v-if="!getIsSystem(scope.row.field)">
                           <el-button type="text" @click="addEditParameter(scope.row,scope.$index)"
                             icon="el-icon-edit-outline"></el-button>
                           <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
@@ -101,13 +101,15 @@
                       </el-table-column>
                     </el-table>
                   </div>
-                  <div class="table-actions" @click="addEditParameter()">
+                  <div class="table-actions" @click="addEditParameter()"
+                    v-if="dataForm.messageSource==='2'">
                     <el-button type="text" icon="el-icon-plus">添加参数</el-button>
                   </div>
                 </div>
               </div>
               <div class="right-pane" v-if="dataForm.messageType != 3&&dataForm.messageType != 7">
-                <jnpf-form-tip-item label="消息标题" prop="title" tipLabel='参数格式：{参数名}'>
+                <jnpf-form-tip-item label="消息标题" prop="title"
+                  :tipLabel="dataForm.messageSource=='2'?'系统参数格式：{@系统参数名}；自定义参数格式：{自定义参数名}':'系统参数格式：{@系统参数名}；'">
                   <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
@@ -176,7 +178,7 @@
                       <el-table-column label="参数">
                         <template slot-scope="scope">
                           <el-select v-model="scope.row.field" placeholder="选择参数" clearable
-                            style=“width:100%” filterable>
+                            filterable>
                             <el-option v-for="(item,index) in parameterList" :key="index"
                               :label="item.field" :value="item.field">
                             </el-option>
@@ -232,6 +234,28 @@
 <script>
 import { getMsgTemplateDetail, addMsgTemplate, editMsgTemplate, getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import { deepClone } from '@/utils'
+const defaultParameterList = [
+  { field: '@Title', fieldName: '标题' },
+  { field: '@CreatorUserName', fieldName: '创建人' },
+]
+const noticeParameterList = [
+  ...defaultParameterList,
+  { field: '@Content', fieldName: '内容' },
+  { field: '@Remark', fieldName: '摘要' },
+]
+const flowParameterList = [
+  ...defaultParameterList,
+  { field: '@FlowLink', fieldName: '流程链接' },
+]
+const systemParameterList = defaultParameterList
+const scheduleParameterList = [
+  ...defaultParameterList,
+  { field: '@Content', fieldName: '内容' },
+  { field: '@StartDate', fieldName: '开始日期' },
+  { field: '@StartTime', fieldName: '开始时间' },
+  { field: '@EndDate', fieldName: '结束日期' },
+  { field: '@EndTime', fieldName: '结束时间' },
+]
 export default {
   name: 'msgTemplate-Form',
   data() {
@@ -302,12 +326,7 @@ export default {
       messageTypeList: [],
       isEdit: false,
       keyword: "",
-      parameterList: [
-        {
-          field: '@flowLink',
-          fieldName: '流程链接'
-        }
-      ],
+      parameterList: [],
       allParameterList: [],
       smsList: [],
       wxSkipList: [
@@ -319,10 +338,7 @@ export default {
   methods: {
     init(id) {
       this.dataForm.id = id || ''
-      this.parameterList = [{
-        field: '@flowLink',
-        fieldName: '流程链接'
-      }]
+      this.parameterList = []
       this.allParameterList = this.parameterList
       this.getConfig()
       this.$nextTick(() => {
@@ -448,6 +464,7 @@ export default {
       } else {
         this.dataForm.content += content
       }
+      this.dataForm.title += content
     },
     searchParameter() {
       this.parameterList = this.allParameterList.filter(item => {
@@ -480,6 +497,16 @@ export default {
         }
       }
     },
+    onMessageSourceChange(val) {
+      if (val == 1) this.parameterList = JSON.parse(JSON.stringify(noticeParameterList))
+      if (val == 2) this.parameterList = JSON.parse(JSON.stringify(flowParameterList))
+      if (val == 3) this.parameterList = JSON.parse(JSON.stringify(systemParameterList))
+      if (val == 4) this.parameterList = JSON.parse(JSON.stringify(scheduleParameterList))
+      this.allParameterList = this.parameterList
+    },
+    getIsSystem(val) {
+      return val && val.startsWith('@') ? true : false
+    }
   }
 }
 </script>
