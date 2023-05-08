@@ -73,12 +73,12 @@ export default {
     },
     realStartTime() {
       const format = this.format === 'yyyy' ? 'yyyy-01-01 00:00:00' : this.format === 'yyyy-MM' ? 'yyyy-MM-01 00:00:00' : 'yyyy-MM-dd 00:00:00'
-      if (this.startTime) return null
+      if (!this.startTime) return null
       const startTime = this.jnpf.toDate(this.startTime, format)
       return new Date(startTime).getTime()
     },
     realEndTime() {
-      if (this.endTime) return null
+      if (!this.endTime) return null
       const endTime = this.jnpf.toDate(this.endTime, 'yyyy-MM-dd 23:59:59')
       return new Date(endTime).getTime()
     },

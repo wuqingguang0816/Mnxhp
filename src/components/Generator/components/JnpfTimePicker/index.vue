@@ -63,7 +63,8 @@ export default {
   },
   computed: {
     realStartTime() {
-      if (this.startTime) return null
+      if (!this.startTime) return null
+      console.log(this.startTime);
       if (this.startTime.split(':').length == 3) {
         return this.startTime
       } else {
@@ -71,7 +72,7 @@ export default {
       }
     },
     realEndTime() {
-      if (this.endTime) return null
+      if (!this.endTime) return null
       if (this.endTime.split(':').length == 3) {
         return this.endTime
       } else {
