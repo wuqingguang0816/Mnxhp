@@ -478,7 +478,11 @@ export default {
     },
     getTableList() {
       this.treeLoading = true
-      DataModelList(this.dataForm.dbLinkId, { keyword: this.keyword }).then(res => {
+      DataModelList(this.dataForm.dbLinkId, {
+        keyword: this.keyword,
+        currentPage: 1,
+        pageSize: 1000000
+      }).then(res => {
         this.treeData = res.data.list
         this.treeLoading = false
       })
