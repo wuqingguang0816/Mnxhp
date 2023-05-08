@@ -260,8 +260,15 @@
                         {{scope.row[item.prop+'_name']||scope.row[item.prop]}}</el-link>
                     </template>
                     <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
-                      <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
-                      </JnpfNumber>
+                      <template v-if="scope.row[item.prop+'_name']">
+                        <JnpfNumber v-model="scope.row[item.prop+'_name']"
+                          :thousands="item.thousands">
+                        </JnpfNumber>
+                      </template>
+                      <template v-else>
+                        <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
+                        </JnpfNumber>
+                      </template>
                     </template>
                     <template v-else>
                       {{scope.row[item.prop+'_name']||scope.row[item.prop]}}
