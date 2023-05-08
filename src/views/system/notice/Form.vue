@@ -10,7 +10,7 @@
         </div>
       </div>
       <div>
-        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置" type="warning"
+        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；选择默认则站内信提醒，选择自定义则取自定义模板配置。" type="warning"
           :closable="false" show-icon>
         </el-alert>
       </div>
@@ -47,7 +47,7 @@
         <jnpf-form-tip-item label="封面图片" prop="coverImage" tipLabel='门户公告通知缩略图展示，无设置则系统默认图片'>
           <single-img v-model="dataForm.coverImage" />
         </jnpf-form-tip-item>
-        <jnpf-form-tip-item label="正文" prop="bodyText">
+        <jnpf-form-tip-item label="内容" prop="bodyText">
           <JNPFQuill v-model="dataForm.bodyText" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="摘要" prop="excerpt">
