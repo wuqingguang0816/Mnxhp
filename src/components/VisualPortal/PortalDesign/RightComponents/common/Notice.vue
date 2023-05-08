@@ -26,26 +26,29 @@
             <el-switch v-model="activeData.option.showHeader" @change="renderKeyChange">
             </el-switch>
           </el-form-item>
-          <el-form-item label="字体大小">
-            <el-input-number v-model="activeData.option.headerFontSize" controls-position="right"
-              :min="12" :max="25" />
-          </el-form-item>
-          <el-form-item label="字体加粗">
-            <el-switch v-model="activeData.option.headerFontWeight" />
-          </el-form-item>
-          <el-form-item label="字体颜色">
-            <el-color-picker v-model="activeData.option.headerFontColor" />
-          </el-form-item>
-          <el-form-item label="字体位置">
-            <el-radio-group v-model="activeData.option.headerLeft" size="small">
-              <el-radio-button :label="item.value" v-for="(item,index) in alignList" :key="index">
-                {{item.label}}
-              </el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="背景色">
-            <el-color-picker v-model="activeData.option.headerBgColor" />
-          </el-form-item>
+          <template v-if="activeData.option.showHeader">
+            <el-form-item label="字体大小">
+              <el-input-number v-model="activeData.option.headerFontSize" controls-position="right"
+                :min="12" :max="25" />
+            </el-form-item>
+            <el-form-item label="字体加粗">
+              <el-switch v-model="activeData.option.headerFontWeight" />
+            </el-form-item>
+            <el-form-item label="字体颜色">
+              <el-color-picker v-model="activeData.option.headerFontColor" />
+            </el-form-item>
+            <el-form-item label="字体位置">
+              <el-radio-group v-model="activeData.option.headerLeft" size="small">
+                <el-radio-button :label="item.value" v-for="(item,index) in alignList" :key="index">
+                  {{item.label}}
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="背景色">
+              <el-color-picker v-model="activeData.option.headerBgColor" />
+            </el-form-item>
+          </template>
+
           <el-divider>表格设置</el-divider>
           <el-form-item label="显示序号">
             <el-switch v-model="activeData.option.tableIndex">
