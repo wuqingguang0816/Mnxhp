@@ -62,23 +62,24 @@ export default {
     },
   },
   computed: {
+    realStartTime() {
+      if (this.startTime) return null
+      if (this.startTime.split(':').length == 3) {
+        return this.startTime
+      } else {
+        return this.startTime + ':00'
+      }
+    },
+    realEndTime() {
+      if (this.endTime) return null
+      if (this.endTime.split(':').length == 3) {
+        return this.endTime
+      } else {
+        return this.endTime + ':00'
+      }
+    },
     pickerOptions() {
-      if (this.startTime) {
-        if (this.startTime.split(':').length == 3) {
-          this.startTime = this.startTime
-        } else {
-          this.startTime = this.startTime + ':00'
-        }
-      }
-      if (this.endTime) {
-        if (this.endTime.split(':').length == 3) {
-          this.endTime = this.endTime
-        } else {
-          this.endTime = this.endTime + ':00'
-        }
-      }
-      let selectableRange = [`${this.startTime || '00:00:00'} - ${this.endTime || '23:59:59'}`]
-      return { selectableRange }
+      return { selectableRange: [`${this.realStartTime || '00:00:00'} - ${this.realEndTime || '23:59:59'}`] }
     },
     readOnly() {
       if (this.readonly) return true

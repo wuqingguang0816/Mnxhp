@@ -71,30 +71,29 @@ export default {
       if (this.startTime && this.endTime && (this.startTime > this.endTime)) return true
       return false
     },
+    realStartTime() {
+      const format = this.format === 'yyyy' ? 'yyyy-01-01 00:00:00' : this.format === 'yyyy-MM' ? 'yyyy-MM-01 00:00:00' : 'yyyy-MM-dd 00:00:00'
+      if (this.startTime) return null
+      const startTime = this.jnpf.toDate(this.startTime, format)
+      return new Date(startTime).getTime()
+    },
+    realEndTime() {
+      if (this.endTime) return null
+      const endTime = this.jnpf.toDate(this.endTime, 'yyyy-MM-dd 23:59:59')
+      return new Date(endTime).getTime()
+    },
     pickerOptions() {
-      let that = this
       return {
-        disabledDate(time) {
-          let format = that.format === 'yyyy' ? 'yyyy-01-01 00:00:00' : that.format === 'yyyy-MM' ? 'yyyy-MM-01 00:00:00' : 'yyyy-MM-dd 00:00:00'
-          if (that.startTime) {
-            let startTime = that.jnpf.toDate(that.startTime, format)
-            that.startTime = new Date(startTime).getTime()
-          }
-          if (that.endTime) {
-            let endTime = that.jnpf.toDate(that.endTime, 'yyyy-MM-dd 23:59:59')
-            that.endTime = new Date(endTime).getTime()
-          }
+        disabledDate: (time) => {
           const timeVal = time.getTime()
-          if (!that.startTime && !that.endTime) return false
-          if (that.startTime && that.endTime) return timeVal < that.startTime || timeVal > that.endTime
-          if (that.endTime) return timeVal > that.endTime
-          return timeVal < that.startTime
+          if (!this.realStartTime && !this.realEndTime) return false
+          if (this.realStartTime && this.realEndTime) return timeVal < this.realStartTime || timeVal > this.realEndTime
+          if (this.realEndTime) return timeVal > this.realEndTime
+          return timeVal < this.realStartTime
         }
       }
     }
   },
-  created() { },
-  mounted() { },
   methods: {
     change(val) {
       if (!this.startTime && !this.startTime) {
