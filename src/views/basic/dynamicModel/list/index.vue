@@ -262,11 +262,12 @@
                     <template v-if="['numInput','calculate'].includes(item.jnpfKey)">
                       <template v-if="scope.row[item.prop+'_name']">
                         <JnpfNumber v-model="scope.row[item.prop+'_name']"
-                          :thousands="item.thousands">
+                          :thousands="item.thousands" :precision="item.precision">
                         </JnpfNumber>
                       </template>
                       <template v-else>
-                        <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands">
+                        <JnpfNumber v-model="scope.row[item.prop]" :thousands="item.thousands"
+                          :precision="item.precision">
                         </JnpfNumber>
                       </template>
                     </template>
@@ -302,7 +303,7 @@
                             <template
                               v-else-if="childTable.jnpfKey==='numInput' ||childTable.jnpfKey==='calculate'">
                               <JnpfNumber v-model="scope.row[childTable.vModel]"
-                                :thousands="childTable.thousands">
+                                :thousands="childTable.thousands" :precision="childTable.precision">
                               </JnpfNumber>
                             </template>
                             <template v-else>
@@ -350,7 +351,8 @@
                   :fixed="getFixed(item, i)" :width="item.width" :key="i"
                   :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
-                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands">
+                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands"
+                      :precision="item.precision">
                     </JnpfNumber>
                   </template>
                 </el-table-column>
