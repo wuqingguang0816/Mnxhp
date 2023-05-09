@@ -36,36 +36,79 @@
           </div>
         </template>
       </el-table-column>
-      <template v-if="type !=1 && showType == 'pc'">
-        <el-table-column label="是否显示" prop="show" width="70">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.show">
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column prop="fontSize" label="大小" width="170">
-          <template slot-scope="scope">
-            <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
-              controls-position="right" style="width:100%"
-              v-if="scope.row.filedName !== 'classify'" />
-          </template>
-        </el-table-column>
-        <el-table-column prop="fontWeight" label="加粗" align="center" width="100">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.fontWeight" v-if="scope.row.filedName !== 'classify'" />
-          </template>
-        </el-table-column>
-        <el-table-column prop="fontColor" label="颜色" align="center" width="100">
-          <template slot-scope="scope">
-            <el-color-picker v-model="scope.row.fontColor"
-              v-if="scope.row.filedName !== 'classify'" />
-          </template>
-        </el-table-column>
+      <template v-if="showType == 'pc'">
+        <template v-if="type !=1">
+          <el-table-column label="是否显示" prop="show" width="70">
+            <template slot-scope="scope">
+              <el-switch v-model="scope.row.show" v-if="scope.row.id != 2 && scope.row.id != 4">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="fontSize" label="大小" width="170">
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.fontSize" placeholder="大小" :min="0" :precision="0"
+                controls-position="right" style="width:100%"
+                v-if="scope.row.filedName !== 'classify'" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="fontWeight" label="加粗" align="center" width="100">
+            <template slot-scope="scope">
+              <el-switch v-model="scope.row.fontWeight" v-if="scope.row.filedName !== 'classify'" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="fontColor" label="颜色" align="center" width="100">
+            <template slot-scope="scope">
+              <el-color-picker v-model="scope.row.fontColor"
+                v-if="scope.row.filedName !== 'classify'" />
+            </template>
+          </el-table-column>
+        </template>
+        <template v-if="type ==1">
+          <el-table-column label="是否显示" prop="show" width="70">
+            <template slot-scope="scope">
+              <el-switch v-model="scope.row.show">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="sortable" label="排序" width="60" align="center"
+            v-if="showType == 'pc'">
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.sortable" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'" width="110">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.fixed" placeholder="请选择"
+                v-if="scope.row.filedName !== 'classify'" filterable>
+                <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'" width="110">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.align" placeholder="请选择"
+                v-if="scope.row.filedName !== 'classify'" filterable>
+                <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="width" label="宽度" width="110">
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.width" placeholder="宽度" :min="0" :precision="0"
+                controls-position="right" style="width:100%"
+                v-if="scope.row.filedName !== 'classify'" />
+            </template>
+          </el-table-column>
+        </template>
       </template>
-      <template v-if="showType == 'app'">
+      <template v-else>
         <el-table-column label="是否显示" prop="show" width="90">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.show">
+            <el-switch v-model="scope.row.show" v-if="scope.row.filedName == 'classify'">
             </el-switch>
           </template>
         </el-table-column>
@@ -84,48 +127,6 @@
         <el-table-column prop="fontColor" label="颜色" align="center" width="100">
           <template slot-scope="scope">
             <el-color-picker v-model="scope.row.fontColor"
-              v-if="scope.row.filedName !== 'classify'" />
-          </template>
-        </el-table-column>
-      </template>
-      <template v-if="showType == 'pc' && type ==1">
-        <el-table-column label="是否显示" prop="show" width="70">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.show">
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sortable" label="排序" width="60" align="center"
-          v-if="showType == 'pc'">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.sortable" />
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="align" label="冻结方式" v-if="showType == 'pc'" width="110">
-          <template slot-scope="scope">
-            <el-select v-model="scope.row.fixed" placeholder="请选择"
-              v-if="scope.row.filedName !== 'classify'" filterable>
-              <el-option v-for="item in fixedOptions" :key="item.value" :label="item.fullName"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="align" label="对齐方式" v-if="showType == 'pc'" width="110">
-          <template slot-scope="scope">
-            <el-select v-model="scope.row.align" placeholder="请选择"
-              v-if="scope.row.filedName !== 'classify'" filterable>
-              <el-option v-for="item in alignOptions" :key="item.value" :label="item.fullName"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="width" label="宽度" width="110">
-          <template slot-scope="scope">
-            <el-input-number v-model="scope.row.width" placeholder="宽度" :min="0" :precision="0"
-              controls-position="right" style="width:100%"
               v-if="scope.row.filedName !== 'classify'" />
           </template>
         </el-table-column>
@@ -137,7 +138,6 @@
     </span>
   </el-dialog>
 </template>
-
 <script>
 import Sortable from 'sortablejs'
 export default {

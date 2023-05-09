@@ -114,7 +114,8 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="行数据">
-          <el-button @click="showColumnData(activeData.option.appColumnList)">设置</el-button>
+          <el-button
+            @click="showColumnData(activeData.option.appColumnList,activeData.option.appStyleType)">设置</el-button>
         </el-form-item>
         <Refresh :refresh="activeData.refresh" />
         <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">

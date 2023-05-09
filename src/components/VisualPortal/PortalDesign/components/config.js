@@ -232,21 +232,24 @@ export const systemComponents = [{
       classify: [],
       fontWeight: false,
       fontColor: '#666666',
-      show: true
+      show: true,
+      id:'1'
     }, {
       fullName: '标题',
       filedName: 'fullName',
       fontSize: 14,
       fontWeight: false,
       fontColor: '#303133',
-      show: true
+      show: true,
+      id:'2'
     }, {
       fullName: '摘要',
       filedName: 'content',
       fontSize: 12,
       fontWeight: false,
       fontColor: '#666666',
-      show: true
+      show: true,
+      id:'3'
     }, {
       fullName: '时间',
       filedName: 'time',
@@ -254,7 +257,8 @@ export const systemComponents = [{
       timeClassify: '创建时间',
       fontWeight: false,
       fontColor: '#666666',
-      show: true
+      show: true,
+      id:'4'
     }, {
       fullName: '人员',
       filedName: 'user',
@@ -262,7 +266,8 @@ export const systemComponents = [{
       userClassify: '2',
       fontWeight: false,
       fontColor: '#666666',
-      show: true
+      show: true,
+      id:'5'
     }
     ],
     columnData: [{
@@ -274,7 +279,7 @@ export const systemComponents = [{
       align: 'center',
       width: 0,
       classify: [],
-      id: '6'
+      id: '1'
     }, {
       fullName: '标题',
       filedName: 'fullName',
@@ -283,7 +288,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      id: '1'
+      id: '2'
     },
     {
       fullName: '创建人',
@@ -293,7 +298,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      id: '2'
+      id: '3'
     },
     {
       fullName: '创建时间',
@@ -303,7 +308,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      id: '3'
+      id: '4'
     },
     {
       fullName: '发布人',
@@ -313,7 +318,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      id: '4'
+      id: '5'
     }, {
       fullName: '发布时间',
       filedName: 'releaseTime',
@@ -322,7 +327,7 @@ export const systemComponents = [{
       fixed: "none",
       align: 'center',
       width: 0,
-      id: '5'
+      id: '6'
     }],
     rowData: [
       {
@@ -332,21 +337,24 @@ export const systemComponents = [{
         classify: [],
         fontWeight: false,
         fontColor: '#666666',
-        show: true
+        show: true,
+        id: '1'
       }, {
         fullName: '标题',
         filedName: 'fullName',
         fontSize: 14,
         fontWeight: false,
         fontColor: '#303133',
-        show: true
+        show: true,
+        id: '2'
       }, {
         fullName: '摘要',
         filedName: 'content',
         fontSize: 12,
         fontWeight: false,
         fontColor: '#666666',
-        show: true
+        show: true,
+        id: '3'
       }, {
         fullName: '时间',
         filedName: 'time',
@@ -354,7 +362,8 @@ export const systemComponents = [{
         timeClassify: '创建时间',
         fontWeight: false,
         fontColor: '#666666',
-        show: true
+        show: true,
+        id: '4'
       }],
   },
   border: true,
