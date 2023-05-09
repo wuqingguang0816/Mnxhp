@@ -72,22 +72,20 @@
               <template v-else-if="item.jnpfKey==='time'">
                 <el-time-picker v-model="item.fieldValue" :picker-options="item['picker-options']"
                   placeholder="请选择" clearable :value-format="item['value-format']"
-                  :format="item.format">
+                  format="HH:mm:ss">
                 </el-time-picker>
+              </template>
+              <template v-else-if="['date'].includes(item.jnpfKey)">
+                <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择" type="date"
+                  value-format="timestamp" @change="onConditionDateChange($event,item)"
+                  format="yyyy-MM-dd">
+                </el-date-picker>
               </template>
               <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
                 <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type" value-format="timestamp"
-                  @change="onConditionDateChange($event,item)"
-                  :format="item.format||'yyyy-MM-dd HH:mm:ss'">
+                  type="datetime" value-format="timestamp"
+                  @change="onConditionDateChange($event,item)" format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
-              </template>
-              <template v-else-if="item.jnpfKey==='date'">
-                <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type || 'date'" @change="onConditionDateChange($event,item)"
-                  :valueFormat="item['value-format'] || 'timestamp'"
-                  :format="item.format || 'yyyy-MM-dd'">
-                </JnpfDatePicker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                 <comSelect v-model="item.fieldValue" placeholder="请选择" clearable
