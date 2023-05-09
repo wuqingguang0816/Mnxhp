@@ -17,12 +17,12 @@
             <template v-for="(item, i) in list">
               <el-table-column :prop="item.filedName" :label="item.fullName" :align="item.align"
                 :width="item.width" :key="i" :sortable="item.sortable"
-                :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 6">
+                :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 1">
                 <template slot-scope="scope">
                   <div>
                     <span>
                       <span
-                        v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='6')[0].show">{{ `【${scope.row.category}】` }}</span>
+                        v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
                       {{ scope.row[item.filedName] }}
                     </span>
                   </div>
