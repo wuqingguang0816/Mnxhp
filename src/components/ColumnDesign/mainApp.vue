@@ -147,17 +147,6 @@
                   <el-radio-button :label="500">500条</el-radio-button>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label=" 千位分隔">
-                <el-switch v-model="columnData.thousands"></el-switch>
-              </el-form-item>
-              <el-form-item label="分隔字段" v-if="columnData.thousands">
-                <el-select v-model="columnData.thousandsField" placeholder="请选择千位分隔符字段" clearable
-                  multiple filterable>
-                  <template v-for="(item,i) in thousandsOptions">
-                    <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__" />
-                  </template>
-                </el-select>
-              </el-form-item>
               <el-divider>按钮配置</el-divider>
               <el-checkbox-group v-model="btnsList" class="btnsList" v-if="webType!=4">
                 <el-checkbox :label="item.value" v-for="item in btnsOption" :key="item.value">
