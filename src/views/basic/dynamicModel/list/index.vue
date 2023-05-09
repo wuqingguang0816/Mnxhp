@@ -763,6 +763,10 @@ export default {
     * 对表格进行合计 目前只支持数字，金额，滑块
     */
     getTableSummaries(param) {
+      const thousandsField = []
+      this.columnList.forEach(res => {
+        if (res.thousands) thousandsField.push(res.__vModel__)
+      })
       const { columns, data } = param;
       const sums = [];
       columns.forEach((column, index) => {
@@ -780,7 +784,7 @@ export default {
                 return prev;
               }
             }, 0).toFixed(2);
-            if (this.columnData.thousands && this.columnData.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
+            if (thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
           } else {
             sums[index] = '';
           }

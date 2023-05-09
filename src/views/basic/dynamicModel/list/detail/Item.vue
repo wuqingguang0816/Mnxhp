@@ -322,6 +322,10 @@ export default {
     },
     getSummaries(param) {
       const summaryField = this.item.summaryField
+      const thousandsField = []
+      this.item.__config__.children.forEach(res => {
+        if (res.thousands) thousandsField.push(res.__vModel__)
+      })
       const { columns, data } = param;
       const sums = [];
       columns.forEach((column, index) => {
@@ -343,7 +347,7 @@ export default {
               return prev;
             }
           }, 0).toFixed(2);
-          if (this.item.thousands && this.item.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
+          if (thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
         } else {
           sums[index] = '';
         }

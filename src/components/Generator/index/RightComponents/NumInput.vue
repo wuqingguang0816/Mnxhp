@@ -26,7 +26,7 @@
         controls-position="right" />
     </el-form-item>
     <el-form-item label="按钮">
-      <el-radio-group v-model="activeData.controlsPosition">
+      <el-radio-group v-model="activeData.controlsPosition" @change="controlsPositionChange">
         <el-radio-button label="">无</el-radio-button>
         <el-radio-button label="bothSides">左右</el-radio-button>
         <el-radio-button v-show="showType==='pc'" label="right">右侧</el-radio-button>
@@ -80,6 +80,9 @@ export default {
     change(val) {
       this.$set(this.activeData.__config__, 'defaultValue', val || 0)
       this.innerVal = this.activeData.__config__.defaultValue || null
+    },
+    controlsPositionChange() {
+      this.activeData.thousands = false
     }
   }
 }

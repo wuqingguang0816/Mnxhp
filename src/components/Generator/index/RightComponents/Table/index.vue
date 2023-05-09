@@ -13,25 +13,13 @@
       <el-button style="width: 100%;" @click="editConf()">配置表单</el-button>
     </el-form-item>
     <el-form-item label="合计设置">
-      <el-switch v-model="activeData['show-summary']" @change="summaryChange" />
+      <el-switch v-model="activeData['show-summary']" />
     </el-form-item>
     <el-form-item label="合计字段" v-if="activeData['show-summary']">
-      <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段"
-        @change="summaryFieldChange">
+      <el-select v-model="activeData.summaryField" multiple placeholder="请选择合计字段">
         <template v-for="(item,i) in activeData.__config__.children">
           <el-option :key="i" :label="item.__config__.label" :value="item.__vModel__"
             v-if="['comInput','numInput','calculate'].includes(item.__config__.jnpfKey) && item.__vModel__" />
-        </template>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="千位分隔" v-if="activeData['show-summary']">
-      <el-switch v-model="activeData.thousands" />
-    </el-form-item>
-    <el-form-item label="分隔字段" v-if="activeData.thousands">
-      <el-select v-model="activeData.thousandsField" multiple placeholder="请选择千位分隔符字段">
-        <template v-for="(item,i) in thousandsOptions">
-          <el-option :key="i" :label="item.label" :value="item.__vModel__">
-          </el-option>
         </template>
       </el-select>
     </el-form-item>
@@ -62,17 +50,6 @@ export default {
 
     }
   },
-  watch: {
-    'activeData.__config__.children': {
-      handler(val) {
-        this.summaryFieldChange(this.activeData.summaryField)
-      },
-      immediate: true
-    },
-    'activeData.summaryField'(val) {
-      this.activeData.thousandsField = []
-    }
-  },
   methods: {
     editConf() {
       if (!this.activeData.addTableConf) {
@@ -86,25 +63,6 @@ export default {
     },
     updateConf(data) {
       this.activeData.addTableConf = data
-    },
-    summaryChange(val) {
-      if (!val) this.activeData.thousands = false
-    },
-    summaryFieldChange(val) {
-      this.thousandsOptions = []
-      let list = []
-      val.forEach(element => {
-        let item = this.activeData.__config__.children.filter(o => o.__vModel__ == element)[0]
-        if (item) list.push(item)
-      });
-      this.thousandsOptions = list
-      if (list && list.length) {
-        this.thousandsOptions = this.thousandsOptions.map(o => (
-          {
-            ...o,
-            label: o.__config__.label
-          }))
-      }
     }
   }
 }
