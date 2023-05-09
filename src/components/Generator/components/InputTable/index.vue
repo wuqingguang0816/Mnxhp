@@ -776,7 +776,11 @@ export default {
     getTableSummaries(param) {
       const { columns, data } = param
       const sums = []
+      const thousandsField = []
       let tableData = this.tableData.filter(o => !o.__config__.noShow)
+      tableData.forEach(res => {
+        if (res.thousands) thousandsField.push(res.__vModel__)
+      })
       if (tableData.length + 1 !== columns.length) return []  // 防止多次加载
       columns.forEach((column, index) => {
         if (index === 0) {
@@ -786,7 +790,7 @@ export default {
         const sumVal = data.reduce((sum, d) => sum + this.getCmpValOfRow(d, column.property), 0)
         sums[index] = Number.isNaN(sumVal) ? '' : sumVal
         if (sums[index] && !Number.isInteger(sums[index])) sums[index] = sums[index].toFixed(2)
-        if (this.config.thousands && this.config.thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
+        if (thousandsField.includes(column.property)) sums[index] = thousandsFormat(sums[index])
       })
       return sums
     },
