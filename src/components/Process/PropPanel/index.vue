@@ -3823,7 +3823,7 @@ export default {
     // 条件节点
     onConditionDateChange(val, item) {
       if (!val) return item.fieldLabel = ''
-      let format = item.format || 'yyyy-MM-dd HH:mm:ss'
+      let format = item.__config__.jnpfKey === 'date' ? 'yyyy-MM-dd 00:00:00' : 'yyyy-MM-dd HH:mm:ss'
       item.fieldLabel = this.jnpf.toDate(val, format)
     },
     onConditionListChange(data, item) {
