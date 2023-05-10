@@ -97,11 +97,6 @@ export default {
     return {
       fileList: [],
       uploadHeaders: { Authorization: this.$store.getters.token },
-      params: {
-        pathType: this.pathType,
-        isAccount: this.isAccount,
-        folder: this.folder
-      }
     }
   },
   watch: {
@@ -109,6 +104,15 @@ export default {
       immediate: true,
       handler(val) {
         this.fileList = Array.isArray(val) ? val : []
+      }
+    }
+  },
+  computed: {
+    params() {
+      return {
+        pathType: this.pathType,
+        isAccount: this.isAccount,
+        folder: this.folder
       }
     }
   },

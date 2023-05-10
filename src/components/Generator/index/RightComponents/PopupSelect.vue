@@ -49,6 +49,9 @@
         <template slot-scope="scope">
           <el-select v-model="scope.row.relationField" placeholder="请选择表单字段" clearable filterable
             @change="onRelationFieldChange($event,scope.row)">
+            <el-option v-for="item in sysOptions" :key="item.realVModel" :label="item.realLabel"
+              :value="item.realVModel">
+            </el-option>
             <el-option v-for="item in formFieldsOptions" :key="item.realVModel"
               :label="item.realLabel" :value="item.realVModel">
             </el-option>
@@ -112,6 +115,11 @@ import draggable from 'vuedraggable'
 import { noAllowRelationList } from '@/components/Generator/generator/comConfig'
 import { getDrawingList } from '@/components/Generator/utils/db'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
+const sysOptions = [
+  { realVModel: '@currentPage', realLabel: '@currentPage' },
+  { realVModel: '@pageSize', realLabel: '@pageSize' },
+  { realVModel: '@keyword', realLabel: '@keyword' },
+]
 export default {
   props: ['activeData'],
   mixins: [comMixin],
@@ -120,6 +128,7 @@ export default {
     return {
       popupWidthOptions: ['600px', '800px', '1000px', '40%', '50%', '60%', '70%', '80%'],
       treeData: [],
+      sysOptions
     }
   },
   computed: {
