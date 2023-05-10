@@ -168,11 +168,6 @@ export default {
       })
       getMsgTypeList(4).then(res => {
         this.messageSourceList = res.data
-        this.messageSourceList.map(res => {
-          if (res.enCode == 1) {
-            this.messageSource = res.enCode
-          }
-        })
       })
     },
     search() {
@@ -239,6 +234,7 @@ export default {
       this.endTime = ''
       this.keyword = ''
       this.msgType = ''
+      this.messageSource = ''
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,
