@@ -37,10 +37,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-form-item label="显示条数">
-      <el-input-number v-model="activeData.total" placeholder="默认值" :min="10" :max="50"
+    <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部">
+      <el-input-number v-model="activeData.total" placeholder="默认值" :min="0" :max="50"
         :precision="activeData.precision" controls-position="right" />
-    </el-form-item>
+    </jnpf-form-tip-item>
     <el-form-item label="能否清空">
       <el-switch v-model="activeData.clearable" />
     </el-form-item>
