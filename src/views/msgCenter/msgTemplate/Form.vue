@@ -108,16 +108,15 @@
                 </div>
               </div>
               <div class="right-pane" v-if="dataForm.messageType != 3&&dataForm.messageType != 7">
-                <jnpf-form-tip-item label="消息标题" prop="title"
-                  :tipLabel="dataForm.messageSource=='2'?'系统参数格式：{@系统参数名}；自定义参数格式：{自定义参数名}':'系统参数格式：{@系统参数名}；'">
+                <jnpf-form-tip-item label="消息标题" prop="title" :tipLabel="getTipLabel()">
                   <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
-                  tipLabel='参数格式：{参数名}'>
+                  :tipLabel="getTipLabel()">
                   <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content"
-                  v-else-if="dataForm.messageType != 1" tipLabel='参数格式：{参数名}'>
+                  v-else-if="dataForm.messageType != 1" :tipLabel="getTipLabel()">
                   <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
                     :rows="19" />
                 </jnpf-form-tip-item>
@@ -506,6 +505,9 @@ export default {
     },
     getIsSystem(val) {
       return val && val.startsWith('@') ? true : false
+    },
+    getTipLabel() {
+      return this.dataForm.messageSource == '2' ? '系统参数格式：{@系统参数名}；自定义参数格式：{自定义参数名}' : '系统参数格式：{@系统参数名}；'
     }
   }
 }
