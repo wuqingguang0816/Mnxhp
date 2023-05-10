@@ -70,22 +70,23 @@
                 <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
               </template>
               <template v-else-if="item.jnpfKey==='time'">
-                <el-time-picker v-model="item.fieldValue" :picker-options="item['picker-options']"
-                  placeholder="请选择" clearable :value-format="item['value-format']"
-                  format="HH:mm:ss">
-                </el-time-picker>
-              </template>
-              <template v-else-if="['date'].includes(item.jnpfKey)">
-                <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择" type="date"
-                  value-format="timestamp" @change="onConditionDateChange($event,item)"
-                  format="yyyy-MM-dd">
-                </el-date-picker>
+                <JnpfTimePicker v-model="item.fieldValue" :picker-options="item['picker-options']"
+                  placeholder="请选择" clearable :valueFormat="item['value-format']"
+                  :format="item.format" @change="onConditionTimeChange($event,item)">
+                </JnpfTimePicker>
               </template>
               <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
                 <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                  type="datetime" value-format="timestamp"
-                  @change="onConditionDateChange($event,item)" format="yyyy-MM-dd HH:mm:ss">
+                  :type="item.type" value-format="timestamp"
+                  @change="onConditionDateChange($event,item)"
+                  :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
+              </template>
+              <template v-else-if="item.jnpfKey==='date'">
+                <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
+                  :type="item.type||'timestamp'" @change="onConditionDateChange($event,item)"
+                  :valueFormat="item['value-format']" :format="item.format">
+                </JnpfDatePicker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                 <comSelect v-model="item.fieldValue" placeholder="请选择" clearable
@@ -2434,6 +2435,7 @@ import FormulaDialog from './formulaDialog'
 import FlowDialog from './FlowDialog'
 import Detail from './TemplateDetail'
 import FlowFormDialog from "./FlowFormDialog"
+import { splat } from 'highcharts'
 const requiredDisabled = (jnpfKey) => {
   return ['billRule', 'createUser', 'createTime', 'modifyTime', 'modifyUser', 'currPosition', 'currOrganize', 'table'].includes(jnpfKey)
 }
@@ -3821,9 +3823,15 @@ export default {
       this.subFlowForm.assignList = []
     },
     // 条件节点
+    onConditionTimeChange(val, item) {
+      if (!val) return item.fieldLabel = ''
+      let arr = []
+      arr = val.split(':')
+      item.fieldLabel = item.format === 'HH:mm:ss' ? arr.join(':') : arr.slice(0, -1).join(":")
+    },
     onConditionDateChange(val, item) {
       if (!val) return item.fieldLabel = ''
-      let format = item.__config__.jnpfKey === 'date' ? 'yyyy-MM-dd 00:00:00' : 'yyyy-MM-dd HH:mm:ss'
+      let format = item.format || 'yyyy-MM-dd HH:mm:ss'
       item.fieldLabel = this.jnpf.toDate(val, format)
     },
     onConditionListChange(data, item) {

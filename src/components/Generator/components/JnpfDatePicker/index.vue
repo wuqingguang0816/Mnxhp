@@ -19,10 +19,12 @@ export default {
       default: false
     },
     valueFormat: {
-      default: undefined
+      type: String,
+      default: 'datetime'
     },
     format: {
-      default: undefined
+      type: String,
+      default: 'yyyy-MM-dd HH:mm:ss'
     },
     startTime: {
       default: undefined
