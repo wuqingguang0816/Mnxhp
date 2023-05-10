@@ -66,7 +66,7 @@ export default {
       }
       this.id = id
       this.type = type || 0
-      this.hasPackage = hasPackage || true
+      this.hasPackage = hasPackage
       this.tables = JSON.parse(tables)
       this.getDictionaryData()
       this.visible = true
