@@ -1,21 +1,11 @@
 <template>
   <div>
-    <el-dialog
-      title="请选择打印模板"
-      :close-on-click-modal="false"
-      append-to-body
-      class="JNPF-dialog template-dialog JNPF-dialog_center"
-      lock-scroll
-      width="400px"
-      :visible.sync="printVisible"
-    >
+    <el-dialog title="请选择打印模板" :close-on-click-modal="false" append-to-body
+      class="JNPF-dialog template-dialog JNPF-dialog_center" lock-scroll width="400px"
+      :visible.sync="printVisible">
       <el-scrollbar class="template-list">
-        <div
-          class="template-item"
-          v-for="item in printListOptions"
-          :key="item.id"
-          @click="selectPrint(item)"
-        >
+        <div class="template-item" v-for="item in printListOptions" :key="item.id"
+          @click="selectPrint(item)">
           {{ item.fullName }}
         </div>
       </el-scrollbar>
@@ -41,37 +31,30 @@ export default {
   watch: {
     ids: {
       handler(val) {
-        if (val) {
+        if(val) {
         }
       }
     }
   },
   computed: {},
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   methods: {
     init(ids) {
-      if(ids.length == 1) {
-        this.$emit("change", ids[0]);
+      if(ids.length==1) {
+        this.$emit("change",ids[0]);
         return
       }
-      if (this.printListOptions.length == 0 && ids.length > 0) {
-        printOptionsApi({ids}).then(res => {
-          this.printListOptions = res.data;
-          this.printVisible = true;
+      if(ids.length>0) {
+        printOptionsApi({ ids }).then(res => {
+          this.printListOptions=res.data;
+          this.printVisible=true;
         });
-      }else{
-        
-        this.printVisible = true;
       }
     },
-    initOptions(options) {
-      this.printListOptions = options;
-      this.printVisible = true;
-    },
     selectPrint(item) {
-      this.$emit("change", item.id);
-      this.printVisible = false;
+      this.$emit("change",item.id);
+      this.printVisible=false;
     }
   }
 };

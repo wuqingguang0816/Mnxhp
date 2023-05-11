@@ -65,9 +65,7 @@
               </el-table-column>
               <el-table-column prop="value" label="值">
                 <template slot-scope="scope">
-                  <el-autocomplete class="mt-8" v-model="scope.row.defaultValue" placeholder="请输入"
-                    clearable :fetch-suggestions="querySearch" style="width:100%">
-                  </el-autocomplete>
+                  <el-input v-model="scope.row.defaultValue" placeholder="请输入" clearable />
                 </template>
               </el-table-column>
             </el-table>
@@ -113,23 +111,6 @@ export default {
         ]
       }
     }
-  },
-  methods: {
-    querySearch(queryString, cb) {
-      let systemParams = [{
-        id: '@currentPage',
-        value: '@currentPage'
-      },
-      {
-        id: '@pageSize',
-        value: '@pageSize'
-      },
-      {
-        id: '@keyword',
-        value: '@keyword'
-      },]
-      cb(systemParams);
-    },
   }
 }
 </script>
