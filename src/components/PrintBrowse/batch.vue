@@ -162,6 +162,7 @@ export default {
     width: 776px;
     height: 100%;
     overflow: auto;
+    color: #000;
   }
 }
 .header-page {
