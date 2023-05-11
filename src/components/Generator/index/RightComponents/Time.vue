@@ -255,6 +255,7 @@ export default {
     },
     dateTypeChange(val) {
       this.getTargetOptions()
+      this.activeData['value-format'] = val
     },
     startType(val) {
       this.activeData.startTime = null

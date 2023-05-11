@@ -72,7 +72,7 @@
               <template v-else-if="item.jnpfKey==='time'">
                 <JnpfTimePicker v-model="item.fieldValue" :picker-options="item['picker-options']"
                   placeholder="请选择" clearable :valueFormat="item['value-format']"
-                  :format="item.format" @change="onConditionTimeChange($event,item)">
+                  :format="item.format">
                 </JnpfTimePicker>
               </template>
               <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
@@ -3823,12 +3823,6 @@ export default {
       this.subFlowForm.assignList = []
     },
     // 条件节点
-    onConditionTimeChange(val, item) {
-      if (!val) return item.fieldLabel = ''
-      let arr = []
-      arr = val.split(':')
-      item.fieldLabel = item.format === 'HH:mm:ss' ? arr.join(':') : arr.slice(0, -1).join(":")
-    },
     onConditionDateChange(val, item) {
       if (!val) return item.fieldLabel = ''
       let format = item.format || 'yyyy-MM-dd HH:mm:ss'
