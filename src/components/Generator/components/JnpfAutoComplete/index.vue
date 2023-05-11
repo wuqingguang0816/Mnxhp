@@ -56,7 +56,7 @@ export default {
     },
     total: {
       type: Number,
-      default: 10
+      default: 50
     },
   },
   data() {

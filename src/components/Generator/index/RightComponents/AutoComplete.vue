@@ -37,8 +37,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <jnpf-form-tip-item label="显示条数" tipLabel="置空时，则显示全部数据">
-      <el-input-number v-model="activeData.total" placeholder="默认值" :min="1" :max="50"
+    <jnpf-form-tip-item label="显示条数" tipLabel="最大值只能设置为50">
+      <el-input-number v-model="activeData.total" placeholder="请输入显示条数" :min="1" :max="50"
         :precision="activeData.precision" controls-position="right" />
     </jnpf-form-tip-item>
     <el-form-item label="能否清空">
