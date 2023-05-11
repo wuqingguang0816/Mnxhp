@@ -116,8 +116,6 @@
 
 <script>
 import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
-const sysOptions = ['@currentPage', '@pageSize', '@keyword']
-
 export default {
   name: 'PopupSelect',
   props: {
@@ -262,16 +260,12 @@ export default {
       if (!this.formData) return templateJson
       for (let i = 0; i < templateJson.length; i++) {
         if (templateJson[i].relationField) {
-          if (sysOptions.includes(templateJson[i].relationField)) {
-            templateJson[i].defaultValue = this.listQuery[templateJson[i].relationField.replace('@', '')]
+          if (templateJson[i].relationField.includes('-')) {
+            let tableVModel = templateJson[i].relationField.split('-')[0]
+            let childVModel = templateJson[i].relationField.split('-')[1]
+            templateJson[i].defaultValue = this.formData[tableVModel] && this.formData[tableVModel][this.rowIndex] && this.formData[tableVModel][this.rowIndex][childVModel] || ''
           } else {
-            if (templateJson[i].relationField.includes('-')) {
-              let tableVModel = templateJson[i].relationField.split('-')[0]
-              let childVModel = templateJson[i].relationField.split('-')[1]
-              templateJson[i].defaultValue = this.formData[tableVModel] && this.formData[tableVModel][this.rowIndex] && this.formData[tableVModel][this.rowIndex][childVModel] || ''
-            } else {
-              templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
-            }
+            templateJson[i].defaultValue = this.formData[templateJson[i].relationField] || ''
           }
         }
       }
