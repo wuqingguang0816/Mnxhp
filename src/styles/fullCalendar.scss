@@ -67,8 +67,7 @@
     color: #606266;
   }
 
-  .fc .fc-col-header-cell-cushion {
-    // display: inline-block;
+  .fc .fc-timeGridWeek-view .fc-col-header-cell-cushion {
     padding: 2px 4px;
     display: flex;
     align-items: center;
@@ -86,11 +85,6 @@
 
   .fc .fc-scroller {
     overflow: hidden scroll !important;
-  }
-
-  .fc-daygrid-body,
-  .fc-scrollgrid-sync-table {
-    height: 100% !important;
   }
 
   .fc-daygrid-day-events,
