@@ -19,7 +19,7 @@
         <el-table-column prop="messageType" label="模板类型" width="150"></el-table-column>
         <el-table-column prop="toUser" label="接收人" min-width="200">
           <template slot-scope="scope" v-if="scope.row.messageType != 'webhook'">
-            <userSelect v-model="scope.row.toUser" placeholder="接收人" :value='scope.row.toUser'
+            <userSelect v-model="scope.row.toUser" placeholder="请选择接收人" :value='scope.row.toUser'
               multiple clearable />
           </template>
         </el-table-column>
@@ -33,7 +33,7 @@
         <el-table-column prop="parameterData" label="变量" min-width="200">
           <template slot-scope="scope">
             <div class="variable-box" v-for="(item,index) in scope.row.paramJson" :key="index">
-              <el-input v-model="item.value" placeholder="变量"></el-input>
+              <el-input v-model="item.value" placeholder="请输入变量"></el-input>
             </div>
           </template>
         </el-table-column>

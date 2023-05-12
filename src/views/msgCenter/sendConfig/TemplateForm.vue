@@ -4,7 +4,7 @@
     width='600px'>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="100px">
       <el-form-item label="消息类型" prop="messageType">
-        <el-select v-model="dataForm.messageType" placeholder="选择消息类型" clearable filterable
+        <el-select v-model="dataForm.messageType" placeholder="请选择消息类型" clearable filterable
           @change="onMessageTypeChange">
           <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
             :value="item.enCode">
@@ -17,14 +17,16 @@
           @change="onTemplateChange" />
       </el-form-item>
       <el-form-item label="模板编码" prop="templateCode">
-        <el-input v-model="dataForm.templateCode" placeholder="模板编码" disabled clearable></el-input>
+        <el-input v-model="dataForm.templateCode" placeholder="请输入模板编码" disabled
+          clearable></el-input>
       </el-form-item>
       <el-form-item label="账号名称" prop="accountName" v-if="dataForm.messageType!=1">
         <template-dialog v-model="dataForm.accountConfigId" :title="dataForm.accountName"
           :messageType="dataForm.messageType" :type=2 @change="onAccountChange" />
       </el-form-item>
       <el-form-item label="账号编码" prop="accountCode" v-if="dataForm.messageType!=1">
-        <el-input v-model="dataForm.accountCode" placeholder="模板编码" disabled clearable></el-input>
+        <el-input v-model="dataForm.accountCode" placeholder="请输入账号编码" disabled
+          clearable></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
@@ -34,7 +36,7 @@
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="说明" prop="description">
-        <el-input v-model="dataForm.description" placeholder="说明" type="textarea" :rows="3" />
+        <el-input v-model="dataForm.description" placeholder="请输入说明" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

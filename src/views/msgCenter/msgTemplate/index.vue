@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="消息来源">
-              <el-select v-model="messageSource" placeholder="选择消息来源" clearable filterable>
+              <el-select v-model="messageSource" placeholder="请选择消息来源" clearable filterable>
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="消息类型">
-              <el-select v-model="msgType" placeholder="选择消息类型" clearable filterable>
+              <el-select v-model="msgType" placeholder="请选择消息类型" clearable filterable>
                 <el-option v-for="(item,index) in msgTypeList" :key="index" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -30,7 +30,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="模板类型">
-                <el-select v-model="templateType" placeholder="选择模板类型" clearable filterable>
+                <el-select v-model="templateType" placeholder="请选择模板类型" clearable filterable>
                   <el-option v-for="(item,index) in templateTypeList" :key="index"
                     :label="item.fullName" :value="item.enCode">
                   </el-option>
@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item :label="enabledMarkLabel">
-                <el-select v-model="enabledMark" placeholder="选择状态" clearable filterable>
+                <el-select v-model="enabledMark" placeholder="请选择状态" clearable filterable>
                   <el-option v-for="(item,index) in enabledMarkList" :key="index"
                     :label="item.fullName" :value="item.enCode">
                   </el-option>

@@ -14,22 +14,22 @@
           @submit.native.prevent>
           <el-col :span="12">
             <el-form-item label="名称" prop="fullName">
-              <el-input v-model="dataForm.fullName" placeholder="模板名称" clearable></el-input>
+              <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="编码" prop="enCode">
-              <el-input v-model="dataForm.enCode" placeholder="模板编码" clearable></el-input>
+              <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="模板类型">
-              <el-input value="自定义模板" placeholder="模板编码" disabled clearable></el-input>
+              <el-input value="自定义模板" disabled clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
-              <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
+              <el-select v-model="dataForm.messageSource" placeholder="请选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false" filterable>
                 <el-option v-for="(item,index) in msgSourceList" :key="index" :label="item.fullName"
                   :value="item.enCode">
@@ -50,7 +50,8 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="说明" prop="description">
-              <el-input v-model="dataForm.description" placeholder="内容" type="textarea" :rows="3" />
+              <el-input v-model="dataForm.description" placeholder="请输入说明" type="textarea"
+                :rows="3" />
             </el-form-item>
           </el-col>
           <el-col :span="24">

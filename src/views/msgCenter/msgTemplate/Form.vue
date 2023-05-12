@@ -14,22 +14,22 @@
           @submit.native.prevent>
           <el-col :span="12">
             <el-form-item label="名称" prop="fullName">
-              <el-input v-model="dataForm.fullName" placeholder="模板名称" clearable></el-input>
+              <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="编码" prop="enCode">
-              <el-input v-model="dataForm.enCode" placeholder="模板编码" clearable></el-input>
+              <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="模板类型">
-              <el-input value="自定义模板" placeholder="模板编码" disabled clearable></el-input>
+              <el-input value="自定义模板" disabled clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
-              <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
+              <el-select v-model="dataForm.messageSource" placeholder="请选择消息来源" clearable
                 :disabled="this.dataForm.id?true:false" filterable @change="onMessageSourceChange">
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
@@ -39,7 +39,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="消息类型" prop="messageType">
-              <el-select v-model="dataForm.messageType" placeholder="选择消息类型" clearable
+              <el-select v-model="dataForm.messageType" placeholder="请选择消息类型" clearable
                 :disabled="this.dataForm.id?true:false" @change="onMsgTypeChange" filterable>
                 <el-option v-for="(item,index) in messageTypeList" :key="index"
                   :label="item.fullName" :value="item.enCode">
@@ -60,7 +60,8 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="说明" prop="description">
-              <el-input v-model="dataForm.description" placeholder="说明" type="textarea" :rows="3" />
+              <el-input v-model="dataForm.description" placeholder="请输入说明" type="textarea"
+                :rows="3" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -73,7 +74,7 @@
                       <span>参数说明</span>
                       <span class="operation">操作</span>
                     </div>
-                    <el-input v-model="keyword" placeholder="输入关键字" suffix-icon="el-icon-search"
+                    <el-input v-model="keyword" placeholder="请输入关键字" suffix-icon="el-icon-search"
                       clearable @input='searchParameter' />
                     <el-table :data="parameterList" :showHeader="false" ref="dragTable" row-key="id"
                       size='mini' height="100%">
@@ -109,15 +110,15 @@
               </div>
               <div class="right-pane" v-if="dataForm.messageType != 3&&dataForm.messageType != 7">
                 <jnpf-form-tip-item label="消息标题" prop="title" :tipLabel="getTipLabel()">
-                  <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
+                  <el-input v-model="dataForm.title" placeholder="请输入消息标题" clearable></el-input>
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content" v-if="dataForm.messageType == 2"
                   :tipLabel="getTipLabel()">
-                  <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" />
+                  <JNPFQuill v-model="dataForm.content" ref="myQuillEditor" placeholder="请输入消息内容" />
                 </jnpf-form-tip-item>
                 <jnpf-form-tip-item label="消息内容" prop="content"
                   v-else-if="dataForm.messageType != 1" :tipLabel="getTipLabel()">
-                  <el-input v-model="dataForm.content" placeholder="消息内容" type="textarea"
+                  <el-input v-model="dataForm.content" placeholder="请输入消息内容" type="textarea"
                     :rows="19" />
                 </jnpf-form-tip-item>
               </div>
@@ -126,13 +127,13 @@
                   <el-col :span="12">
                     <jnpf-form-tip-item label="模版编号" prop="templateCode"
                       :tipLabel="dataForm.messageType==3?'阿里云：请在【阿里云管理后台-模板管理】⻚⾯查看模板CODE<br/>腾讯云：请在【腾讯云管理后台-正⽂模板管理】⻚⾯查看模板ID':'在【微信公众号管理后台-广告与服务-模板消息】⻚⾯查看模板ID'">
-                      <el-input v-model="dataForm.templateCode" placeholder="模版编号" />
+                      <el-input v-model="dataForm.templateCode" placeholder="请输入模版编号" />
                     </jnpf-form-tip-item>
                   </el-col>
                   <el-col :span="12" offset="12"></el-col>
                   <el-col :span="12" v-if="dataForm.messageType == 7">
                     <jnpf-form-tip-item label="跳转方式" prop="wxSkip">
-                      <el-select v-model="dataForm.wxSkip" placeholder="选择跳转方式" clearable
+                      <el-select v-model="dataForm.wxSkip" placeholder="请选择跳转方式" clearable
                         filterable>
                         <el-option v-for="(item,index) in wxSkipList" :key="index"
                           :label="item.fullName" :value="item.enCode">
@@ -143,7 +144,7 @@
                   <el-col :span="12" v-if="dataForm.messageType == 7&&dataForm.wxSkip == 1">
                     <jnpf-form-tip-item label="关联小程序ID" prop="xcxAppId" label-width="126px"
                       tipLabel="在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
-                      <el-input v-model="dataForm.xcxAppId" placeholder="关联小程序ID" clearable />
+                      <el-input v-model="dataForm.xcxAppId" placeholder="请输入关联小程序ID" clearable />
                     </jnpf-form-tip-item>
                   </el-col>
                 </el-row>
@@ -171,12 +172,12 @@
                         </template>
                         <template slot-scope="scope">
                           <el-input v-model="scope.row.smsField"
-                            :placeholder="dataForm.messageType==3?'短信变量':'变量'"></el-input>
+                            :placeholder="dataForm.messageType==3?'请输入短信变量':'请输入变量'"></el-input>
                         </template>
                       </el-table-column>
                       <el-table-column label="参数">
                         <template slot-scope="scope">
-                          <el-select v-model="scope.row.field" placeholder="选择参数" clearable
+                          <el-select v-model="scope.row.field" placeholder="请选择参数" clearable
                             filterable>
                             <el-option v-for="(item,index) in parameterList" :key="index"
                               :label="item.field" :value="item.field">
@@ -214,10 +215,10 @@
         <el-form :model="fieldForm" :rules="fieldRule" ref="fieldForm" label-width="100px">
           <jnpf-form-tip-item label="参数名称" prop="field"
             :tip-label="isEdit?'':'可以使用大小写英文字母、数字、下划线组合，且不能数字、下划线开头。'" placement="top-start">
-            <el-input v-model="fieldForm.field" placeholder="参数名称" :disabled="isEdit" />
+            <el-input v-model="fieldForm.field" placeholder="请输入参数名称" :disabled="isEdit" />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="参数说明" prop="fieldName">
-            <el-input v-model="fieldForm.fieldName" placeholder="参数说明"></el-input>
+            <el-input v-model="fieldForm.fieldName" placeholder="请输入参数说明"></el-input>
           </jnpf-form-tip-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
