@@ -116,10 +116,10 @@ export default {
     confirm() {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
-        if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请上传图片')
+        if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请选择图片')
         if (element.dataType == 3 && !element.propsApi) return this.$message.warning('请选择数据接口')
         if (element.linkType == '1' && (!element.urlAddress && !element.moduleId)) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
-        if (element.linkType == '2' && !element.urlAddress) return this.$message({ message: '请输入跳转链接', type: 'warning', duration: 1000 })
+        if (element.linkType == '2' && !element.urlAddress) return this.$message({ message: '跳转链接不能为空', type: 'warning', duration: 1000 })
       }
       this.visible = false
       this.$emit('refresh', this.list)
