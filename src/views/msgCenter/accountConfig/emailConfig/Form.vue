@@ -4,16 +4,16 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="140px">
       <el-form-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入名称" clearable />
+        <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
       </el-form-item>
       <el-form-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="编码" clearable />
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </el-form-item>
       <el-form-item label="发件人昵称" prop="addressorName">
-        <el-input v-model="dataForm.addressorName" placeholder="发件人昵称" clearable />
+        <el-input v-model="dataForm.addressorName" placeholder="请输入发件人昵称" clearable />
       </el-form-item>
       <el-form-item label="SMTP服务器" prop="smtpServer">
-        <el-input v-model="dataForm.smtpServer" placeholder="SMTP服务器" clearable />
+        <el-input v-model="dataForm.smtpServer" placeholder="请输入SMTP服务器" clearable />
       </el-form-item>
       <el-form-item label="SMTP端口" prop="smtpPort">
         <el-input-number :min="0" :max="999999" v-model="dataForm.smtpPort"
@@ -23,10 +23,10 @@
         <el-switch v-model="dataForm.sslLink" :active-value="1" :inactive-value="0" />
       </el-form-item>
       <el-form-item label="SMTP用户名" prop="smtpUser">
-        <el-input v-model="dataForm.smtpUser" placeholder="SMTP用户名" clearable />
+        <el-input v-model="dataForm.smtpUser" placeholder="请输入SMTP用户名" clearable />
       </el-form-item>
       <el-form-item label="SMTP密码" prop="smtpPassword">
-        <el-input v-model="dataForm.smtpPassword" placeholder="SMTP密码" clearable show-password>
+        <el-input v-model="dataForm.smtpPassword" placeholder="请输入SMTP密码" clearable show-password>
           <el-button slot="append" :disabled="btnLoading" @click="sendTest()">测试
           </el-button>
         </el-input>

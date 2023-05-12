@@ -4,56 +4,58 @@
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="160px">
       <jnpf-form-tip-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="名称" clearable />
+        <el-input v-model="dataForm.fullName" placeholder="请输入名称" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="编码" clearable />
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码" clearable />
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="渠道" prop="channel">
-        <el-select v-model="dataForm.channel" placeholder="请选择" clearable @change="channelVal"
+        <el-select v-model="dataForm.channel" placeholder="请选择渠道" clearable @change="channelVal"
           filterable>
           <el-option v-for="item in channelList" :label="item.fullName" :value="item.id"
             :key="item.value" />
         </el-select>
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="短信签名" prop="smsSignature" tip-label="选择国内消息或国际/港澳台消息，在“签名管理”⻚中获取">
-        <el-input v-model="dataForm.smsSignature" placeholder="短信签名" clearable />
+        <el-input v-model="dataForm.smsSignature" placeholder="请输入短信签名" clearable />
       </jnpf-form-tip-item>
       <template v-if="dataForm.channel == 1">
         <jnpf-form-tip-item label="AccessKey ID" prop="appId"
           tip-label="请在“阿里云的AccessKey管理-安全信息管理”页中获得">
-          <el-input v-model="dataForm.appId" placeholder="AccessKey ID" clearable />
+          <el-input v-model="dataForm.appId" placeholder="请输入AccessKey ID" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="AccessKey Secret" prop="appSecret"
           tip-label="请在”阿里云的AccessKey管理-安全信息管理”页中获得">
-          <el-input v-model="dataForm.appSecret" placeholder="AccessKey Secret" show-password
+          <el-input v-model="dataForm.appSecret" placeholder="请输入AccessKey Secret" show-password
             clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="EndPoint" prop="endPoint"
           tip-label="请在“阿里云的短信服务-OpenAPI Explorer-Region&Endpoint”页中获得">
-          <el-input v-model="dataForm.endPoint" placeholder="EndPoint" clearable />
+          <el-input v-model="dataForm.endPoint" placeholder="请输入EndPoint" clearable />
         </jnpf-form-tip-item>
       </template>
       <template v-if="dataForm.channel == 2">
         <jnpf-form-tip-item label="SecretId" prop="secretId"
           tip-label="请在”腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model.number="dataForm.secretId" placeholder="SecretId" clearable />
+          <el-input v-model.number="dataForm.secretId" placeholder="请输入SecretId" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SecretKey" prop="secretKey"
           tip-label="请在“腾讯云的访问管理-访问密钥- API密钥管理”⻚中获得">
-          <el-input v-model="dataForm.secretKey" placeholder="SecretKey" clearable show-password />
+          <el-input v-model="dataForm.secretKey" placeholder="请输入SecretKey" clearable
+            show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="SDK AppID" prop="sdkAppId" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
-          <el-input v-model="dataForm.sdkAppId" placeholder="SDK AppID" clearable show-password />
+          <el-input v-model="dataForm.sdkAppId" placeholder="请输入SDK AppID" clearable
+            show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="App Key" prop="appKey" tip-label="请在”腾讯云的应⽤管理-应⽤列表”⻚中获得">
           <el-input v-model="dataForm.appKey" placeholder="App Key" clearable show-password />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="地域域名" prop="zoneName" tip-label="默认是国内地域域名,也⽀持指定其它地域域名">
-          <el-input v-model="dataForm.zoneName" placeholder="地域域名" clearable />
+          <el-input v-model="dataForm.zoneName" placeholder="请输入地域域名" clearable />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="地域参数" prop="zoneParam" tip-label="默认是国内地域参数,也⽀持指定其它地域参数">
-          <el-input v-model="dataForm.zoneParam" placeholder="地域参数" clearable />
+          <el-input v-model="dataForm.zoneParam" placeholder="请输入地域参数" clearable />
         </jnpf-form-tip-item>
       </template>
       <jnpf-form-tip-item label="排序" prop="sortCode">
