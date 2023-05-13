@@ -151,6 +151,7 @@ export default {
       this.getDictionaryList()
     },
     initData(isInit) {
+      this.filterText = ''
       this.treeLoading = true
       getDictionaryType().then(res => {
         this.treeData = res.data.list
