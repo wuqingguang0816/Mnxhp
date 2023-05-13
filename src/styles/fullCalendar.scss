@@ -67,6 +67,7 @@
     color: #606266;
   }
 
+  .fc .fc-timeGridDay-view .fc-col-header-cell-cushion,
   .fc .fc-timeGridWeek-view .fc-col-header-cell-cushion {
     padding: 2px 4px;
     display: flex;
@@ -151,14 +152,14 @@
 }
 
 @media (max-width: 1360px) {
-  .fc .fc-col-header-cell-cushion {
+  .fc .fc-timeGridWeek-view .fc-col-header-cell-cushion {
     display: inline-block !important;
     margin-top: 10px;
   }
 
-  .list-week {
+  .fc .fc-timeGridWeek-view .list-week {
     text-align: center;
     width: 100%;
-    margin-left: unset !important;
+    margin-left: 0 !important;
   }
 }
