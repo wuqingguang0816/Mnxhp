@@ -209,7 +209,7 @@ export const systemComponents = [{
     showImage: true,
     headerFontSize: 14,
     headerFontWeight: false,
-    headerFontColor: '#606266',
+    headerFontColor: '#303133',
     headerLeft: 'center',
     headerBgColor: '#F4F6F8',
     tableIndex: true,
