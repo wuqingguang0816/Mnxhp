@@ -83,6 +83,7 @@ const printOptionApi = {
             for (let i = 0; i < tableObj.rows.length; i++) {
               tds = tableObj.rows[i]
               const dataTag = this.isChildTable(tds.cells)
+
               if (dataTag) {
                 this.retrieveData(dataTag, tableObj, tds, newTable)
               } else {
@@ -125,8 +126,8 @@ const printOptionApi = {
         })
       })
     },
-    replaceMe(key,value) {
-      this.printTemplate = this.printTemplate.replace(key,value)
+    replaceMe(key, value) {
+      this.printTemplate = this.printTemplate.replace(key, value)
     },
     replaceRemainData(dom) {
       let dataList = dom.querySelectorAll('span')
