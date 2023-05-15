@@ -52,6 +52,10 @@ export default {
         });
       }
     },
+    initOptions(options) {
+      this.printListOptions = options;
+      this.printVisible = true;
+    },
     selectPrint(item) {
       this.$emit("change",item.id);
       this.printVisible=false;

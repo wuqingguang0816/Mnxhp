@@ -21,23 +21,19 @@
         <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
-
     <div v-if="showContainer">
       <!-- 主表使用 -->
       <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
       <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
-
       <!-- 子表使用 -->
       <div ref="barcodewrap"></div>
       <div ref="qrcodewrap"></div>
     </div>
-
     <div class="main" ref="tsPrint" v-loading="loading">
       <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
     </div>
   </el-dialog>
 </template>
-
 <script>
 import printOptionApi from "./printMinxin.js";
 import { getBatchData } from "@/api/system/printDev";
@@ -72,7 +68,6 @@ export default {
             behavior: "smooth",
           });
         }
-
       });
     },
     onOpen() {
@@ -100,24 +95,21 @@ export default {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            
             // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             if (!element.printData) {
-              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g,"");
+              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
             }
             await this.handleData(element, domCurrent);
-            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g,"");
+            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "");
             if (index == array.length - 1) {
               this.showContainer = false
             }
           }
-          
           this.loading = false;
         });
       });
     },
-
     print() {
       let print = this.$refs.tsPrint.innerHTML;
       print = print + `<style>html * {word-break:break-all}</style>`;
@@ -170,9 +162,9 @@ export default {
     width: 776px;
     height: 100%;
     overflow: auto;
+    color: #000;
   }
 }
-
 .header-page {
   vertical-align: middle;
   min-width: 300px;
