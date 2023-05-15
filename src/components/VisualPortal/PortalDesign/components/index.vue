@@ -93,6 +93,8 @@ import CardHeader from '@/components/VisualPortal/CardHeader'
 import RightPanel from './RightPanel'
 import parser from './parser'
 import draggable from 'vuedraggable'
+import { validURL } from '@/utils/validate'
+
 const defaultConf = {
   layoutId: 100,
   layout: [],
@@ -194,6 +196,77 @@ export default {
     },
     getData() {
       return new Promise((resolve, reject) => {
+        const loop = list => {
+          for (let i = 0; i < list.length; i++) {
+            const e = list[i]
+            const option = e.option
+            const card = e.card
+            if (card.linkType === '2') {
+              if (!card.urlAddress) {
+                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(card.urlAddress)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
+              }
+            }
+            if (card.appLinkType === '2') {
+              if (!card.appUrlAddress) {
+                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(card.appUrlAddress)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
+              }
+            }
+            if (option.linkType === '2') {
+              if (!option.urlAddress) {
+                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(option.urlAddress)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
+              }
+            }
+            if (option.appLinkType === '2') {
+              if (!option.appUrlAddress) {
+                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(option.appUrlAddress)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
+              }
+            }
+            if (e.jnpfKey == 'image' && option.styleType == 2) {
+              if (!option.defaultValue) {
+                reject({ msg: `图片地址不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(option.defaultValue)) {
+                reject({ msg: '请输入正确的图片地址', target: 1 })
+                break
+              }
+            }
+            if (e.jnpfKey == 'iframe') {
+              if (!option.defaultValue) {
+                reject({ msg: `链接地址不能为空`, target: 1 })
+                break
+              }
+              if (!validURL(option.defaultValue)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
+              }
+            }
+            if (option && option.children && Array.isArray(option.children)) {
+              loop(option.children)
+            }
+          }
+        }
+        loop(this.layout)
         this.config.layout = this.layout
         resolve({ formData: this.config, target: 1 })
       })

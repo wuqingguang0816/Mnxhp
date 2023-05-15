@@ -121,6 +121,7 @@ import DraggableItemApp from './DraggableItemApp'
 import {
   getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf
 } from '@/components/Generator/utils/db'
+import { validURL } from '@/utils/validate'
 
 const emptyActiveData = { style: {}, autosize: {} }
 let oldActiveId
@@ -451,6 +452,12 @@ export default {
                     break
                   }
                 }
+              }
+            }
+            if (config.jnpfKey === 'link') {
+              if (e.href && !validURL(e.href)) {
+                reject({ msg: '请输入正确的链接地址', target: 1 })
+                break
               }
             }
           }

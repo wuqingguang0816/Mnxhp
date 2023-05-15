@@ -14,14 +14,15 @@
             placeholder="请选择菜单" lastLevel clearable @change="getSelectValue">
           </JNPF-TreeSelect>
         </el-form-item>
-        <el-form-item label="链接地址" v-if="activeData.option.linkType==2">
+        <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
+          v-if="activeData.option.linkType==2">
           <el-input v-model="activeData.option.urlAddress" placeholder="填写地址">
             <el-select slot="append" v-model="activeData.option.linkTarget" style="width: 90px;">
               <el-option label="_self" value="_self" />
               <el-option label="_blank" value="_blank" />
             </el-select>
           </el-input>
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else>
         <el-form-item label="链接类型">
@@ -36,9 +37,10 @@
             placeholder="请选择菜单" lastLevel clearable @change="getSelectValue">
           </JNPF-TreeSelect>
         </el-form-item>
-        <el-form-item label="链接地址" v-if="activeData.option.appLinkType==2">
+        <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
+          v-if="activeData.option.appLinkType==2">
           <el-input v-model="activeData.option.appUrlAddress" placeholder="填写地址" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
     </template>
     <template v-else>
@@ -55,14 +57,15 @@
             placeholder="请选择菜单" lastLevel clearable @change="getSelectVal">
           </JNPF-TreeSelect>
         </el-form-item>
-        <el-form-item label="链接地址" v-if="activeData.card.linkType==2">
+        <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
+          v-if="activeData.card.linkType==2">
           <el-input v-model="activeData.card.urlAddress" placeholder="填写地址">
             <el-select slot="append" v-model="activeData.card.linkTarget" style="width: 90px;">
               <el-option label="_self" value="_self" />
               <el-option label="_blank" value="_blank" />
             </el-select>
           </el-input>
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
       <template v-else>
         <el-form-item label="右上角链接">
@@ -77,9 +80,10 @@
             placeholder="请选择菜单" lastLevel clearable @change="getSelectVal">
           </JNPF-TreeSelect>
         </el-form-item>
-        <el-form-item label="链接地址" v-if="activeData.card.appLinkType==2">
+        <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
+          v-if="activeData.card.appLinkType==2">
           <el-input v-model="activeData.card.appUrlAddress" placeholder="填写地址" />
-        </el-form-item>
+        </jnpf-form-tip-item>
       </template>
     </template>
   </div>

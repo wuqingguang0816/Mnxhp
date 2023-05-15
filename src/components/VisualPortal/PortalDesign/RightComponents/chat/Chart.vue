@@ -184,7 +184,7 @@
       </jnpf-form-tip-item>
       <jnpf-form-tip-item label="图片地址" v-else-if="activeData.option.styleType==2"
         tipLabel='地址以http://或https://为开头'>
-        <el-input v-model="activeData.option.defaultValue" placeholder="图片地址" />
+        <el-input v-model="activeData.option.defaultValue" placeholder="请输入图片地址" />
       </jnpf-form-tip-item>
       <el-form-item label="数据接口" v-else>
         <interface-dialog :value="activeData.propsApi" :title="activeData.propsName"
@@ -217,7 +217,7 @@
         <el-switch v-model="activeData.option.carouselAutoplay" />
       </el-form-item>
       <el-form-item label="轮播间隔">
-        <el-input v-model="activeData.option.carouselInterval" placeholder="请输入" type="number"
+        <el-input v-model="activeData.option.carouselInterval" placeholder="请输入轮播间隔" type="number"
           :min="500" :max="500000">
           <template slot="append">ms</template>
         </el-input>
@@ -276,7 +276,7 @@
       </el-form-item>
       <jnpf-form-tip-item label="视频地址" v-else-if="activeData.option.styleType==2"
         tipLabel='地址以http://或https://开头'>
-        <el-input v-model="activeData.option.defaultValue" placeholder="视频地址" />
+        <el-input v-model="activeData.option.defaultValue" placeholder="请输入视频地址" />
       </jnpf-form-tip-item>
       <template v-else>
         <el-form-item label="数据接口">

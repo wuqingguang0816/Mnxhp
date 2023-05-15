@@ -130,7 +130,7 @@
         <el-switch v-model="activeData.option.autoCarousel" />
       </el-form-item>
       <el-form-item label="轮播间隔" v-if="activeData.option.autoCarousel">
-        <el-input v-model="activeData.option.autoCarouselTime" placeholder="请输入" type="number"
+        <el-input v-model="activeData.option.autoCarouselTime" placeholder="请输入轮播间隔" type="number"
           :min="100" :max="500000">
           <template slot="append">ms</template>
         </el-input>

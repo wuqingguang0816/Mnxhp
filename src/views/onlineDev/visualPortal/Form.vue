@@ -72,9 +72,15 @@
 <script>
 import { getPortalInfo, Update, Create } from '@/api/onlineDev/portal'
 import PortalDesign from '@/components/VisualPortal/PortalDesign'
+import { validURL } from '@/utils/validate'
 export default {
   components: { PortalDesign },
   data() {
+    var validateUrl = (rule, value, callback) => {
+      console.log(this.dataForm)
+      if (this.dataForm.linkType == '1' && !validURL(value)) callback(new Error('请输入正确的地址'));
+      callback();
+    };
     return {
       visible: false,
       loading: false,
@@ -114,6 +120,7 @@ export default {
         ],
         customUrl: [
           { required: true, message: '链接地址不能为空', trigger: 'blur' },
+          { validator: validateUrl, trigger: 'blur' }
         ]
       }
     }

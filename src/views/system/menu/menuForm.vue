@@ -8,10 +8,10 @@
         <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单" />
       </el-form-item>
       <el-form-item label="名称" prop="fullName">
-        <el-input v-model="dataForm.fullName" placeholder="输入名称" />
+        <el-input v-model="dataForm.fullName" placeholder="请输入名称" />
       </el-form-item>
       <el-form-item label="编码" prop="enCode">
-        <el-input v-model="dataForm.enCode" placeholder="输入编码" />
+        <el-input v-model="dataForm.enCode" placeholder="请输入编码" />
       </el-form-item>
       <el-form-item label="图标" prop="icon">
         <el-row type="flex">
@@ -33,7 +33,7 @@
         </el-select>
       </el-form-item>
       <el-form-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址" prop="urlAddress">
-        <el-input v-model="dataForm.urlAddress" placeholder="填写地址">
+        <el-input v-model="dataForm.urlAddress" placeholder="请输入地址">
           <template slot="prepend"
             v-if="dataForm.category ==='Web' && dataForm.type == 2">@/views/</template>
           <el-select slot="append" v-model="dataForm.linkTarget" style="width: 90px;"
@@ -77,6 +77,7 @@ import { getDataReportSelector } from '@/api/onlineDev/dataReport'
 import { getDataVSelector } from '@/api/onlineDev/dataV'
 import { getPortalSelector } from '@/api/onlineDev/portal'
 import iconBox from '@/components/JNPF-iconBox'
+import { validURL } from '@/utils/validate'
 const appTypeData = [{
   enCode: 1,
   fullName: "目录"
@@ -120,9 +121,38 @@ const typeData = [
     fullName: "外链"
   }]
 
+const defaultDataForm = {
+  id: '',
+  parentId: '',
+  fullName: '',
+  enCode: '',
+  sortCode: 0,
+  icon: '',
+  type: null,
+  urlAddress: '',
+  category: 'Web',
+  linkTarget: '_self',
+  isButtonAuthorize: 0,
+  isColumnAuthorize: 0,
+  isFormAuthorize: 0,
+  isDataAuthorize: 0,
+  enabledMark: 1,
+  description: '',
+  systemId: '',//系统id
+  propertyJson: {
+    moduleId: '',
+    iconBackgroundColor: '',
+    isTree: 0
+  }
+}
+
 export default {
   components: { iconBox },
   data() {
+    var validateUrl = (rule, value, callback) => {
+      if (this.dataForm.type == 7 && !validURL(value)) callback(new Error('请输入正确的链接地址'));
+      callback();
+    };
     return {
       visible: false,
       formLoading: false,
@@ -186,7 +216,8 @@ export default {
           { required: true, message: '请选择菜单分类', trigger: 'input' }
         ],
         urlAddress: [
-          { required: true, message: '地址不能为空', trigger: 'blur' }
+          { required: true, message: '地址不能为空', trigger: 'blur' },
+          { validator: validateUrl, trigger: 'blur' }
         ],
         'propertyJson.moduleId': [
           { required: true, message: '关联不能为空', trigger: 'blur' }
@@ -201,7 +232,7 @@ export default {
   },
   methods: {
     init(id, category, systemId, parentId) {
-      Object.assign(this.$data, this.$options.data())
+      this.dataForm = JSON.parse(JSON.stringify(defaultDataForm))
       this.dataForm.id = id || ''
       this.related = false
       this.visible = true
