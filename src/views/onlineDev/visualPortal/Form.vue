@@ -77,7 +77,7 @@ export default {
   components: { PortalDesign },
   data() {
     var validateUrl = (rule, value, callback) => {
-      if (this.dataForm.linkType == '1' && !validURL(value)) callback(new Error('请输入正确的地址'));
+      if (this.dataForm.linkType == '1' && !validURL(value)) callback(new Error('请输入正确的链接地址'));
       callback();
     };
     return {
