@@ -69,6 +69,7 @@ export default {
         setTimeout(() => {
           this.chartData = val
           this.resetChart()
+          this.initBarType()
         }, 0);
       },
     },
@@ -78,6 +79,7 @@ export default {
         getDataInterfaceRes(val).then(res => {
           this.chartData = res.data
           this.resetChart()
+          this.initBarType();
         })
       },
     },
