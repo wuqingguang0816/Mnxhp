@@ -135,14 +135,10 @@ export default {
   methods: {
     getMenuList() {
       getSelectorAll({ category: 'Web' }).then(res => {
-        this.menuList = res.data.list
+        this.menuList = (res.data.list || []).filter(o => o.children && o.children.length)
       })
       getSelectorAll({ category: 'app' }).then(res => {
-        this.appMenuList = res.data.list
-        for (let i = 0; i < this.appMenuList.length; i++) {
-          const element = this.appMenuList[i];
-          if (!element.children || !element.children.length) this.appMenuList.splice(i, 1)
-        }
+        this.appMenuList = (res.data.list || []).filter(o => o.children && o.children.length)
       })
     },
     getDataInterfaceSelector() {
