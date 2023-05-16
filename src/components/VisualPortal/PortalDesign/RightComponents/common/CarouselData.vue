@@ -126,6 +126,7 @@ export default {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
         if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请上传图片')
+        if (element.dataType == 2 && !validURL(element.imageUrl)) return this.$message.warning('请输入正确的图片地址')
         if (element.dataType == 3 && !element.propsApi) return this.$message.warning('请选择请选择数据接口')
         if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
         if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('链接地址不能为空')

@@ -4,16 +4,16 @@
     class="JNPF-dialog JNPF-dialog_center" width="600px">
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px"
       v-loading="formLoading" class="menuForm">
-      <el-form-item label="上级" prop="parentId">
+      <jnpf-form-tip-item label="上级" prop="parentId">
         <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单" />
-      </el-form-item>
-      <el-form-item label="名称" prop="fullName">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="名称" prop="fullName">
         <el-input v-model="dataForm.fullName" placeholder="请输入名称" />
-      </el-form-item>
-      <el-form-item label="编码" prop="enCode">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="编码" prop="enCode">
         <el-input v-model="dataForm.enCode" placeholder="请输入编码" />
-      </el-form-item>
-      <el-form-item label="图标" prop="icon">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="图标" prop="icon">
         <el-row type="flex">
           <div style="flex:1;margin-right:10px">
             <el-input v-model="dataForm.icon" placeholder="请选择图标" readonly
@@ -24,15 +24,16 @@
           <el-color-picker v-model="dataForm.propertyJson.iconBackgroundColor"
             :predefine="['#188ae2', '#35b8e0', '#26bf8c','#f9c851','#ff5b5b', '#5b69bc', '#ff8acc', '#3b3e47','#282828' ]" />
         </el-row>
-      </el-form-item>
-      <el-form-item label="类型" prop="type">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="类型" prop="type">
         <el-select v-model="dataForm.type" placeholder="请选择类型" @change="changeMenuType" filterable>
           <el-option v-for="item in typeData" :key="item.enCode" :label="item.fullName"
             :value="item.enCode">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址" prop="urlAddress">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item v-if="dataForm.type == 2 || dataForm.type == 7" label="地址"
+        prop="urlAddress" :tip-label="dataForm.type == 7?'地址以http://或https://为开头':''">
         <el-input v-model="dataForm.urlAddress" placeholder="请输入地址">
           <template slot="prepend"
             v-if="dataForm.category ==='Web' && dataForm.type == 2">@/views/</template>
@@ -42,22 +43,22 @@
             <el-option label="_blank" value="_blank" />
           </el-select>
         </el-input>
-      </el-form-item>
-      <el-form-item v-if="[3,4,5,6,8].indexOf(dataForm.type)>-1" label="关联"
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item v-if="[3,4,5,6,8].indexOf(dataForm.type)>-1" label="关联"
         prop="propertyJson.moduleId">
         <JNPF-TreeSelect v-model="dataForm.propertyJson.moduleId" :options="tempData"
           placeholder="请选择" lastLevel @change="handleSelectModule" filterable />
-      </el-form-item>
-      <el-form-item label="排序" prop="sortCode">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="排序" prop="sortCode">
         <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
           controls-position="right" />
-      </el-form-item>
-      <el-form-item label="状态" prop="enabledMark">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="状态" prop="enabledMark">
         <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
-      </el-form-item>
-      <el-form-item label="说明" prop="bodyText">
+      </jnpf-form-tip-item>
+      <jnpf-form-tip-item label="说明" prop="bodyText">
         <el-input v-model="dataForm.description" type="textarea" :rows="4" />
-      </el-form-item>
+      </jnpf-form-tip-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">{{$t('common.cancelButton')}}</el-button>

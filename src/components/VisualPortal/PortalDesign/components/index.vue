@@ -241,13 +241,14 @@ export default {
                 break
               }
             }
-            if (e.jnpfKey == 'image' && option.styleType == 2) {
+            if ((e.jnpfKey == 'video' || e.jnpfKey == 'image') && option.styleType == 2) {
+              const val = e.jnpfKey == 'video' ? '视频' : '图片'
               if (!option.defaultValue) {
-                reject({ msg: `图片地址不能为空`, target: 1 })
+                reject({ msg: `${val}地址不能为空`, target: 1 })
                 break
               }
               if (!validURL(option.defaultValue)) {
-                reject({ msg: '请输入正确的图片地址', target: 1 })
+                reject({ msg: `请输入正确的${val}地址`, target: 1 })
                 break
               }
             }
