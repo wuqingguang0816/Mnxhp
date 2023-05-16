@@ -201,6 +201,10 @@ export default {
             const e = list[i]
             const option = e.option
             const card = e.card
+            if (card.linkType === '1' && !card.urlAddress) {
+              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
+              break
+            }
             if (card.linkType === '2') {
               if (!card.urlAddress) {
                 reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
@@ -210,6 +214,10 @@ export default {
                 reject({ msg: '请输入正确的链接地址', target: 1 })
                 break
               }
+            }
+            if (card.appLinkType === '1' && !card.appUrlAddress) {
+              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
+              break
             }
             if (card.appLinkType === '2') {
               if (!card.appUrlAddress) {
@@ -221,6 +229,10 @@ export default {
                 break
               }
             }
+            if (option.linkType === '1' && !option.urlAddress) {
+              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
+              break
+            }
             if (option.linkType === '2') {
               if (!option.urlAddress) {
                 reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
@@ -230,6 +242,10 @@ export default {
                 reject({ msg: '请输入正确的链接地址', target: 1 })
                 break
               }
+            }
+            if (option.appLinkType === '1' && !option.appUrlAddress) {
+              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
+              break
             }
             if (option.appLinkType === '2') {
               if (!option.appUrlAddress) {
@@ -244,7 +260,7 @@ export default {
             if ((e.jnpfKey == 'video' || e.jnpfKey == 'image') && option.styleType == 2) {
               const val = e.jnpfKey == 'video' ? '视频' : '图片'
               if (!option.defaultValue) {
-                reject({ msg: `${val}地址不能为空`, target: 1 })
+                reject({ msg: `${e.label}控件“${val}地址”属性不能为空`, target: 1 })
                 break
               }
               if (!validURL(option.defaultValue)) {
@@ -254,7 +270,7 @@ export default {
             }
             if (e.jnpfKey == 'iframe') {
               if (!option.defaultValue) {
-                reject({ msg: `链接地址不能为空`, target: 1 })
+                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
                 break
               }
               if (!validURL(option.defaultValue)) {
