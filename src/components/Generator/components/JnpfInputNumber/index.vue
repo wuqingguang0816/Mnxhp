@@ -18,7 +18,7 @@
         :controls="!controlsPosition?false:true" @change="change">
       </el-input-number>
     </template>
-    <p v-if="isAmountChinese" style="color:#C0C0C0">{{ amountChineseName }}</p>
+    <p v-if="isAmountChinese" class="amountChinese">{{ amountChineseName }}</p>
   </div>
 </template>
 <script>
@@ -212,5 +212,8 @@ export default {
   >>> .el-input__inner {
     border-radius: 4px !important;
   }
+}
+.amountChinese {
+  color: #c0c0c0;
 }
 </style>
