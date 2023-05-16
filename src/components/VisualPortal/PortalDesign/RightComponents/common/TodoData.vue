@@ -17,7 +17,7 @@
         <el-table-column prop="dataType" label="分类" width="250px">
           <template slot-scope="scope">
             <el-select v-if="scope.row.id!=2" filterable v-model="scope.row.category"
-              placeholder="请选择" multiple clearable>
+              placeholder="请选择分类" multiple clearable>
               <el-option v-for="item in categoryList" :key="item.id" :label="item.fullName"
                 :value="item.id" />
             </el-select>

@@ -20,9 +20,9 @@
                 :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 1">
                 <template slot-scope="scope">
                   <div>
+                    <span
+                      v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
                     <span>
-                      <span
-                        v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
                       {{ scope.row[item.filedName] }}
                     </span>
                   </div>
@@ -206,7 +206,7 @@ export default {
             o.creatorTime = this.jnpf.toDate(o.creatorTime)
             o.releaseTime = this.jnpf.toDate(o.releaseTime)
           })
-          this.list = this.activeData.option.columnData.filter(o => o.show || !o.show && o.id == 6)
+          this.list = this.activeData.option.columnData.filter(o => o.show || !o.show && o.id == 1)
         } else {
           this.list = this.activeData.option.rowData
         }

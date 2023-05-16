@@ -52,7 +52,15 @@
                 v-model="scope.row.iconColor" />
             </template>
           </el-table-column>
-          <el-table-column prop="dataLength" label="链接类型" width="160px">
+          <el-table-column prop="dataLength" width="160px">
+            <template slot="header">
+              <p>
+                链接类型
+                <el-tooltip content="地址以http://或https://为开头" placement="top">
+                  <a class="el-icon-question tooltip-question"></a>
+                </el-tooltip>
+              </p>
+            </template>
             <template slot-scope="scope">
               <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable filterable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
@@ -68,7 +76,7 @@
                 @change="getSelectVal(arguments,scope.$index)">
               </JNPF-TreeSelect>
               <el-input v-if="scope.row.linkType==2" v-model="scope.row.urlAddress"
-                placeholder="填写地址">
+                placeholder="请输入链接地址">
                 <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;"
                   v-if="showType == 'pc'">
                   <el-option label="_self" value="_self" />
@@ -103,7 +111,7 @@ import iconBox from '@/components/JNPF-iconBox'
 import Sortable from 'sortablejs'
 import { linkTypeList, appLinkTypeList, dataTypeList } from '../../components/config'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
-import idGenerator from 'element-resize-detector/src/id-generator'
+import { validURL } from '@/utils/validate'
 export default {
   components: { iconBox, InterfaceDialog },
   props: ['menuList', 'appMenuList', 'showType'],
@@ -143,7 +151,8 @@ export default {
         if (!element.icon) return this.$message.warning('请选择图标')
         if (!element.iconColor) return this.$message.warning('请选择图标颜色')
         if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
-        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('跳转链接不能为空')
+        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('链接地址不能为空')
+        if (element.linkType == 2 && !validURL(element.urlAddress)) return this.$message.warning('请输入正确的链接地址')
       }
       this.visible = false
       this.$emit('refresh', this.list)

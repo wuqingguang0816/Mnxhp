@@ -33,7 +33,8 @@
               <el-radio-button :label="1">外链</el-radio-button>
             </el-radio-group>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="链接地址" prop="customUrl">
+          <jnpf-form-tip-item label="链接地址" prop="customUrl"
+            :tip-label="dataForm.linkType == 1?'地址以http://或https://为开头':''">
             <el-input v-model="dataForm.customUrl" placeholder="链接地址">
               <template slot="prepend" v-if="dataForm.linkType===0">@/views/</template>
             </el-input>
@@ -72,9 +73,14 @@
 <script>
 import { getPortalInfo, Update, Create } from '@/api/onlineDev/portal'
 import PortalDesign from '@/components/VisualPortal/PortalDesign'
+import { validURL } from '@/utils/validate'
 export default {
   components: { PortalDesign },
   data() {
+    var validateUrl = (rule, value, callback) => {
+      if (this.dataForm.linkType == 1 && !validURL(value)) callback(new Error('请输入正确的链接地址'));
+      callback();
+    };
     return {
       visible: false,
       loading: false,
@@ -114,6 +120,7 @@ export default {
         ],
         customUrl: [
           { required: true, message: '链接地址不能为空', trigger: 'blur' },
+          { validator: validateUrl, trigger: 'blur' }
         ]
       }
     }

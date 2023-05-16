@@ -10,12 +10,12 @@
       </div>
       <el-radio-group v-model="showType" size="mini">
         <el-radio-button label="pc">
-          <el-tooltip effect="dark" content="pc" placement="top">
+          <el-tooltip effect="dark" content="PC" placement="top">
             <i class="icon-ym icon-ym-pc" />
           </el-tooltip>
         </el-radio-button>
         <el-radio-button label="app">
-          <el-tooltip effect="dark" content="app" placement="top">
+          <el-tooltip effect="dark" content="APP" placement="top">
             <i class="icon-ym icon-ym-mobile" />
           </el-tooltip>
         </el-radio-button>

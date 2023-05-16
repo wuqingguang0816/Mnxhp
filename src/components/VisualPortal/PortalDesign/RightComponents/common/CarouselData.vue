@@ -23,7 +23,7 @@
             <template slot-scope="scope">
               <single-img v-if="scope.row.dataType==1" v-model="scope.row.imageUrl" />
               <el-input v-else-if="scope.row.dataType==2" v-model="scope.row.imageUrl"
-                placeholder="图片地址" />
+                placeholder="请输入图片地址" />
               <interface-dialog v-else :value="scope.row.propsApi" :title="scope.row.propsName"
                 popupTitle="数据接口" @change="propsApiChange(arguments,scope.$index)" />
             </template>
@@ -33,7 +33,15 @@
               <el-input v-model="scope.row.textDefaultValue" placeholder="请输入名称" maxlength="50" />
             </template>
           </el-table-column>
-          <el-table-column prop="dataLength" label="链接类型" width="160px">
+          <el-table-column prop="dataLength" width="160px">
+            <template slot="header">
+              <p>
+                链接类型
+                <el-tooltip content="地址以http://或https://为开头" placement="top">
+                  <a class="el-icon-question tooltip-question"></a>
+                </el-tooltip>
+              </p>
+            </template>
             <template slot-scope="scope">
               <el-select v-model="scope.row.linkType" placeholder="请选择链接类型" clearable filterable>
                 <el-option v-for="(item, index) in linkTypeList" :key="index" :label="item.label"
@@ -49,7 +57,7 @@
                 @change="getSelectVal(arguments,scope.$index)">
               </JNPF-TreeSelect>
               <el-input v-if="scope.row.linkType==2" v-model="scope.row.urlAddress"
-                placeholder="填写地址">
+                placeholder="请输入链接地址">
                 <el-select slot="append" v-model="scope.row.linkTarget" style="width: 80px;"
                   v-if="showType == 'pc'">
                   <el-option label="_self" value="_self" />
@@ -84,6 +92,7 @@ import Sortable from 'sortablejs'
 import { linkTypeList, imageStyleList } from '../../components/config'
 import InterfaceDialog from '@/components/Process/PropPanel/InterfaceDialog'
 import singleImg from '@/components/Upload/SingleImg'
+import { validURL } from '@/utils/validate'
 export default {
   components: { iconBox, InterfaceDialog, singleImg },
   props: ['menuList', 'appMenuList', 'showType'],
@@ -116,10 +125,12 @@ export default {
     confirm() {
       for (let i = 0; i < this.list.length; i++) {
         const element = this.list[i];
-        if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请选择图片')
-        if (element.dataType == 3 && !element.propsApi) return this.$message.warning('请选择数据接口')
-        if (element.linkType == '1' && (!element.urlAddress && !element.moduleId)) return this.$message({ message: '请选择菜单', type: 'warning', duration: 1000 })
-        if (element.linkType == '2' && !element.urlAddress) return this.$message({ message: '跳转链接不能为空', type: 'warning', duration: 1000 })
+        if ((element.dataType == 1 || element.dataType == 2) && !element.imageUrl) return this.$message.warning(element.dataType == 2 ? '图片地址不能为空' : '请上传图片')
+        if (element.dataType == 2 && !validURL(element.imageUrl)) return this.$message.warning('请输入正确的图片地址')
+        if (element.dataType == 3 && !element.propsApi) return this.$message.warning('请选择请选择数据接口')
+        if (element.linkType == 1 && (!element.urlAddress && !element.moduleId)) return this.$message.warning('请选择菜单')
+        if (element.linkType == 2 && !element.urlAddress) return this.$message.warning('链接地址不能为空')
+        if (element.linkType == 2 && !validURL(element.urlAddress)) return this.$message.warning('请输入正确的链接地址')
       }
       this.visible = false
       this.$emit('refresh', this.list)

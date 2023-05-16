@@ -215,14 +215,14 @@ export const systemComponents = [{
     tableIndex: true,
     noticeCount: 5,
     tableFontSize: 14,
-    tableFontColor: '#666666',
+    tableFontColor: '#606266',
     noticeBgColor: '',
     noticeOddLineColor: '',
     noticeEventLineColor: '',
     describe: false,
     showText: true,
     textFontSize: 14,
-    textFontColor: '#303133',
+    textFontColor: '#606266',
     textFontWeight: false,
     appCount: 5,
     appColumnList: [{
@@ -231,7 +231,7 @@ export const systemComponents = [{
       fontSize: 12,
       classify: [],
       fontWeight: false,
-      fontColor: '#666666',
+      fontColor: '#303133',
       show: true,
       id:'1'
     }, {
@@ -247,7 +247,7 @@ export const systemComponents = [{
       filedName: 'content',
       fontSize: 12,
       fontWeight: false,
-      fontColor: '#666666',
+      fontColor: '#606266',
       show: true,
       id:'3'
     }, {
@@ -256,7 +256,7 @@ export const systemComponents = [{
       fontSize: 12,
       timeClassify: '创建时间',
       fontWeight: false,
-      fontColor: '#666666',
+      fontColor: '#606266',
       show: true,
       id:'4'
     }, {
@@ -265,7 +265,7 @@ export const systemComponents = [{
       fontSize: 12,
       userClassify: '2',
       fontWeight: false,
-      fontColor: '#666666',
+      fontColor: '#303133',
       show: true,
       id:'5'
     }
@@ -336,7 +336,7 @@ export const systemComponents = [{
         fontSize: 12,
         classify: [],
         fontWeight: false,
-        fontColor: '#666666',
+        fontColor: '#303133',
         show: true,
         id: '1'
       }, {
@@ -352,7 +352,7 @@ export const systemComponents = [{
         filedName: 'content',
         fontSize: 12,
         fontWeight: false,
-        fontColor: '#666666',
+        fontColor: '#606266',
         show: true,
         id: '3'
       }, {
@@ -361,7 +361,7 @@ export const systemComponents = [{
         fontSize: 12,
         timeClassify: '创建时间',
         fontWeight: false,
-        fontColor: '#666666',
+        fontColor: '#606266',
         show: true,
         id: '4'
       }],
