@@ -201,32 +201,34 @@ export default {
             const e = list[i]
             const option = e.option || {}
             const card = e.card || {}
-            if (card.linkType === '1' && !card.urlAddress) {
-              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
-              break
-            }
-            if (card.linkType === '2') {
-              if (!card.urlAddress) {
-                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+            if (card.cardRightBtn) {
+              if (card.linkType === '1' && !card.urlAddress) {
+                reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
                 break
               }
-              if (!validURL(card.urlAddress)) {
-                reject({ msg: '请输入正确的链接地址', target: 1 })
+              if (card.linkType === '2') {
+                if (!card.urlAddress) {
+                  reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                  break
+                }
+                if (!validURL(card.urlAddress)) {
+                  reject({ msg: '请输入正确的链接地址', target: 1 })
+                  break
+                }
+              }
+              if (card.appLinkType === '1' && !card.appUrlAddress) {
+                reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
                 break
               }
-            }
-            if (card.appLinkType === '1' && !card.appUrlAddress) {
-              reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
-              break
-            }
-            if (card.appLinkType === '2') {
-              if (!card.appUrlAddress) {
-                reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
-                break
-              }
-              if (!validURL(card.appUrlAddress)) {
-                reject({ msg: '请输入正确的链接地址', target: 1 })
-                break
+              if (card.appLinkType === '2') {
+                if (!card.appUrlAddress) {
+                  reject({ msg: `${e.label}控件“链接地址”属性不能为空`, target: 1 })
+                  break
+                }
+                if (!validURL(card.appUrlAddress)) {
+                  reject({ msg: '请输入正确的链接地址', target: 1 })
+                  break
+                }
               }
             }
             if (option.linkType === '1' && !option.urlAddress) {
