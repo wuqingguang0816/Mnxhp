@@ -199,8 +199,8 @@ export default {
         const loop = list => {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
-            const option = e.option
-            const card = e.card
+            const option = e.option || {}
+            const card = e.card || {}
             if (card.linkType === '1' && !card.urlAddress) {
               reject({ msg: `${e.label}控件“菜单名称”属性不能为空`, target: 1 })
               break
