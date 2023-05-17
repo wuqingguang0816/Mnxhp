@@ -5,24 +5,24 @@
       append-to-body>
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
         <el-form-item label="类型" prop="type">
-          <el-select v-model="dataForm.type" placeholder="请选择" clearable filterable>
+          <el-select v-model="dataForm.type" placeholder="请选择类型" clearable filterable>
             <el-option v-for="item in typeOptions" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="紧急程度" prop="urgent">
-          <el-select v-model="dataForm.urgent" placeholder="请选择" filterable>
+          <el-select v-model="dataForm.urgent" placeholder="请选择紧急程度" filterable>
             <el-option v-for="item in urgentList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="标题" prop="title">
-          <el-input v-model="dataForm.title" placeholder="标题" />
+          <el-input v-model="dataForm.title" placeholder="请输入标题" />
         </el-form-item>
         <el-form-item label="内容" prop="content">
-          <el-input v-model="dataForm.content" placeholder="内容" type="textarea" :rows="3" />
+          <el-input v-model="dataForm.content" placeholder="请输入内容" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="全天" prop="allDay">
           <el-switch v-model="dataForm.allDay" :active-value="1" :inactive-value="0"
@@ -74,7 +74,7 @@
             :predefine="['#188ae2', '#35b8e0', '#26bf8c','#f9c851','#ff5b5b', '#5b69bc', '#ff8acc', '#3b3e47','#282828' ]" />
         </el-form-item>
         <el-form-item label="提醒时间" prop="reminderTime">
-          <el-select v-model="dataForm.reminderTime" placeholder="请选择" filterable>
+          <el-select v-model="dataForm.reminderTime" placeholder="请选择提醒时间" filterable>
             <el-option v-for="item in reminderTimeList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
@@ -82,7 +82,7 @@
         </el-form-item>
         <template v-if="dataForm.reminderTime!=-2">
           <el-form-item label="提醒方式" prop="reminderType">
-            <el-select v-model="dataForm.reminderType" placeholder="请选择" filterable>
+            <el-select v-model="dataForm.reminderType" placeholder="请选择提醒方式" filterable>
               <el-option v-for="item in remindList" :key="item.id" :label="item.fullName"
                 :value="item.id">
               </el-option>
@@ -94,14 +94,14 @@
           </el-form-item>
         </template>
         <el-form-item label="重复提醒" prop="repetition">
-          <el-select v-model="dataForm.repetition" placeholder="请选择" filterable>
+          <el-select v-model="dataForm.repetition" placeholder="请选择重复提醒" filterable>
             <el-option v-for="item in repeatReminderList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"'>
-          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="选择日期时间" clearable
+          <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="请选择结束重复" clearable
             format="yyyy-MM-dd" value-format="timestamp">
           </el-date-picker>
         </el-form-item>
@@ -153,7 +153,7 @@ export default {
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('结束时间不能为空'));
+        callback(new Error('请选择结束时间'));
       } else {
         if (this.dataForm.startDay == value) {
           if (this.dataForm.allDay == 0 && (this.dataForm.startTime > this.dataForm.endTime)) {
@@ -207,22 +207,22 @@ export default {
           { required: true, message: '请选择时长', trigger: 'change' }
         ],
         startDay: [
-          { required: true, message: '起始时间不能为空', trigger: 'change' }
+          { required: true, message: '请选择开始时间', trigger: 'change' }
         ],
         endDay: [
           { required: true, validator: validatePass, trigger: 'change' }
         ],
         repeatTime: [
-          { required: true, message: '结束重复时间不能为空', trigger: 'change' }
+          { required: true, message: '请选择结束重复', trigger: 'change' }
         ],
         send: [
-          { required: true, message: '发送配置不能为空', trigger: 'change' }
+          { required: true, message: '请选择发送配置', trigger: 'change' }
         ],
         reminderType: [
-          { required: true, message: '提醒方式不能为空', trigger: 'change' }
+          { required: true, message: '请选择提醒方式', trigger: 'change' }
         ],
         startTime: [
-          { required: true, message: '提醒方式不能为空', trigger: 'change' }
+          { required: true, message: '请选择提醒方式', trigger: 'change' }
         ],
       },
       urgentList: [
@@ -411,6 +411,7 @@ export default {
       if (val) this.dataForm.endDay = this.dataForm.startDay
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate('duration')
+
       })
     },
     onMsgChange(id, item) {
@@ -431,17 +432,13 @@ export default {
         if (valid) {
           if (this.dataForm.allDay == 0) {
             if (!this.dataForm.startTime) return this.$message({ message: '开始时间不能为空', type: 'error' })
-            if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束日期不能为空', type: 'error' })
-          }
-          if (this.dataForm.allDay == 1) {
-            if (this.dataForm.startDay > this.dataForm.endDay) {
-              return this.$message({ message: '开始时间与结束结束重复', type: 'error' })
-            }
+            if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束时间不能为空', type: 'error' })
           }
           if (this.dataForm.duration != -1 && this.dataForm.allDay == 0 && (this.dataForm.startDay == this.dataForm.endDay)) {
-            if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束结束重复', type: 'error' })
+            if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束时间重复', type: 'error' })
+            if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束时间不能为空', type: 'error' })
           }
-          if (this.dataForm.repetition != 1 && (this.dataForm.startDay > this.dataForm.repeatTime)) return this.$message({ message: '结束重复时间必须晚于开始时间', type: 'error' })
+          if (this.dataForm.repetition != 1 && (this.dataForm.startDay > this.dataForm.repeatTime)) return this.$message({ message: '结束重复必须晚于开始时间', type: 'error' })
           const formMethod = this.dataForm.id ? ScheduleUpdate : ScheduleCreate
           if (this.dataForm.id && this.repetitionType) {
             if (!this.updateVisible) {
