@@ -1,6 +1,6 @@
 import { mapGetters } from "vuex"
 import { BillNumber } from '@/api/system/billRule'
-
+const includeList = ['crmOrder', 'salesOrder', 'leaveApply']
 export default {
   computed: {
     ...mapGetters(['userInfo']),
@@ -34,7 +34,7 @@ export default {
           } else {
             this.dataForm = dataForm
           }
-          if (this.dataForm.fileJson) {
+          if (includeList.includes(data.formEnCode)) {
             this.fileList = JSON.parse(this.dataForm.fileJson)
           }
           this.$emit('setPageLoad')
@@ -71,7 +71,7 @@ export default {
           } else {
             dataForm = this.dataForm
           }
-          if ('fileJson' in dataForm) {
+          if (includeList.includes(this.setting.formEnCode)) {
             dataForm.fileJson = JSON.stringify(this.fileList)
           }
           if (eventType === 'save' || eventType === 'submit') {
