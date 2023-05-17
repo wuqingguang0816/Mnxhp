@@ -163,9 +163,9 @@ export function getDataChange(modelId, id) {
   })
 }
 // 获取表单主表属性列表
-export function getFormDataFields(modelId) {
+export function getFormDataFields(modelId, filterType = 0) {
   return request({
-    url: `/api/visualdev/Base/${modelId}/FormDataFields`,
+    url: `/api/visualdev/Base/${modelId}/FormDataFields?filterType=${filterType}}`,
     method: 'GET'
   })
 }
