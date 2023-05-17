@@ -91,6 +91,7 @@ export default {
       this.dataForm.id = id || 0
       this.groupId = groupId || 0
       this.loading = true
+      this.checked = 1
       this.$nextTick(() => {
         ScheduleDetail(this.groupId, this.dataForm.id).then(res => {
           this.dataForm = res.data || {}
@@ -106,8 +107,8 @@ export default {
         if (!this.delVisible) {
           this.delVisible = true
         } else {
+          if (!this.checked) return this.$message.error('请选择删除日程')
           this.btnLoading = true
-          if (!this.checked) return this.$message('请选择日程')
           ScheduleDelete(this.dataForm.id, this.checked).then(res => {
             this.$message({
               message: res.msg,
