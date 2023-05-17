@@ -270,7 +270,7 @@ export default {
     },
     getFieldOptions() {
       if (!this.dataForm.modelId) return
-      getFormDataFields(this.dataForm.modelId).then(res => {
+      getFormDataFields(this.dataForm.modelId, 1).then(res => {
         this.fieldOptions = res.data.list
       })
     },
