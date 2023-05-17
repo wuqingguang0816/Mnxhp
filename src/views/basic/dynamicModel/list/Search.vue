@@ -4,7 +4,7 @@
       <el-col :span="6" v-for="(item, index) in searchList" :key="index">
         <el-form-item :label="item.__config__.label" v-show="index<3 || (index>=3 && showAll)">
           <template v-if="useInputList.indexOf(item.__config__.jnpfKey)>-1">
-            <el-input v-model="item.value" :placeholder="item.__config__.label" clearable
+            <el-input v-model="item.value" :placeholder="'请输入'+item.__config__.label" clearable
               class="item">
             </el-input>
           </template>
@@ -106,7 +106,7 @@
                 :multiple="item.searchMultiple" />
             </template>
             <template v-if="item.__config__.jnpfKey==='autoComplete'">
-              <JnpfAutoComplete v-model="item.value" :placeholder="item.__config__.label"
+              <JnpfAutoComplete v-model="item.value" :placeholder="'请输入'+item.__config__.label"
                 :total="item.total" clearable class="item" :relationField="item.relationField"
                 :templateJson="item.templateJson" :interfaceId="item.interfaceId" />
             </template>
