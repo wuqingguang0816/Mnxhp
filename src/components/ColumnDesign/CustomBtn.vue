@@ -213,7 +213,7 @@ export default {
   computed: {
     formFieldsOptions() {
       if (this.webType == 4) return this.columnOptions
-      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
+      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'createUser', 'createTime', 'modifyUser', 'modifyTime']
       let list = []
       const loop = (data, parent) => {
         if (!data) return
