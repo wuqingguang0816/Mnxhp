@@ -37,7 +37,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.jnpfKey === 'popupSelect' && data.__vModel__) {
+          if (data.__config__.jnpfKey === 'popupSelect' && data.__vModel__ && (!this.activeData.__config__.isSubTable || (this.activeData.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable))) {
             list.push(data)
           }
         }

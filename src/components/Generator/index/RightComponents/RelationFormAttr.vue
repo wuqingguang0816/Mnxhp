@@ -43,7 +43,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__ && (!data.__config__.isSubTable || (data.__config__.isSubTable && this.activeData.__config__.relationTable == data.__config__.relationTable))) {
+          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__ && (!this.activeData.__config__.isSubTable || (this.activeData.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable))) {
             list.push(data)
           }
         }
