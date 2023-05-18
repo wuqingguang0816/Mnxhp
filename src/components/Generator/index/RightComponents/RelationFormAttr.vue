@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     getOptions() {
+
       const drawingList = getDrawingList() || []
       let list = []
       const loop = (data, parent) => {
@@ -43,7 +44,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__ && (!this.activeData.__config__.isSubTable || (this.activeData.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable))) {
+          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__ && this.getRelationForm(data)) {
             list.push(data)
           }
         }
@@ -64,6 +65,12 @@ export default {
       getFormDataFields(item.modelId).then(res => {
         this.fieldOptions = res.data.list
       })
+    },
+    getRelationForm(data) {
+      const isSubTable = this.activeData.__config__.isSubTable
+      if (!isSubTable && !data.__config__.isSubTable) return true
+      if (isSubTable && data.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable) return true
+      return false
     },
     onRelationFieldChange(val) {
       this.activeData.showField = ''
