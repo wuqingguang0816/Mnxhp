@@ -1060,7 +1060,7 @@ export default {
 <style lang="scss" scoped>
 .flow-form-main {
   .JNPF-el_tabs {
-    overflow: hidden;
+    height: calc(100% - 62px);
   }
 }
 
