@@ -233,7 +233,7 @@ export const systemComponents = [{
       fontWeight: false,
       fontColor: '#303133',
       show: true,
-      id:'1'
+      id: '1'
     }, {
       fullName: '标题',
       filedName: 'fullName',
@@ -241,7 +241,7 @@ export const systemComponents = [{
       fontWeight: false,
       fontColor: '#303133',
       show: true,
-      id:'2'
+      id: '2'
     }, {
       fullName: '摘要',
       filedName: 'content',
@@ -249,7 +249,7 @@ export const systemComponents = [{
       fontWeight: false,
       fontColor: '#606266',
       show: true,
-      id:'3'
+      id: '3'
     }, {
       fullName: '时间',
       filedName: 'time',
@@ -258,7 +258,7 @@ export const systemComponents = [{
       fontWeight: false,
       fontColor: '#606266',
       show: true,
-      id:'4'
+      id: '4'
     }, {
       fullName: '人员',
       filedName: 'user',
@@ -267,7 +267,7 @@ export const systemComponents = [{
       fontWeight: false,
       fontColor: '#303133',
       show: true,
-      id:'5'
+      id: '5'
     }
     ],
     columnData: [{
@@ -718,7 +718,7 @@ export const basicComponents = [{
     nameFontWeight: false,
     appCount: 5,
     appColumnList: [{
-      fullName: '姓名',
+      fullName: '部门',
       filedName: 'comInputField102',
     },
     {
@@ -736,7 +736,7 @@ export const basicComponents = [{
       id: '1'
     },
     {
-      fullName: '姓名',
+      fullName: '部门',
       filedName: 'comInputField102',
       sortable: false,
       fixed: "none",

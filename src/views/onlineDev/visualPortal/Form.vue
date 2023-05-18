@@ -103,7 +103,6 @@ export default {
       dataRule: {
         fullName: [
           { required: true, message: '门户名称不能为空', trigger: 'blur' },
-          { validator: this.formValidate('fullName'), trigger: 'blur' },
         ],
         enCode: [
           { required: true, message: '门户编码不能为空', trigger: 'blur' },
