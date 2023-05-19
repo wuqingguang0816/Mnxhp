@@ -22,15 +22,11 @@
       </div>
     </div>
     <div v-if="showContainer">
-      <!-- 主表使用 -->
-      <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
-      <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
-      <!-- 子表使用 -->
       <div ref="barcodewrap"></div>
       <div ref="qrcodewrap"></div>
     </div>
     <div class="main" ref="tsPrint" v-loading="loading">
-      <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
+      <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" ></div>
     </div>
   </el-dialog>
 </template>
@@ -101,13 +97,13 @@ export default {
               this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
             }
             await this.handleData(element, domCurrent);
-            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "");
+            this.$set(this.batchData,index,this.printTemplate.replace(/\{(.*?)\}/g, ""))
             if (index == array.length - 1) {
               this.showContainer = false
             }
           }
-          this.loading = false;
         });
+        this.loading = false;
       });
     },
     print() {
@@ -162,7 +158,6 @@ export default {
     width: 776px;
     height: 100%;
     overflow: auto;
-    color: #000;
   }
 }
 .header-page {

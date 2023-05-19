@@ -213,7 +213,7 @@ export default {
   computed: {
     formFieldsOptions() {
       if (this.webType == 4) return this.columnOptions
-      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'modifyUser', 'modifyTime']
+      const noAllowList = ['table', 'uploadImg', 'uploadFz', 'billRule', 'relationForm', 'popupSelect', 'createUser', 'createTime', 'modifyUser', 'modifyTime']
       let list = []
       const loop = (data, parent) => {
         if (!data) return
@@ -270,7 +270,7 @@ export default {
     },
     getFieldOptions() {
       if (!this.dataForm.modelId) return
-      getFormDataFields(this.dataForm.modelId).then(res => {
+      getFormDataFields(this.dataForm.modelId, 1).then(res => {
         this.fieldOptions = res.data.list
       })
     },

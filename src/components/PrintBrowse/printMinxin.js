@@ -49,6 +49,7 @@ const printOptionApi = {
           this.$nextTick(() => {
             this.getJsBarcode(element.value, `#barcode${id}`, element.width, element.height)
             let dom = document.querySelector(`#barcode${id}`)
+            if (!dom) return
             this.printTemplate = this.printTemplate.replace(element.replaceStr, dom.outerHTML)
           })
         }
@@ -114,12 +115,16 @@ const printOptionApi = {
           this.replaceRemainData(domCurrent)
           // 表格
           await this.subDo(domCurrent)
-          // 通用          
-          this.replaceImg()
+
+          this.replaceRemainData(domCurrent)
+
           this.replaceSysValue()
-          // 替换主表二维码条码
-          this.replaceBarCodeMain()
-          this.replaceQrCodeMain()
+          this.replaceImg()
+
+          this.replaceQrCode()
+          this.replaceBarCode()
+          this.qrbarReplace()
+
           const pageBreak = '<p style="page-break-after:always;"></p>'
           this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
           resolve(this.printTemplate)
@@ -186,66 +191,6 @@ const printOptionApi = {
             this.printTemplate = this.printTemplate.replace(element, this.getThousands(data, place))
           }
         }
-      }
-    },
-    replaceBarCodeMain(childItem) {
-      let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
-      let imgList = []
-      if (childItem) {
-        const element = childItem.innerHTML
-        imgList = element.match(imgRegular)
-      } else {
-        imgList = this.printTemplate.match(imgRegular)
-      }
-      if (imgList && imgList.length) {
-        for (var i = 0; i < imgList.length; i++) {
-          const item = imgList[i]
-          if (this.getIsChildren(item) && !childItem) continue
-          const width = this.getWidthHeight(item)
-          const height = this.getWidthHeight(item, 'height')
-          const value = this.getValue(item)
-          const id = this.jnpf.idGenerator()
-          const template = `<img width='${width}' height='${height}'  id='barcode${id}'/>`
-          // 在页面中设置这个dom
-          this.barcodeId = `barcode${id}`
-          this.width = `${width}`
-          this.height = `${height}`
-          this.$nextTick(() => {
-            this.getJsBarcode(value, '#barcode' + id, width, height)
-            // 获取节点内容替换
-            let dom = document.querySelector('#barcode' + id)
-            this.printTemplate = this.printTemplate.replace(item, dom.outerHTML)
-          })
-        }
-      }
-    },
-    replaceQrCodeMain(childItem) {
-      let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
-      let imgList = []
-      if (childItem) {
-        const element = childItem.innerHTML
-        imgList = element.match(imgRegular)
-      } else {
-        imgList = this.printTemplate.match(imgRegular)
-      }
-      if (imgList && imgList.length) {
-        for (var i = 0; i < imgList.length; i++) {
-          const item = imgList[i]
-          if (this.getIsChildren(item) && !childItem) continue
-          const width = this.getWidthHeight(item)
-          const height = this.getWidthHeight(item, 'height')
-          const value = this.getValue(item)
-          const id = this.jnpf.idGenerator()
-          // 在页面中设置这个dom
-          this.qrcodeId = `qrCode${id}`
-          this.width = `${width}`
-          this.height = `${height}`
-          this.$nextTick(() => {
-            let base64Url = this.getJsQrcode(value, 'qrCode' + id, width, height)
-            this.printTemplate = this.printTemplate.replace(item, `<img id='qrCode${id}'  width='${width}' height='${height}' src='${base64Url}'/>`)
-          })
-        }
-
       }
     },
     isChildTable(cells) {
@@ -441,7 +386,6 @@ const printOptionApi = {
           const height = this.getWidthHeight(item, 'height')
           const value = this.getValue(item)
           const id = this.jnpf.idGenerator()
-          const template = `<span id='qrCode${id}'/>`
           // 先收集码生成的信息
           let info = {
             replaceStr: item,
@@ -505,7 +449,9 @@ const printOptionApi = {
     },
     getJsQrcode(value, id, width, height) {
       if (!value) return
-      let qrcode = new QRCode(document.getElementById(id), {
+      let dom = document.getElementById(id)
+      if (!dom) return
+      let qrcode = new QRCode(dom, {
         width: width ? width : 265,
         height: height ? height : 265, // 高度
         text: value, // 二维码内容

@@ -14,10 +14,6 @@
       </div>
     </div>
     <div v-if="showContainer">
-      <!-- 主表使用 -->
-      <img :width="width" :height="height" :id="barcodeId" ref="barContainer" />
-      <img :width="width" :height="height" :id="qrcodeId" ref="qrContainer" />
-      <!-- 子表使用 -->
       <div ref="barcodewrap"></div>
       <div ref="qrcodewrap"></div>
     </div>

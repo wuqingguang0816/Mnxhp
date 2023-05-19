@@ -72,8 +72,7 @@
             <div v-html="item.__config__.defaultValue"></div>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='relationForm'">
-            <el-link :underline="false" @click.native="toDetail(item)" type="primary">
-              {{ item.name }}</el-link>
+            <a @click="toDetail(item)" style="color:#1890ff">{{ item.name }}</a>
           </template>
           <template v-else-if="item.__config__.jnpfKey==='popupSelect'">
             <p>{{ item.name }}</p>
