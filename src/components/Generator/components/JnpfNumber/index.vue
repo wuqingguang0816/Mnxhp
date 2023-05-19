@@ -1,10 +1,10 @@
 <template>
   <div>
-    <template>
+    <p class="jnpf-detail-text">
       <span v-if="addonBefore" class="addonBefore">{{ addonBefore }} </span>
       <span class="innerValue">{{ innerValue }}</span>
       <span v-if="addonAfter" class="addonAfter">{{ addonAfter }}</span>
-    </template>
+    </p>
     <p v-if="isAmountChinese" class="input-color">{{ amountChineseName }}</p>
   </div>
 </template>

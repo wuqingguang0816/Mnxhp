@@ -5,7 +5,7 @@
       <el-input v-model="innerValue" v-else readonly placeholder="用于展示计算结果，且数据同时会保存入库" />
     </template>
     <p v-else class="jnpf-detail-text">{{innerValue}}</p>
-    <p v-if="isAmountChinese" class="amountChinese">{{ amountChineseName }}</p>
+    <p v-if="isAmountChinese" class="isAmountChinese">{{ amountChineseName }}</p>
   </div>
 </template>
 <script>
@@ -109,7 +109,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.amountChinese {
+.isAmountChinese {
   color: #c0c0c0;
 }
 </style>
