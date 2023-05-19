@@ -163,7 +163,7 @@ export default {
       if (this.showType === 'app') {
         item = { fullName: "", filedName: "", id: this.jnpf.idGenerator() }
       } else {
-        item = { fullName: "", filedName: "", sortable: false, fixed: "none", align: 'left', width: 0, id: this.jnpf.idGenerator() }
+        item = { fullName: "", filedName: "", sortable: false, fixed: "none", align: 'center', width: 0, id: this.jnpf.idGenerator() }
       }
       this.list.push(item)
     },
