@@ -132,6 +132,10 @@ export default {
       type: String,
       default: '接口模板'
     },
+    hasPage: {
+      type: Number,
+      default: 0
+    }
   },
   model: {
     prop: 'value',
@@ -182,7 +186,8 @@ export default {
       const query = {
         ...this.listQuery,
         ...this.query,
-        dataType: this.dataType === 0 ? this.query.dataType : this.dataType
+        dataType: this.dataType === 0 ? this.query.dataType : this.dataType,
+        hasPage: this.hasPage
       }
       getDataInterfaceSelectorList(query).then(res => {
         this.list = res.data.list.map(o => {
