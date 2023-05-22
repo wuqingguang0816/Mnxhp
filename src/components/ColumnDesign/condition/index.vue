@@ -76,7 +76,7 @@
             <div v-if="item.fieldValueType === 2">
               <template v-if="item.jnpfKey === 'numInput'">
                 <NumRange v-model="item.fieldValue" :disabled="item.disabled"
-                  v-if="item.symbol == 'between'"></NumRange>
+                  v-if="item.symbol == 'between'" :precision="item.precision"></NumRange>
                 <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
                   :disabled="item.disabled" :precision="item.precision" :controls="false"
                   controls-position="right" />
