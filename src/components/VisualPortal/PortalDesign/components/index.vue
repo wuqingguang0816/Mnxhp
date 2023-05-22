@@ -280,9 +280,7 @@ export default {
                 break
               }
             }
-            if (option && option.children && Array.isArray(option.children)) {
-              loop(option.children)
-            }
+            if (e.children && Array.isArray(e.children)) loop(e.children)
           }
         }
         loop(this.layout)
