@@ -404,6 +404,16 @@ const defaultEchoParameters = [
   { fieldName: 'showKey', field: '' },
   { fieldName: 'showValue', field: '' },
 ]
+const defaultJson = {
+  countSql: "",
+  echoSql: "",
+  echoPath: "",
+  echoReqMethod: "6",
+  echoReqParameters: [],
+  echoReqHeaders: [],
+  pageParameters: defaultPageParameters,
+  echoParameters: defaultEchoParameters
+}
 
 export default {
   components: {
@@ -444,16 +454,7 @@ export default {
         dataProcessing: '',
         requestParameters: '',
         query: '',
-        propertyJson: {
-          countSql: "",
-          echoSql: "",
-          echoPath: "",
-          echoReqMethod: "6",
-          echoReqParameters: [],
-          echoReqHeaders: [],
-          pageParameters: [],
-          echoParameters: []
-        }
+        propertyJson: defaultJson
       },
       restaurants: [
         { "value": "Postman-Token" },
@@ -559,16 +560,8 @@ export default {
     },
     getFormData() {
       getDataInterfaceInfo(this.dataForm.id).then(res => {
-        if (!res.data.propertyJson) res.data.propertyJson = {
-          countSql: "",
-          echoSql: "",
-          echoPath: "",
-          echoReqMethod: "6",
-          echoReqParameters: [],
-          echoReqHeaders: [],
-          pageParameters: defaultPageParameters,
-          echoParameters: defaultEchoParameters
-        }
+        if (!res.data.propertyJson) res.data.propertyJson = JSON.stringify(defaultJson)
+        res.data.propertyJson = JSON.parse(res.data.propertyJson)
         this.dataForm = res.data
         this.getTableList(this.dataForm.dbLinkId)
         this.dataForm.query = res.data.query
@@ -622,6 +615,7 @@ export default {
     handlePrevStep() {
       this.active -= 1
       if (this.active == 0) this.$refs['dataForm'].clearValidate()
+      if (this.dataForm.dataType === 1) this.setSqlData()
     },
     handleNextStep() {
       this.$refs['dataForm'].validate(valid => {
@@ -634,14 +628,7 @@ export default {
           }
           // SQL操作
           if (this.dataForm.dataType === 1) {
-            if (this.active == 1) this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: this.dataForm.query, options: this.sqlOptions })
-            if (this.dataForm.checkType && (this.active === 2 || this.active === 3)) {
-              const propertyJson = this.dataForm.propertyJson || {}
-              const sql = propertyJson[this.active === 2 ? 'countSql' : 'echoSql'] || ''
-              this.$nextTick(() => {
-                this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: sql, options: this.sqlOptions })
-              })
-            }
+            this.setSqlData()
             if (this.active === this.stepList.length - 1) this.setDataProcessing()
           }
           // API操作
@@ -649,6 +636,15 @@ export default {
             if (this.active === 1 || (this.active === 2 && this.dataForm.checkType)) this.$nextTick(() => this.setSort())
             if (this.active === this.stepList.length - 1) this.setDataProcessing()
           }
+        }
+      })
+    },
+    setSqlData() {
+      this.$nextTick(() => {
+        if (this.active == 1) this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: this.dataForm.query, options: this.sqlOptions })
+        if (this.dataForm.checkType && (this.active === 2 || this.active === 3)) {
+          const sql = this.dataForm.propertyJson[this.active === 2 ? 'countSql' : 'echoSql'] || ''
+          this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: sql, options: this.sqlOptions })
         }
       })
     },
@@ -750,8 +746,10 @@ export default {
       this.dataForm.propertyJson.echoReqParameters = this.echoReqParameters || []
       this.dataForm.propertyJson.pageParameters = this.pageParameters
       this.dataForm.propertyJson.echoParameters = this.echoParameters
+      let query = JSON.parse(JSON.stringify(this.dataForm))
+      query.propertyJson = JSON.stringify(query.propertyJson)
       const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
-      formMethod(this.dataForm).then(res => {
+      formMethod(query).then(res => {
         this.$message({
           message: res.msg,
           type: 'success',
