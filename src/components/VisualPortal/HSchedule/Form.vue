@@ -155,6 +155,8 @@ export default {
       if (value === '') {
         callback(new Error('请选择结束时间'));
       } else {
+        let startDay = this.jnpf.toDate(this.dataForm.startDay, "yyyy-MM-dd 00:00:00")
+        this.dataForm.startDay = new Date(startDay).getTime()
         let endDay = this.jnpf.toDate(value, "yyyy-MM-dd 00:00:00")
         value = new Date(endDay).getTime()
         if (this.dataForm.startDay == value) {
