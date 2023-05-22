@@ -32,7 +32,8 @@
         <el-form-item label="开始时间" prop="startDay">
           <el-col :span="14">
             <el-date-picker v-model="dataForm.startDay" type="date" placeholder="请选择开始日期"
-              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
+              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp"
+              @change="startDayChange">
             </el-date-picker>
           </el-col>
           <el-col :span="10">
@@ -52,15 +53,14 @@
         <el-form-item label="结束时间" prop="endDay" v-if='dataForm.duration==-1||dataForm.allDay'>
           <el-col :span="14">
             <el-date-picker v-model="dataForm.endDay" type="date" placeholder="请选择结束日期"
-              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
+              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp"
+              @change="endDayChange">
             </el-date-picker>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="" prop="endTime">
-              <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
+            <el-time-select placeholder="请选择结束时间" v-model="dataForm.endTime" :picker-options="{
        start: '00:00',step: '00:05',end: '23:55'}" class="jnpf-el-row" v-if="dataForm.allDay==0">
-              </el-time-select>
-            </el-form-item>
+            </el-time-select>
           </el-col>
         </el-form-item>
         <el-form-item label="创建人" prop="creatorUserId">
@@ -155,6 +155,8 @@ export default {
       if (value === '') {
         callback(new Error('请选择结束时间'));
       } else {
+        let endDay = this.jnpf.toDate(value, "yyyy-MM-dd 00:00:00")
+        value = new Date(endDay).getTime()
         if (this.dataForm.startDay == value) {
           if (this.dataForm.allDay == 0 && (this.dataForm.startTime > this.dataForm.endTime)) {
             callback(new Error('结束时间必须晚于开始时间'));
@@ -391,6 +393,10 @@ export default {
           this.dataForm.endTime = (Number(time) + 2) < 10 ? '0' + (Number(time) + 2) + ':00' : (Number(time) + 2) + ':00'
         }
       })
+    },
+    startDayChange(val) {
+      let startDay = this.jnpf.toDate(val, "yyyy-MM-dd 00:00:00")
+      this.dataForm.startDay = new Date(startDay).getTime()
     },
     durationChange() {
       let arr = this.dataForm.startTime.split(":")

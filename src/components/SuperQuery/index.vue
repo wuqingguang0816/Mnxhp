@@ -46,7 +46,7 @@
                   <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
                 </div>
                 <template v-else-if="item.jnpfKey==='time'">
-                  <el-time-picker v-model="item.fieldValue" style="width:100%"
+                  <el-time-picker v-model="item.fieldValue" style="width:100%" :key="key2"
                     :picker-options="item.attr['picker-options']" placeholder="请选择" clearable
                     :value-format="item.attr['value-format']" :format="item.attr.format">
                   </el-time-picker>
@@ -228,6 +228,7 @@ export default {
         jnpfKey: '',
         attr: {}
       }],
+      key2: +new Date(),
       planList: [],
       fieldOptions: [],
       symbolOptions: [
