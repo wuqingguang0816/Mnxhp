@@ -247,9 +247,9 @@ export default {
       List(query).then(res => {
         this.calendarOptions.events = res.data.list.map(o => {
           let allDay = false
-          let startDay = this.jnpf.toDate(o.startDay, "yyyy-MM-dd 00:00:00")
-          let endDay = 0
-          if (o.endDay) endDay = this.jnpf.toDate(o.endDay, "yyyy-MM-dd 00:00:00")
+          let startDay = this.jnpf.toDate(o.startDay, "yyyy-MM-dd")
+          let endDay = ''
+          if (o.endDay) endDay = this.jnpf.toDate(o.endDay, "yyyy-MM-dd")
           allDay = o.allDay && startDay != endDay ? false : o.allDay
           return {
             id: o.id,
