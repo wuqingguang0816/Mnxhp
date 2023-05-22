@@ -2,24 +2,19 @@
   <div class="JNPF-preview-main flow-form-main">
     <div class="JNPF-common-page-header">
       <el-page-header @back="goBack" content="" />
-      <el-steps :active="active" finish-status="success" simple
-        :class="dataForm.dataType!=2?'elsteps':'steps'">
-        <el-step title="基本信息"></el-step>
-        <el-step title="数据配置"></el-step>
-        <el-step v-if="dataForm.dataType!=2" title="数据处理"></el-step>
+      <el-steps :active="active" finish-status="success" simple class="steps" :key="key">
+        <el-step v-for="item in stepList" :key="item" :title="item"></el-step>
       </el-steps>
       <div class="options">
-        <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}
-        </el-button>
-        <el-button :disabled="dataForm.dataType!=2?active >= 2:active >= 1" @click="handleNextStep">
-          {{$t('common.next')}}
-        </el-button>
-        <el-button type="primary" :loading="btnLoading"
-          :disabled="dataForm.dataType!=2?active < 2:active < 1" @click="dataFormSubmit()">
-          {{$t('common.confirmButton')}}</el-button>
+        <el-button :disabled="active <= 0" @click="handlePrevStep">{{$t('common.prev')}}</el-button>
+        <el-button :disabled="active >= stepList.length-1"
+          @click="handleNextStep">{{$t('common.next')}}</el-button>
+        <el-button type="primary" :loading="btnLoading" :disabled="active < stepList.length-1"
+          @click="dataFormSubmit()">{{$t('common.confirmButton')}}</el-button>
         <el-button @click="goBack">{{$t('common.cancelButton')}}</el-button>
       </div>
     </div>
+    <!-- 基本信息 -->
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
       label-width="100px" v-if="active === 0">
       <el-row>
@@ -33,9 +28,6 @@
           <el-form-item label="分类" prop="categoryId">
             <JNPF-TreeSelect v-model="dataForm.categoryId" :options="selectData" placeholder="选择分类"
               clearable />
-          </el-form-item>
-          <el-form-item prop="ipAddress" v-if="dataForm.checkType===2">
-            <el-input v-model="dataForm.ipAddress" placeholder="请输入域名，多个域名用逗号隔开" />
           </el-form-item>
           <el-form-item label="类型" prop="dataType">
             <el-radio-group v-model="dataForm.dataType" @change="onDataTypeChange">
@@ -59,13 +51,18 @@
           <el-form-item label="状态" prop="enabledMark">
             <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" />
           </el-form-item>
+          <el-form-item label="分页" prop="checkType">
+            <el-switch v-model="dataForm.checkType" :active-value="1" :inactive-value="0" />
+            <span class="page-explain" @click="handleShowPageExplain">分页使用说明</span>
+          </el-form-item>
           <el-form-item label="说明" prop="description">
             <el-input v-model="dataForm.description" type="textarea" :rows="3" />
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div class="config" v-if="active === 1 && dataForm.dataType === 1">
+    <!-- sql语句 -->
+    <div class="config" v-if="getShowSqlBox()">
       <div class="tableData">
         <el-select v-model="dataForm.dbLinkId" filterable placeholder="选择数据库" style="width: 100%"
           @change="handleSelectTable">
@@ -99,8 +96,7 @@
                     <el-dropdown-item v-for="(item,index) in sysVariableList" :key="index">
                       <div @click="handleSysNodeClick(item.value)">
                         <span>{{ item.value }}</span>
-                        <span
-                          style="float: right; color: #8492a6;padding-left: 10px;">{{ item.tips }}</span>
+                        <span class="tips">{{ item.tips }}</span>
                       </div>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -110,9 +106,21 @@
             <div class="list">
               <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px"
                 style="padding-top: 0px;">
-                <el-form-item label-width="0" prop="query">
+                <el-form-item label-width="0" prop="query" v-if="active===1">
                   <div class="sql-box">
                     <SQLEditor v-model="dataForm.query" :options="sqlOptions" ref="SQLEditorRef" />
+                  </div>
+                </el-form-item>
+                <el-form-item label-width="0" prop="propertyJson.countSql" v-if="active===2">
+                  <div class="sql-box">
+                    <SQLEditor v-model="dataForm.propertyJson.countSql" :options="sqlOptions"
+                      ref="SQLEditorRef" />
+                  </div>
+                </el-form-item>
+                <el-form-item label-width="0" prop="propertyJson.echoSql" v-if="active===3">
+                  <div class="sql-box">
+                    <SQLEditor v-model="dataForm.propertyJson.echoSql" :options="sqlOptions"
+                      ref="SQLEditorRef" />
                   </div>
                 </el-form-item>
               </el-form>
@@ -172,26 +180,9 @@
         </div>
       </div>
     </div>
-    <div class="jsStaticData" v-if="active === 2">
-      <div class="json-box">
-        <JNPFCodeEditor v-model="text" :options="options" ref="CodeEditor" />
-      </div>
-      <div class="jsTips">
-        <p>1、支持JavaScript的脚本</p>
-        <p>2、小程序不支持在线JS脚本</p>
-      </div>
-    </div>
-    <div class="staticData" v-if="active === 1 && dataForm.dataType === 2">
-      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
-        <el-form-item label-width="0" prop="query">
-          <div class="json-box">
-            <JSONEditor v-model="dataForm.query" :options="jsonOptions" ref="JSONEditorRef" />
-          </div>
-        </el-form-item>
-      </el-form>
-    </div>
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="110px"
-      v-if="active === 1 && dataForm.dataType === 3">
+    <!-- api操作 -->
+    <el-form v-if="active === 1&&dataForm.dataType === 3" ref="dataForm" :model="dataForm"
+      :rules="dataRule" label-width="110px">
       <el-row>
         <el-col :span="14" :offset="5" class="mt-20 baseInfo">
           <jnpf-form-tip-item label="接口类型" prop="requestMethod">
@@ -260,31 +251,159 @@
               </el-table-column>
             </el-table>
           </div>
+          <jnpf-form-tip-item label="分页参数">
+            <el-table :data="pageParameters" row-key="id" size='mini'>
+              <el-table-column prop="fieldName" label="分页字段">
+                <template slot-scope="scope">
+                  <p>{{scope.row.fieldName}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column prop="field" label="接口参数">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.field" :placeholder="scope.row.field" clearable />
+                </template>
+              </el-table-column>
+            </el-table>
+          </jnpf-form-tip-item>
         </el-col>
       </el-row>
     </el-form>
+    <el-form v-if="active === 2&&dataForm.dataType === 3&&dataForm.checkType" ref="dataForm"
+      :model="dataForm" :rules="dataRule" label-width="110px">
+      <el-row>
+        <el-col :span="14" :offset="5" class="mt-20 baseInfo">
+          <jnpf-form-tip-item label="接口类型" prop="propertyJson.echoReqMethod">
+            <el-radio-group v-model="dataForm.propertyJson.echoReqMethod">
+              <el-radio label="6">GET</el-radio>
+              <el-radio label="7">POST</el-radio>
+            </el-radio-group>
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口路径" prop="propertyJson.echoPath">
+            <el-input v-model="dataForm.propertyJson.echoPath" placeholder="输入接口路径">
+              <el-button slot="append" class="el-icon-plus" @click="addHeaders(1)">添加headers
+              </el-button>
+            </el-input>
+            <el-row v-for="(item, index) in echoReqHeaders" :key="item.index" class="mt-10">
+              <el-col :span="10">
+                <el-autocomplete v-model="item.field" :fetch-suggestions="querySearch"
+                  placeholder="key" clearable style="width:100%" />
+              </el-col>
+              <el-col :span="10" :offset="1">
+                <el-input v-model="item.defaultValue" placeholder="value" clearable />
+              </el-col>
+              <el-col :span="2" :offset="1">
+                <el-button type="danger" icon="el-icon-close" @click="removeHeaders(index)">
+                </el-button>
+              </el-col>
+            </el-row>
+          </jnpf-form-tip-item>
+          <jnpf-form-tip-item label="接口参数" tip-label="接收方式:Body/json">
+            <el-button @click="addOrUpdateHandle('',1)" class="el-icon-plus" size="mini">添加参数
+            </el-button>
+          </jnpf-form-tip-item>
+          <div class="parameterList">
+            <el-table :data="echoReqParameters" ref="dragTable" row-key="id" size='mini'>
+              <el-table-column align="center" label="拖动" width="50">
+                <template>
+                  <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
+                    title='点击拖动' />
+                </template>
+              </el-table-column>
+              <el-table-column prop="field" label="参数名称">
+                <template slot-scope="scope">
+                  <p>
+                    <span class="required-sign">{{scope.row.required?'*':''}}</span>
+                    {{scope.row.field}}{{scope.row.fieldName?'('+scope.row.fieldName+')':''}}
+                  </p>
+                </template>
+              </el-table-column>
+              <el-table-column prop="dataType" label="参数类型" width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.dataType === 'varchar'">字符串</span>
+                  <span v-if="scope.row.dataType === 'int'">整型</span>
+                  <span v-if="scope.row.dataType === 'datetime'">日期时间</span>
+                  <span v-if="scope.row.dataType === 'decimal'">浮点</span>
+                  <span v-if="scope.row.dataType === 'bigint'">长整型</span>
+                  <span v-if="scope.row.dataType === 'text'">文本</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="defaultValue" label="默认值" />
+              <el-table-column label="操作" width="70">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="addOrUpdateHandle(scope.row,1)"
+                    icon="el-icon-edit-outline"></el-button>
+                  <el-button type="text" class="JNPF-table-delBtn" icon="el-icon-delete"
+                    @click="removeParameter(scope.$index,1)"></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <jnpf-form-tip-item label="回显参数">
+            <el-table :data="echoParameters" row-key="id" size='mini'>
+              <el-table-column prop="fieldName" label="回显字段">
+                <template slot-scope="scope">
+                  <p>{{scope.row.fieldName}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column prop="field" label="接口参数">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.field" clearable />
+                </template>
+              </el-table-column>
+            </el-table>
+          </jnpf-form-tip-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <!-- 静态数据数据处理 -->
+    <div class="staticData" v-if="active === 1&&dataForm.dataType === 2">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="100px">
+        <el-form-item label-width="0" prop="query">
+          <div class="json-box">
+            <JSONEditor v-model="dataForm.query" :options="jsonOptions" ref="JSONEditorRef" />
+          </div>
+        </el-form-item>
+      </el-form>
+    </div>
+    <!-- api\sql数据处理 -->
+    <div class="jsStaticData" v-if="active === stepList.length-1">
+      <div class="json-box">
+        <JNPFCodeEditor v-model="text" :options="jsOptions" ref="CodeEditor" />
+      </div>
+      <div class="jsTips">
+        <p>1、支持JavaScript的脚本</p>
+        <p>2、小程序不支持在线JS脚本</p>
+      </div>
+    </div>
     <FieldForm v-show="fieldFormVisible" ref="fieldForm" @addParameter="addParameter" />
     <form-script :visible.sync="formScriptVisible" :value="this.dataForm.dataProcessing"
       @updateScript="updateScript" />
+    <page-explain v-if="pageExplainVisible" ref="pageExplain" />
   </div>
 </template>
 
 <script>
-import {
-  getDataInterfaceInfo,
-  createDataInterface,
-  updateDataInterface,
-} from '@/api/systemData/dataInterface'
+import { getDataInterfaceInfo, createDataInterface, updateDataInterface } from '@/api/systemData/dataInterface'
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
 import { DataModelList } from '@/api/systemData/dataModel'
 import SQLEditor from '@/components/JNPFEditor/monaco'
 import JSONEditor from '@/components/JNPFEditor/monaco'
 import FieldForm from './FieldForm'
 import FormScript from './FormScript'
+import PageExplain from './PageExplain'
 import { deepClone } from '@/utils'
 import Sortable from 'sortablejs'
 import JNPFCodeEditor from '@/components/JNPFEditor/monaco'
 const defaultDataHandler = '(data) => {\r\n    // 处理数据逻辑\r\n\r\n    // 返回所需的数据\r\n    return data\r\n}'
+const defaultPageParameters = [
+  { fieldName: 'currentPage', field: 'currentPage' },
+  { fieldName: 'pageSize', field: 'pageSize' },
+  { fieldName: 'keyword ', field: 'keyword' },
+]
+const defaultEchoParameters = [
+  { fieldName: 'showKey', field: '' },
+  { fieldName: 'showValue', field: '' },
+]
 
 export default {
   components: {
@@ -292,6 +411,7 @@ export default {
     JSONEditor,
     FieldForm,
     FormScript,
+    PageExplain,
     JNPFCodeEditor
   },
   data() {
@@ -301,14 +421,12 @@ export default {
       formLoading: false,
       btnLoading: false,
       fieldFormVisible: false,
+      pageExplainVisible: false,
       formScriptVisible: false,
       selectData: [],
-      sqlOptions: {
-        language: 'sql'
-      },
-      jsonOptions: {
-        language: 'json'
-      },
+      sqlOptions: { language: 'sql' },
+      jsonOptions: { language: 'json' },
+      jsOptions: { language: 'javascript' },
       dataForm: {
         fullName: '',
         enCode: '',
@@ -325,7 +443,17 @@ export default {
         description: '',
         dataProcessing: '',
         requestParameters: '',
-        query: ''
+        query: '',
+        propertyJson: {
+          countSql: "",
+          echoSql: "",
+          echoPath: "",
+          echoReqMethod: "6",
+          echoReqParameters: [],
+          echoReqHeaders: [],
+          pageParameters: [],
+          echoParameters: []
+        }
       },
       restaurants: [
         { "value": "Postman-Token" },
@@ -337,6 +465,10 @@ export default {
       ],
       requestHeaders: [],
       requestParameters: [],
+      pageParameters: [],
+      echoReqHeaders: [],
+      echoReqParameters: [],
+      echoParameters: [],
       sqlRequestMethod: '3',
       apiRequestMethod: '6',
       dbOptions: [],
@@ -347,58 +479,51 @@ export default {
           return data.table + '(' + data.tableName + ')'
         },
       },
-      activeName: 'query',
       dataRule: {
-        fullName: [
-          {
-            required: true,
-            message: '名称不能为空',
-            trigger: 'blur'
-          }
-        ],
-        enCode: [
-          {
-            required: true,
-            message: '编码不能为空',
-            trigger: 'blur'
-          }
-        ],
-        categoryId: [
-          {
-            required: true,
-            message: '请选择分类',
-            trigger: 'blur'
-          }
-        ],
-        path: [
-          {
-            required: true,
-            message: '请填写接口路径',
-            trigger: 'blur'
-          }
-        ],
-        query: [
-          {
-            required: true,
-            message: '请输入SQL查询语句或静态数据',
-            trigger: 'blur'
-          }
-        ]
+        fullName: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+        enCode: [{ required: true, message: '编码不能为空', trigger: 'blur' }],
+        categoryId: [{ required: true, message: '请选择分类', trigger: 'blur' }],
+        path: [{ required: true, message: '请填写接口路径', trigger: 'blur' }],
+        query: [{ required: true, message: '请输入SQL查询语句或静态数据', trigger: 'blur' }],
+        'propertyJson.countSql': [{ type: "string", required: true, message: '请输入SQL语句', trigger: 'blur' }],
+        'propertyJson.echoSql': [{ type: "string", required: true, message: '请输入SQL语句', trigger: 'blur' }],
+        'propertyJson.echoPath': [{ required: true, message: '请填写接口路径', trigger: 'blur' }],
       },
-      sysVariableList: [
+      text: '',
+      key: +new Date(),
+      sqlType: 0
+    }
+  },
+  computed: {
+    stepList() {
+      this.key = +new Date()
+      let base = ['基本信息', '数据配置']
+      if (this.dataForm.dataType == 2) return base
+      if (this.dataForm.dataType == 1 && this.dataForm.checkType === 1) return [...base, '数量统计', '数据回显', '数据处理']
+      if (this.dataForm.dataType == 3 && this.dataForm.checkType === 1) return [...base, '数据回显', '数据处理']
+      return [...base, '数据处理']
+    },
+    sysVariableList() {
+      const list = [
         { value: '@user', tips: "当前用户" },
         { value: '@currentUsersAndSubordinates', tips: "当前用户及下属" },
         { value: '@organization', tips: "当前组织" },
         { value: '@currentOrganizationAndSuborganization', tips: "当前组织及子组织" },
         { value: '@chargeorganization', tips: "当前分管组织" },
-        {
-          value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织"
-        }
-      ],
-      text: '',
-      options: {
-        language: 'javascript'
-      },
+        { value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织" }
+      ]
+      const dataConfigList = [
+        { value: '@currentPage', tips: "当前页码" },
+        { value: '@pageSize', tips: "每页显示多少条" },
+      ]
+      const dataEchoList = [
+        { value: '@showKey', tips: "回显字段查询key" },
+        { value: '@showValue', tips: "回显字段值" },
+      ]
+      const keyword = { value: '@keyword', tips: "关键词搜索" }
+      if (this.active === 2) return [...list, keyword]
+      if (this.active === 3) return [...list, ...dataEchoList]
+      return [...list, ...dataConfigList, keyword]
     }
   },
   methods: {
@@ -424,6 +549,8 @@ export default {
             this.getFormData()
           } else {
             this.dataForm.categoryId = categoryId
+            this.pageParameters = defaultPageParameters
+            this.echoParameters = defaultEchoParameters
             this.formLoading = false
             this.getTableList(this.dataForm.dbLinkId)
           }
@@ -432,11 +559,31 @@ export default {
     },
     getFormData() {
       getDataInterfaceInfo(this.dataForm.id).then(res => {
+        if (!res.data.propertyJson) res.data.propertyJson = {
+          countSql: "",
+          echoSql: "",
+          echoPath: "",
+          echoReqMethod: "6",
+          echoReqParameters: [],
+          echoReqHeaders: [],
+          pageParameters: defaultPageParameters,
+          echoParameters: defaultEchoParameters
+        }
         this.dataForm = res.data
         this.getTableList(this.dataForm.dbLinkId)
         this.dataForm.query = res.data.query
-        if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters) || []
         if (res.data.requestHeaders) this.requestHeaders = JSON.parse(res.data.requestHeaders) || []
+        if (res.data.requestParameters) this.requestParameters = JSON.parse(res.data.requestParameters) || []
+        if (res.data.propertyJson) {
+          const propertyJson = res.data.propertyJson
+          this.echoReqHeaders = propertyJson.echoReqHeaders || []
+          this.echoReqParameters = propertyJson.echoReqParameters || []
+          this.pageParameters = propertyJson.pageParameters && propertyJson.pageParameters.length ? propertyJson.pageParameters : defaultPageParameters
+          this.echoParameters = propertyJson.echoParameters && propertyJson.echoParameters.length ? propertyJson.echoParameters : defaultEchoParameters
+        } else {
+          this.pageParameters = defaultPageParameters
+          this.echoParameters = defaultEchoParameters
+        }
         if (res.data.dataType === 1) this.sqlRequestMethod = this.dataForm.requestMethod
         if (res.data.dataType === 3) this.apiRequestMethod = this.dataForm.requestMethod
         this.formLoading = false
@@ -452,7 +599,7 @@ export default {
       }
       this.requestParameters = []
     },
-    onMethodChange(val, key) {
+    onMethodChange(val, key, type) {
       this[key + 'RequestMethod'] = val
     },
     handleSelectTable(val) {
@@ -474,56 +621,47 @@ export default {
     },
     handlePrevStep() {
       this.active -= 1
-      if (this.active == 0) {
-        this.$refs['dataForm'].clearValidate()
-      }
-
+      if (this.active == 0) this.$refs['dataForm'].clearValidate()
     },
     handleNextStep() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          if (this.active < 2) {
-            this.active += 1
-            // SQL操作
-            if (this.dataForm.dataType === 1) {
-              this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({
-                value: this.dataForm.query,
-                options: this.sqlOptions
-              })
-            }
-            //数据处理
-            if (this.active == 2 && this.dataForm.dataType != 2) {
-              if (!this.dataForm.dataProcessing) this.dataForm.dataProcessing = defaultDataHandler
-              this.text = this.dataForm.dataProcessing
+          this.active += 1
+          // 静态数据
+          if (this.active === this.stepList.length - 1) {
+            this.text = this.dataForm.dataProcessing
+            this.$refs.JSONEditorRef && this.$refs.JSONEditorRef.changeEditor({ value: this.text, options: this.jsonOptions })
+          }
+          // SQL操作
+          if (this.dataForm.dataType === 1) {
+            if (this.active == 1) this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: this.dataForm.query, options: this.sqlOptions })
+            if (this.dataForm.checkType && (this.active === 2 || this.active === 3)) {
+              const propertyJson = this.dataForm.propertyJson || {}
+              const sql = propertyJson[this.active === 2 ? 'countSql' : 'echoSql'] || ''
               this.$nextTick(() => {
-                this.$refs.CodeEditor && this.$refs.CodeEditor.changeEditor({
-                  value: this.text,
-                  options: this.options
-                })
+                this.$refs.SQLEditorRef && this.$refs.SQLEditorRef.changeEditor({ value: sql, options: this.sqlOptions })
               })
             }
-            // 静态数据
-            if (this.dataForm.dataType === 2) {
-              this.text = this.dataForm.dataProcessing
-              this.$refs.JSONEditorRef && this.$refs.JSONEditorRef.changeEditor({
-                value: this.text,
-                options: this.jsonOptions
-              })
-            } else {
-              if (this.active == 1) {
-                this.$nextTick(() => {
-                  this.setSort()
-                })
-              }
-            }
+            if (this.active === this.stepList.length - 1) this.setDataProcessing()
+          }
+          // API操作
+          if (this.dataForm.dataType === 3) {
+            if (this.active === 1 || (this.active === 2 && this.dataForm.checkType)) this.$nextTick(() => this.setSort())
+            if (this.active === this.stepList.length - 1) this.setDataProcessing()
           }
         }
+      })
+    },
+    setDataProcessing() {
+      if (!this.dataForm.dataProcessing) this.dataForm.dataProcessing = defaultDataHandler
+      this.text = this.dataForm.dataProcessing
+      this.$nextTick(() => {
+        this.$refs.CodeEditor && this.$refs.CodeEditor.changeEditor({ value: this.text, options: this.jsOptions })
       })
     },
     querySearch(queryString, cb) {
       const restaurants = this.restaurants;
       const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-      // 调用 callback 返回建议列表的数据
       cb(results);
     },
     createFilter(queryString) {
@@ -534,45 +672,44 @@ export default {
     removeHeaders(index) {
       this.requestHeaders.splice(index, 1)
     },
-    addHeaders() {
-      this.requestHeaders.push({
+    addHeaders(type) {
+      this[type === 1 ? 'echoReqHeaders' : 'requestHeaders'].push({
         field: '',
         defaultValue: ''
       })
     },
-    removeParameter(index) {
+    removeParameter(index, type) {
       this.$confirm('此操作删除该参数, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
-        this.requestParameters.splice(index, 1)
+        this[type === 1 ? 'echoReqParameters' : 'requestParameters'].splice(index, 1)
       }).catch(() => { });
     },
     addParameter(type, item) {
       this.fieldFormVisible = false
-      if (type === 'add') {
-        this.requestParameters.push(deepClone(item))
-      } else {
-        for (let i = 0; i < this.requestParameters.length; i++) {
-          if (item.id === this.requestParameters[i].id) {
-            this.$set(this.requestParameters, i, deepClone(item))
-            break
-          }
+      const key = this.sqlType == 1 ? 'echoReqParameters' : 'requestParameters'
+      if (type === 'add') return this[key].push(deepClone(item))
+      for (let i = 0; i < this[key].length; i++) {
+        if (item.id === this[key][i].id) {
+          this.$set(this[key], i, deepClone(item))
+          break
         }
       }
     },
-    addOrUpdateHandle(item) {
+    addOrUpdateHandle(item, type) {
+      this.sqlType = type || 0
+      const data = item ? JSON.parse(JSON.stringify(item)) : null
+      const parameters = type == 1 ? this.echoReqParameters : this.requestParameters
       this.fieldFormVisible = true
       this.$nextTick(() => {
-        this.$refs.fieldForm.init(item ? JSON.parse(JSON.stringify(item)) : null, this.requestParameters)
+        this.$refs.fieldForm.init(data, parameters)
       })
     },
     setSort() {
       const el = this.$refs.dragTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
       this.sortable = Sortable.create(el, {
-        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        ghostClass: 'sortable-ghost',
         setData: function (dataTransfer) {
-          // to avoid Firefox bug
-          // Detail see : https://github.com/RubaXa/Sortable/issues/1012
           dataTransfer.setData('Text', '')
         },
         onEnd: evt => {
@@ -596,54 +733,63 @@ export default {
       this.$refs.SQLEditorRef.insert('{' + item.field + '}')
     },
     dataFormSubmit() {
-      if (this.active == 2) {
-        this.btnLoading = true
+      this.btnLoading = true
+      if (this.dataForm.dataType !== 2) {
         this.dataForm.dataProcessing = this.text
-        this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
-        this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
-        const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
-        formMethod(this.dataForm).then(res => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.btnLoading = false
-              this.$emit('close', true)
-            }
-          })
-        }).catch(() => {
-          this.btnLoading = false
-        })
+        this.handleSubmit()
       } else {
         this.$refs['dataForm'].validate(valid => {
-          if (valid) {
-            this.btnLoading = true
-            this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
-            this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
-            const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
-            formMethod(this.dataForm).then(res => {
-              this.$message({
-                message: res.msg,
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.btnLoading = false
-                  this.$emit('close', true)
-                }
-              })
-            }).catch(() => {
-              this.btnLoading = false
-            })
-          }
+          if (valid) this.handleSubmit()
         })
       }
+    },
+    handleSubmit() {
+      this.dataForm.requestHeaders = JSON.stringify(this.requestHeaders)
+      this.dataForm.requestParameters = JSON.stringify(this.requestParameters)
+      this.dataForm.propertyJson.echoReqHeaders = this.echoReqHeaders || []
+      this.dataForm.propertyJson.echoReqParameters = this.echoReqParameters || []
+      this.dataForm.propertyJson.pageParameters = this.pageParameters
+      this.dataForm.propertyJson.echoParameters = this.echoParameters
+      const formMethod = this.dataForm.id ? updateDataInterface : createDataInterface
+      formMethod(this.dataForm).then(res => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+          duration: 1500,
+          onClose: () => {
+            this.btnLoading = false
+            this.$emit('close', true)
+          }
+        })
+      }).catch(() => {
+        this.btnLoading = false
+      })
+    },
+    handleShowPageExplain() {
+      this.pageExplainVisible = true
+      this.$nextTick(() => {
+        this.$refs.pageExplain.init()
+      })
+    },
+    getShowSqlBox() {
+      if (this.dataForm.dataType !== 1) return false
+      if (this.active === 1) return true
+      if (this.dataForm.checkType && (this.active === 2 || this.active === 3)) return true
+    },
+    getShowApiBox() {
+      if (this.dataForm.dataType !== 3) return false
+      if (this.active === 1) return true
+      if (this.dataForm.checkType && this.active === 2) return true
     }
-
   }
 }
 </script>
 <style lang="scss" scoped>
+.tips {
+  float: right;
+  color: #8492a6;
+  padding-left: 10px;
+}
 .jsTips {
   -ms-flex-negative: 0;
   flex-shrink: 0;
@@ -670,17 +816,20 @@ export default {
   width: 100%;
   overflow: hidden;
 }
-.elsteps {
-  width: 506px;
-  padding: 6px 20px;
-  background: #fff;
-  justify-items: flex-start;
-}
 .steps {
-  width: 318px;
+  width: unset;
+  overflow: auto;
   padding: 6px 20px;
   background: #fff;
   justify-items: flex-start;
+  .el-step {
+    width: 155px;
+  }
+}
+.page-explain {
+  cursor: pointer;
+  float: right;
+  color: #606266;
 }
 .flow-form-main {
   >>> .main {
@@ -731,40 +880,8 @@ export default {
       }
       .sql-box {
         border-top: 1px solid #dcdfe6;
-        // border-bottom: 1px solid #dcdfe6;
         height: calc(100vh - 258px);
         overflow: auto;
-      }
-      .tips {
-        padding: 8px 0;
-        background-color: #ecf8ff;
-        border-radius: 4px;
-        border-left: 5px solid #50bfff;
-
-        p {
-          padding: 8px 0 8px 20px;
-        }
-
-        .tips-content {
-          display: flex;
-          flex-wrap: wrap;
-
-          .tips-content-item {
-            display: inline-block;
-            padding-left: 20px;
-            line-height: 30px;
-            color: #5e6d82;
-            width: 50%;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-
-            span {
-              cursor: pointer;
-              padding-right: 2px;
-            }
-          }
-        }
       }
     }
   }
@@ -835,7 +952,6 @@ export default {
     display: flex;
     flex-direction: column;
     height: calc(100% + 9px);
-    // margin-top: 10px;
     overflow: hidden;
 
     .right-pane-list {
