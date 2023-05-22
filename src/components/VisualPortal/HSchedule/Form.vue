@@ -53,8 +53,7 @@
         <el-form-item label="结束时间" prop="endDay" v-if='dataForm.duration==-1||dataForm.allDay'>
           <el-col :span="14">
             <el-date-picker v-model="dataForm.endDay" type="date" placeholder="请选择结束日期"
-              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp"
-              @change="endDayChange">
+              :editable="false" :clearable="false" format="yyyy-MM-dd" value-format="timestamp">
             </el-date-picker>
           </el-col>
           <el-col :span="10">
