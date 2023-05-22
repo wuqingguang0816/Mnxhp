@@ -118,8 +118,8 @@
                   :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
-                <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'" :precision="2"
-                  :disabled="item.disabled"></NumRange>
+                <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'"
+                  :precision="item.precision" :disabled="item.disabled"></NumRange>
                 <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
                   :precision="item.precision" :disabled="item.disabled" :controls="false"
                   controls-position="right" />
