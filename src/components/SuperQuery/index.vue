@@ -46,7 +46,7 @@
                   <el-switch v-model="item.fieldValue" :active-value="1" :inactive-value="0" />
                 </div>
                 <template v-else-if="item.jnpfKey==='time'">
-                  <el-time-picker v-model="item.fieldValue" style="width:100%" :key="key2"
+                  <el-time-picker v-model="item.fieldValue" style="width:100%" :key="item.cellKey"
                     :picker-options="item.attr['picker-options']" placeholder="请选择" clearable
                     :value-format="item.attr['value-format']" :format="item.attr.format">
                   </el-time-picker>
@@ -54,7 +54,7 @@
                 <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
                   <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
                     :type="item.jnpfKey==='date'&&item.attr.type?item.attr.type:'datetime'"
-                    value-format="timestamp" style="width:100%"
+                    :value-format="item.attr['value-format']" style="width:100%" :key="item.cellKey"
                     :format="item.attr.format||'yyyy-MM-dd HH:mm:ss'">
                   </el-date-picker>
                 </template>
