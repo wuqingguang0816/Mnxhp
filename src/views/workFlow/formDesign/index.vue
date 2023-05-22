@@ -67,9 +67,9 @@
                     <!-- <el-dropdown-item @click.native="rollBackForm(scope.row.id)"
                       v-if="scope.row.enabledMark">
                       回滚表单</el-dropdown-item> -->
-                    <el-dropdown-item @click.native="preview(scope.row,'draftJson')">
+                    <el-dropdown-item @click.native="preview(scope.row,'draftJson',1)">
                       设计预览</el-dropdown-item>
-                    <el-dropdown-item @click.native="preview(scope.row,'propertyJson')"
+                    <el-dropdown-item @click.native="preview(scope.row,'propertyJson',2)"
                       v-if="scope.row.enabledMark == 1">
                       发布预览</el-dropdown-item>
                     <el-dropdown-item @click.native="copy(scope.row.id)">
@@ -87,7 +87,8 @@
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
-    <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
+    <preview v-if="previewVisible" ref="preview" @close="previewVisible=false"
+      :previewType="previewType" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
       @previewPc="previewPc" :dataSource="currRow.dataSource" />
     <el-dialog title="新建流程表单" :visible.sync="dialogVisible"
@@ -136,6 +137,7 @@ export default {
         sort: 'desc',
         sidx: ''
       },
+      previewType: 1,
       total: 0,
       listLoading: false,
       formVisible: false,
@@ -234,7 +236,8 @@ export default {
         this.$refs.Form.init(id, flowType, formType)
       })
     },
-    preview(row, dataSource) {
+    preview(row, dataSource, type) {
+      this.previewType = type
       this.currRow = row
       this.currRow.dataSource = dataSource
       this.$nextTick(() => {
