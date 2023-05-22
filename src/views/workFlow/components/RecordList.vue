@@ -12,7 +12,7 @@
         :formatter="jnpf.tableDateFormat" />
       <el-table-column prop="handleTime" label="操作时间" width="150"
         :formatter="jnpf.tableDateFormat" />
-      <el-table-column prop="handleStatus" label="执行动作" min-width="130" show-overflow-tooltip>
+      <el-table-column prop="handleStatus" label="执行动作" width="200" show-overflow-tooltip>
         <template slot-scope="scope">
           <div class="item">
             <span :style="{background:colorList[scope.row.handleStatus||0]}"></span>
@@ -31,7 +31,7 @@
           </el-image>
         </template>
       </el-table-column>
-      <el-table-column prop="fileList" label="附件" width="150" align="center">
+      <el-table-column prop="fileList" label="附件" width="200" align="center">
         <template slot-scope="scope">
           <div v-for="(file,index) in JSON.parse(scope.row.fileList)" :key="index"
             @click="handlePreview(file)">
@@ -39,7 +39,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="handleOpinion" label="备注" width="200" show-overflow-tooltip />
+      <el-table-column prop="handleOpinion" label="备注" min-width="200" show-overflow-tooltip />
     </JNPF-table>
     <Preview :visible.sync="previewVisible" :file="activeFile" :showDownload="true" />
     <FormBox v-if="formVisible" ref="FormBox" @close="formVisible = false" />
