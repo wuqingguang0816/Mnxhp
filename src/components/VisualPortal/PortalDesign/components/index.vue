@@ -47,7 +47,7 @@
                   :animation="340" group="componentsGroup">
                   <div v-for="(item,index) in layout" :key="index" class="item-box"
                     @click="handleClick(item)" :class="{'active-item': item.i===activeId}">
-                    <parser :item="item" :showType='showType' />
+                    <parser :item="item" :activeId="activeId" :showType='showType' />
                     <div class="mask" v-if="!noNeedMaskList.includes(item.jnpfKey)"></div>
                     <span title="复制" class="drawing-item-copy" @click="addComponent(item)">
                       <i class="el-icon-copy-document"></i></span>
