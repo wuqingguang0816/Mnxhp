@@ -282,6 +282,7 @@ const printOptionApi = {
     getThousands(value, place) {
       if (!value && value !== 0) return ''
       place = place ? place : this.getPlace(value)
+      value = Number(value).toFixed(place)
       const numArr = value.toString().split('.');
       numArr[0] = numArr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       numArr[1] = numArr[1] ? numArr[1].toString().substring(0, place) : ''
