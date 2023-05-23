@@ -11,7 +11,8 @@
       <ul class="el-upload-list el-upload-list el-upload-list--text">
         <li class="el-upload-list__item is-success" v-for="(file,index) in fileList"
           :key="file.fileId" :class="{'el-upload-list__item_detail':detailed}">
-          <a class="el-upload-list__item-name" :style="{'color': !showIcon?'#409eff':''}">
+          <a class="el-upload-list__item-name" :style="{'color': !showIcon?'#409eff':''}"
+            :title="file.name+(file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:'')">
             <i class="el-icon-paperclip" v-if="showIcon"></i>
             {{file.name}}{{file.fileSize?`（${jnpf.toFileSize(file.fileSize)}）`:''}}
           </a>

@@ -158,7 +158,7 @@
               <template
                 v-if="!column.__config__.noShow && (!column.__config__.visibility || (Array.isArray(column.__config__.visibility) && column.__config__.visibility.includes('pc')))">
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
-                  :label="column.__config__.label" :width="column.__config__.columnWidth"
+                  :label="column.__config__.label"
                   v-if="column.__config__.jnpfKey==='relationForm'">
                   <template slot-scope="scope">
                     <el-link :underline="false" type="primary"
@@ -167,7 +167,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" :width="column.__config__.columnWidth"
+                  :prop="column.__vModel__"
                   v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
                   <template slot-scope="scope">
                     <p v-if="!column.__vModel__">
@@ -179,15 +179,14 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" :width="column.__config__.columnWidth"
+                  :prop="column.__vModel__" min-width="250px"
                   v-else-if="column.__config__.jnpfKey==='uploadFz'">
                   <template slot-scope="scope">
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" :width="column.__config__.columnWidth"
-                  v-else-if="column.__config__.jnpfKey==='calculate'">
+                  :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='calculate'">
                   <template slot-scope="scope">
                     <calculate :rowIndex="scope.$index" :expression="column.expression"
                       :isStorage="1" :formData="formValue" :isAmountChinese="column.isAmountChinese"
@@ -196,15 +195,13 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" :width="column.__config__.columnWidth"
-                  v-else-if="column.__config__.jnpfKey==='uploadImg'">
+                  :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='uploadImg'">
                   <template slot-scope="scope">
                     <JNPFUploadImg v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" :width="column.__config__.columnWidth"
-                  v-else-if="column.__config__.jnpfKey==='numInput'">
+                  :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='numInput'">
                   <template slot-scope="scope">
                     <JnpfNumber v-model="scope.row[column.__vModel__]" :thousands="column.thousands"
                       :isAmountChinese="column.isAmountChinese" :addonBefore="column.addonBefore"
@@ -212,7 +209,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
-                  :label="column.__config__.label" :width="column.__config__.columnWidth" v-else>
+                  :label="column.__config__.label" v-else>
                   <template slot="header">
                     <span slot="label"
                       v-if="column.__config__.tipLabel">{{column.__config__['label']}}
