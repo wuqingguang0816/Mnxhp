@@ -137,7 +137,7 @@ export default {
       getSelectorAll({ category: 'Web' }).then(res => {
         this.menuList = (res.data.list || []).filter(o => o.children && o.children.length)
       })
-      getSelectorAll({ category: 'app' }).then(res => {
+      getSelectorAll({ category: 'App' }).then(res => {
         this.appMenuList = (res.data.list || []).filter(o => o.children && o.children.length)
       })
     },

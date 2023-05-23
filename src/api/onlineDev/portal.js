@@ -55,7 +55,7 @@ export function exportTemplate(id) {
 // 获取门户下拉框列表
 export function getPortalSelector(type) {
   return request({
-    url: '/api/visualdev/Portal/Selector/?platform=Web',
+    url: '/api/visualdev/Portal/Selector?platform=Web',
     method: 'GET',
     data: { type }
   })
@@ -63,7 +63,7 @@ export function getPortalSelector(type) {
 // 切换用户门户默认显示
 export function SetDefault(id) {
   return request({
-    url: `/api/visualdev/Portal/${id}/Actions/SetDefault/?platform=Web`,
+    url: `/api/visualdev/Portal/${id}/Actions/SetDefault?platform=Web`,
     method: 'PUT'
   })
 }

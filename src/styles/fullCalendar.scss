@@ -68,10 +68,17 @@
   }
 
   .fc-popover {
+    z-index: 999 !important;
     max-height: 200px;
-    overflow: auto;
-    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
     margin-top: 20px;
+    margin-left: 40px;
+
+    .fc-popover-body {
+      overflow: auto;
+      flex: 1;
+    }
   }
 
 
