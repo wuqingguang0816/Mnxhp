@@ -416,9 +416,9 @@ export default {
     },
     change_providerType(val) {
       if (val) this.dataForm.endDay = this.dataForm.startDay
+      if (!val) this.dataForm.endDay = 0
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate('duration')
-
       })
     },
     onMsgChange(id, item) {

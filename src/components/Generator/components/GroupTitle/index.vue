@@ -1,6 +1,6 @@
 <template>
   <p class="groupTitle" :style="{'text-align':contentPosition}">{{content}}
-    <span slot="label" v-if="tipLabel">
+    <span slot="label" v-if="tipLabel&&content">
       <el-tooltip placement="top" :content=tipLabel>
         <a class='el-icon-question tooltip-question'></a>
       </el-tooltip>
