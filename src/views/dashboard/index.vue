@@ -76,7 +76,7 @@ export default {
         this.noData = true
         return
       }
-      getAuthPortal(this.portalId, { platform: 'web', systemId: this.systemId }).then(res => {
+      getAuthPortal(this.portalId, { platform: 'Web', systemId: this.systemId }).then(res => {
         if (res.data) {
           this.type = res.data.type || 0
           this.linkType = res.data.linkType || 0

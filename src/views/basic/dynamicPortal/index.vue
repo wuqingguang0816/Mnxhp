@@ -48,7 +48,7 @@ export default {
         this.ajaxing = false
         return
       }
-      getAuthPortal(this.portalId, { platform: 'web' }).then(res => {
+      getAuthPortal(this.portalId, { platform: 'Web' }).then(res => {
         this.type = res.data.type || 0
         this.linkType = res.data.linkType || 0
         this.url = res.data.customUrl
