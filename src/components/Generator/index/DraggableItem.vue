@@ -99,7 +99,7 @@ const layouts = {
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(element); event.stopPropagation() }}>
-        <jnpf-form-tip-item label-width={labelWidth} tip-label={config.tipLabel}
+        <jnpf-form-tip-item label-width={labelWidth} tip-label={config.label ? config.tipLabel : ''}
           label={config.showLabel ? config.label : ''} required={config.required}>
           {Item}
         </jnpf-form-tip-item>
@@ -259,7 +259,7 @@ const layouts = {
         tip = <div class="table-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       let toolTip = element.__config__.label
-      if (element.__config__.tipLabel) {
+      if (element.__config__.tipLabel && element.__config__.label) {
         toolTip = <span slot="label">{element.__config__.label}
           <el-tooltip placement="top" content={element.__config__.tipLabel}>
             <a class='el-icon-question tooltip-question content-name'></a>
@@ -288,7 +288,7 @@ const layouts = {
         tip = <div class="table-tip card-tip">请将组件拖到此区域(可拖多个组件)</div>
       }
       let toolTip = element.header
-      if (element.__config__.tipLabel) {
+      if (element.__config__.tipLabel && element.__config__.label) {
         toolTip = <span slot="label">{element.header}
           <el-tooltip placement="top" content={element.__config__.tipLabel}>
             <a class='el-icon-question tooltip-question content-name'></a>

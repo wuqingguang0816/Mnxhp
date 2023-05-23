@@ -27,7 +27,8 @@
           v-if="!head.__config__.noShow && (!head.__config__.visibility || (Array.isArray(head.__config__.visibility) && head.__config__.visibility.includes('pc')))">
           <template slot="header">
             <span style="color: #f56c6c;" v-if="head.__config__.required">*</span>
-            <span slot="label" v-if="head.__config__.tipLabel">{{head.__config__['label']}}
+            <span slot="label"
+              v-if="head.__config__.tipLabel &&head.__config__.label">{{head.__config__['label']}}
               <el-tooltip placement="top" :content=head.__config__.tipLabel>
                 <a class='el-icon-question tooltip-question'></a>
               </el-tooltip>
