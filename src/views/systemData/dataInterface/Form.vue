@@ -366,7 +366,7 @@
       </el-form>
     </div>
     <!-- api\sql数据处理 -->
-    <div class="jsStaticData" v-if="active === stepList.length-1">
+    <div class="jsStaticData" v-if="active === stepList.length-1&&dataForm.dataType !== 2">
       <div class="json-box">
         <JNPFCodeEditor v-model="text" :options="jsOptions" ref="CodeEditor" />
       </div>
