@@ -259,7 +259,11 @@ export default {
       this.getData()
       this.listLoading = true;
       const dbLinkId = this.dbLinkId || "0";
-      DataModelList(dbLinkId, { keyword: this.keyword }).then((res) => {
+      DataModelList(dbLinkId, {
+        keyword: this.keyword,
+        currentPage: 1,
+        pageSize: 1000000
+      }).then((res) => {
         this.list = res.data.list;
         this.listLoading = false;
         if (this.list.length && this.selectedData.length) {
