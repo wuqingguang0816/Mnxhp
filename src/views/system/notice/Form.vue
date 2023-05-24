@@ -10,7 +10,7 @@
         </div>
       </div>
       <div>
-        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；选择默认则站内信提醒，选择自定义则取自定义模板配置。" type="warning"
+        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置。" type="warning"
           :closable="false" show-icon>
         </el-alert>
       </div>
