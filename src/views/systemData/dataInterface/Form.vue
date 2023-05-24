@@ -292,7 +292,7 @@
                 <el-input v-model="item.defaultValue" placeholder="value" clearable />
               </el-col>
               <el-col :span="2" :offset="1">
-                <el-button type="danger" icon="el-icon-close" @click="removeHeaders(index)">
+                <el-button type="danger" icon="el-icon-close" @click="removeHeaders(index,1)">
                 </el-button>
               </el-col>
             </el-row>
@@ -514,8 +514,8 @@ export default {
         { value: '@currentChargeorganizationAndSuborganization', tips: "当前分管组织及子组织" }
       ]
       const dataConfigList = [
-        { value: '@currentPage', tips: "当前页码" },
-        { value: '@pageSize', tips: "每页显示多少条" },
+        { value: '@offsetSize', tips: "开始数据条数" },
+        { value: '@pageSize', tips: "返回数据条数" },
       ]
       const dataEchoList = [
         { value: '@showKey', tips: "回显字段查询key" },
@@ -665,8 +665,8 @@ export default {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    removeHeaders(index) {
-      this.requestHeaders.splice(index, 1)
+    removeHeaders(index, type) {
+      this[type === 1 ? 'echoReqHeaders' : 'requestHeaders'].splice(index, 1)
     },
     addHeaders(type) {
       this[type === 1 ? 'echoReqHeaders' : 'requestHeaders'].push({
