@@ -125,7 +125,7 @@
       <el-switch v-model="activeData.__config__.showLabel" />
     </el-form-item> -->
     <treeNode-dialog :visible.sync="dialogVisible" :title="currentNode.id?'编辑选项':'添加选项'"
-      :currentNode="currentNode.id?currentNode:{}" @commit="addNode" />
+      :currentNode="currentNodeId?currentNode:formData" @commit="addNode" />
     <div>
       <el-dialog :visible.sync="dicVisible" append-to-body
         class="JNPF-dialog JNPF-dialog_center JNPF-dialog-tree-select" lock-scroll width="80%"
@@ -160,6 +160,12 @@ export default {
       cascaderKey: +new Date(),
       dicVisible: false,
       updateVisible: false,
+      node: '',
+      currentNodeId: "",
+      formData: {
+        fullName: '',
+        id: ''
+      },
     }
   },
   methods: {
@@ -172,7 +178,7 @@ export default {
               class="el-icon-plus"
               title="添加"
             ></i>
-            <i on-click={() => this.update(data)}
+            <i on-click={() => this.update(node, data)}
               class="el-icon-edit-outline"
               title="编辑"
             ></i>
@@ -198,23 +204,25 @@ export default {
       })
     },
     addTreeItem() {
+      this.currentNodeId = ''
       this.dialogVisible = true
       this.currentNode = this.activeData.options
     },
     addNode(data) {
-      if (this.currentNode.id) {
-        this.currentNode.id = data.id
-        this.currentNode.fullName = data.fullName
+      if (this.currentNodeId) {
+        Object.keys(data).forEach(key => { this.node.data[key] = data[key] })
       } else {
         this.currentNode.push(data)
-
       }
     },
-    update(data) {
+    update(node, data) {
+      this.node = node
+      this.currentNodeId = data.id
       this.dialogVisible = true
       this.currentNode = data
     },
     append(data) {
+      this.currentNodeId = ''
       if (!data.children) {
         this.$set(data, 'children', [])
       }
@@ -310,11 +318,12 @@ export default {
   i[class*='el-icon'] + i[class*='el-icon'] {
     margin-left: 6px;
   }
-  .el-icon-plus {
+  .el-icon-plus,
+  .el-icon-edit-outline {
     color: #409eff;
   }
   .el-icon-delete {
-    color: #157a0c;
+    color: #f56c6c;
   }
 }
 .jnpf-el-row {

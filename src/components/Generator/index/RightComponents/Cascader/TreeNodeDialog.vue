@@ -47,7 +47,10 @@ export default {
   },
   methods: {
     onOpen() {
-      this.formData = { fullName: this.currentNode.fullName || '', id: this.currentNode.id || '' }
+      this.formData = JSON.parse(JSON.stringify(this.currentNode))
+      this.$nextTick(() => {
+        this.$refs['elForm'].clearValidate()
+      })
     },
     onClose() { },
     close() {
