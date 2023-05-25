@@ -53,7 +53,7 @@ export default {
   .notice-hd {
     padding-top: 24px;
     .title {
-      color: #303133;
+      color: #303133 !important;
       margin-top: 0;
       margin-bottom: 8px;
     }
