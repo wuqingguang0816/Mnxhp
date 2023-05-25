@@ -50,7 +50,7 @@ export default {
       if (this.options.length > 0) {
         this.options.forEach((opt) => {
           if (opt.id === opt.fullName) {
-            this.resultInfo += opt.id + '\n'
+            this.resultInfo += opt.fullName + this.separator + opt.id + '\n'
           } else {
             this.resultInfo += opt.fullName + this.separator + opt.id + '\n'
           }

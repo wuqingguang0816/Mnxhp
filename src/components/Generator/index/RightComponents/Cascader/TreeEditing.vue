@@ -49,13 +49,11 @@ export default {
         const loop = (list, id) => {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
-            if (e.id === e.fullName) {
-              this.resultInfo += e.id + '\n'
+            if (e.id == e.fullName) {
+              this.resultInfo += e.fullName + this.separator + e.id + '\n'
             } else {
               let separator = ''
-              if (id) {
-                separator = this.separator + id
-              }
+              if (id) separator = this.separator + id
               this.resultInfo += e.fullName + this.separator + e.id + separator + '\n'
             }
             if (e && e.children && Array.isArray(e.children)) {

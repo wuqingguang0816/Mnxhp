@@ -50,7 +50,7 @@ export default {
           for (let i = 0; i < list.length; i++) {
             const e = list[i]
             if (e.id === e.fullName) {
-              this.resultInfo += e.id + '\n'
+              this.resultInfo += e.fullName + this.separator + e.id + '\n'
             } else {
               let separator = ''
               if (id) {
