@@ -10,7 +10,7 @@
         </div>
       </div>
       <div>
-        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；默认站内信提醒，选择自定义则取自定义模板配置。" type="warning"
+        <el-alert title="提醒方式设置在【消息中心】-【消息发送配置】维护；选择默认则站内信提醒，选择自定义则取自定义模板配置。" type="warning"
           :closable="false" show-icon>
         </el-alert>
       </div>
@@ -25,7 +25,7 @@
         <el-row>
           <el-col :span="12">
             <jnpf-form-tip-item label="类型" prop="category">
-              <el-select v-model="dataForm.category" placeholder="选择公告类型" clearable filterable
+              <el-select v-model="dataForm.category" placeholder="请选择类型" clearable filterable
                 :key="key">
                 <el-option v-for="(item,index) in categoryList" :key="index" :label="item.fullName"
                   :value="item.enCode">
@@ -35,8 +35,8 @@
           </el-col>
           <el-col :span="12">
             <jnpf-form-tip-item label="失效时间" prop="expirationTime" tipLabel='当前时间超过失效时间，状态更新已过期'>
-              <el-date-picker v-model="dataForm.expirationTime" type="datetime" placeholder="选择失效时间"
-                value-format="timestamp">
+              <el-date-picker v-model="dataForm.expirationTime" type="datetime"
+                placeholder="请选择失效时间" value-format="timestamp">
               </el-date-picker>
             </jnpf-form-tip-item>
           </el-col>
@@ -51,12 +51,12 @@
           <JNPFQuill v-model="dataForm.bodyText" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="摘要" prop="excerpt">
-          <el-input v-model="dataForm.excerpt" placeholder="摘要" />
+          <el-input v-model="dataForm.excerpt" placeholder="请输入摘要" />
         </jnpf-form-tip-item>
         <el-row>
           <el-col :span="12">
             <jnpf-form-tip-item label="提醒方式" prop="remindCategory">
-              <el-select v-model="dataForm.remindCategory" placeholder="选择消息来源" clearable
+              <el-select v-model="dataForm.remindCategory" placeholder="请选择提醒方式" clearable
                 filterable>
                 <el-option v-for="(item,index) in remindCategoryList" :key="index"
                   :label="item.fullName" :value="item.enCode">
@@ -115,7 +115,7 @@ export default {
           { required: true, message: '发送配置不能为空', trigger: 'blur' }
         ],
         category: [
-          { required: true, message: '分类不能为空', trigger: 'blur' }
+          { required: true, message: '类型不能为空', trigger: 'blur' }
         ],
         remindCategory: [
           { required: true, message: '提醒方式不能为空', trigger: 'blur' }

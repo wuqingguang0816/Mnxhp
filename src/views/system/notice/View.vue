@@ -3,11 +3,13 @@
     :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center JNPF-dialog-notice" lock-scroll
     width="80%">
     <div class="notice-wrapper" v-loading="loading">
-      <h1 class="title">{{dataForm.title}}</h1>
-      <div class="info">
-        <span>{{jnpf.dateFormat(dataForm.releaseTime)}}</span><span>{{dataForm.releaseUser}}</span>
+      <div class="notice-hd">
+        <h1 class="title">{{dataForm.title}}</h1>
+        <div class="info">
+          <span>{{jnpf.dateFormat(dataForm.releaseTime)}}</span><span>{{dataForm.releaseUser}}</span>
+        </div>
       </div>
-      <p style="padding: 20px 0 10px;color: #303133;">{{ dataForm.excerpt }}</p>
+      <p class="excerpt">{{ dataForm.excerpt }}</p>
       <div class="main" v-html="dataForm.bodyText"></div>
       <div class="file-list" v-if="files.length">
         <JNPF-UploadFz v-model="files" disabled detailed />
@@ -56,5 +58,27 @@ export default {
 <style lang="scss" scoped>
 .main >>> a {
   color: #06c !important;
+}
+.main {
+  margin-top: 8px !important;
+}
+.notice-wrapper {
+  .notice-hd {
+    padding-top: 24px;
+    .title {
+      color: #303133;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .info {
+      color: #606266;
+      padding-bottom: 24px;
+      line-height: normal;
+    }
+  }
+  .excerpt {
+    padding: 20px 0 0px;
+    color: #303133;
+  }
 }
 </style>
