@@ -3,9 +3,11 @@
     class="JNPF-dialog JNPF-dialog_center JNPF-dialog-notice" lock-scroll width="80%"
     append-to-body>
     <div class="notice-wrapper" v-loading="loading">
-      <h1 class="title">{{info.title}}</h1>
-      <div class="info">
-        <span>{{info.releaseTime|toDate()}}</span><span>{{info.releaseUser}}</span>
+      <div class="notice-hd">
+        <h1 class="title">{{info.title}}</h1>
+        <div class="info">
+          <span>{{info.releaseTime|toDate()}}</span><span>{{info.releaseUser}}</span>
+        </div>
       </div>
       <p style="padding: 20px 0 10px;color: #303133;">{{ info.excerpt }}</p>
       <div class="main" v-html="info.bodyText"></div>
@@ -40,3 +42,30 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.main >>> a {
+  color: #06c !important;
+}
+.main {
+  margin-top: 8px !important;
+}
+.notice-wrapper {
+  .notice-hd {
+    padding-top: 24px;
+    .title {
+      color: #303133;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .info {
+      color: #606266;
+      padding-bottom: 24px;
+      line-height: normal;
+    }
+  }
+  .excerpt {
+    padding: 20px 0 0px;
+    color: #303133;
+  }
+}
+</style>
