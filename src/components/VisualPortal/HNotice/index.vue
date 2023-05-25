@@ -19,13 +19,13 @@
                 :width="item.width" :key="i" :sortable="item.sortable"
                 :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 1">
                 <template slot-scope="scope">
-                  <div>
+                  <a class="scope-a">
                     <span
                       v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
-                    <span>
+                    <span class="title">
                       {{ scope.row[item.filedName] }}
                     </span>
-                  </div>
+                  </a>
                 </template>
               </el-table-column>
             </template>
@@ -240,10 +240,12 @@ export default {
   .portal-notice-box-body {
     height: 100%;
     overflow: auto;
+    .scope-a .title:hover {
+      color: #189eff;
+    }
     .portal-list-box {
       display: flex;
       flex-direction: column;
-
       .portal-list-item {
         display: flex;
         height: 100%;
@@ -254,7 +256,6 @@ export default {
           width: 52px;
           height: 52px;
           flex-shrink: 0;
-
           .item-image {
             width: 100%;
             height: 100%;
