@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="visible" append-to-body title="批量编辑" :closeOnClickModal="false"
-    class="JNPF-dialog JNPF-dialog_center update-dialog" lock-scroll width="660px">
+    class="JNPF-dialog JNPF-dialog_center update-dialog" lock-scroll width="700px">
     <el-alert title="注意：每行对应一个选项；选项名、选项值和父级选项值之间用英文 | 隔开。格式如下：" type="warning" :closable="false"
       show-icon />
     <div class="demo-box">
@@ -145,6 +145,7 @@ export default {
 .textarea {
   >>> .el-textarea__inner {
     height: 300px !important;
+    line-height: 30px !important;
   }
 }
 .demo-box {
@@ -156,7 +157,7 @@ export default {
   .demo-box-cell {
     line-height: 30px;
     border-bottom: 1px solid #d9d9d9;
-    padding: 0 2px;
+    padding: 0 15px;
     &:last-child {
       border-bottom: 0;
     }
