@@ -589,6 +589,11 @@ export default {
       const isChildTable = prop.indexOf('.') > -1
       if (!isChildTable) {
         this.comSet('noShow', prop, !newVal)
+      } else {
+        const list = prop.split('.')
+        if (this.$refs[list[0]] && this.$refs[list[0]].$children[0]) {
+          this.$refs[list[0]].$children[0].setTableShowOrHide(list[1], !newVal)
+        }
       }
     },
     setRequired(prop, value) {
