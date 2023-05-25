@@ -71,15 +71,20 @@ const printOptionApi = {
         }
       }
     },
-    createTr(table) {
-      let trs = table.querySelectorAll('tr')
-      let tbody = table.querySelector('tbody')
+    createTr(table, tableKey, index) {
+      let cloneTable = table.cloneNode(true);
+      cloneTable.setAttribute('tableKey', tableKey + "." + index)
+      if (index == 0) return cloneTable
+
+      cloneTable.style.borderTop = 'none'
+      let trs = cloneTable.querySelectorAll('tr')
+      let tbody = cloneTable.querySelector('tbody')
       for (const tr of trs) {
         if (!tr.innerHTML.includes('{')) {
           tbody.removeChild(tr);
         }
       }
-      return table.cloneNode(true);
+      return cloneTable;
     },
     createTable(domCurrent) {
       let tableList = domCurrent.querySelectorAll('table')
@@ -91,23 +96,13 @@ const printOptionApi = {
         if (data && Array.isArray(data)) {
           // 子表
           let tableSize = (data && Array.isArray(data)) ? data.length : 0
-
           for (let index = 0; index < tableSize; index++) {
-            table.setAttribute('tableKey', tableKey + "." + index)
-            if (index > 0) {
-              tableWrap.appendChild(this.createTr(table))
-            } else {
-              tableWrap.appendChild(table.cloneNode(true))
-            }
-
+            tableWrap.appendChild(this.createTr(table, tableKey, index))
           }
-
-          this.replaceMe(table.innerHTML, tableWrap.outerHTML)
+          this.replaceMe(table.innerHTML, tableWrap.innerHTML)
           this.replaceTableCell(tableWrap)
-
         } else {
           this.handleTable(table, null, null, 'main')
-
         }
       }
     },
