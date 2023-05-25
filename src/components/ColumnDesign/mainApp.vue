@@ -373,14 +373,15 @@ export default {
       this.columnData.columnBtnsList = list
     },
     currentTab(val) {
+      const list = this.columnData[val + 'List']
       this.$nextTick(() => {
         if (this.$refs[val + 'Table']) {
-          this.columnData[val + 'List'].forEach(row => {
+          list.forEach(row => {
             this.$refs[val + 'Table'].toggleRowSelection(row, true)
           })
         }
       })
-    }
+    },
   },
   created() {
     if (typeof this.conf === 'object' && this.conf !== null) {
