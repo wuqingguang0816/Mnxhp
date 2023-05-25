@@ -11,8 +11,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="类型">
-              <el-select v-model="noticeSource" multiple placeholder="请选择类型（支持多选）" clearable
-                filterable>
+              <el-select v-model="noticeSource" multiple placeholder="请选择类型" clearable filterable>
                 <el-option v-for="(item,index) in noticeSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -21,7 +20,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="noticeStatus" multiple placeholder="请选择状态（支持多选）" clearable>
+              <el-select v-model="noticeStatus" multiple placeholder="请选择状态" clearable>
                 <el-option v-for="(item,index) in noticeStatusList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
