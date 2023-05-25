@@ -4,7 +4,8 @@
       <div class="el-input el-input--small el-input-group el-input-group--prepend el-input--suffix">
         <div class="el-input-group__prepend" v-if="addonBefore">{{ addonBefore }}</div>
         <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-          :step="step" :precision="precision" :disabled="disabled" v-thousands class="input-number"
+          :step="step" :precision="precision" :disabled="disabled" v-thousands
+          :class="addonBefore&&addonAfter? 'addon':addonBefore?'addonBefore':addonAfter?'addonAfter':'input-number'"
           :controls-position="controlsPosition==='right'?'right':''" :key="key2"
           :controls="!controlsPosition?false:true" @change="change">
         </el-input-number>
@@ -211,6 +212,28 @@ export default {
   border-radius: 4px !important;
   >>> .el-input__inner {
     border-radius: 4px !important;
+  }
+}
+.addon {
+  width: 100%;
+  >>> .el-input__inner {
+    border-radius: unset !important;
+  }
+}
+.addonBefore {
+  width: 100%;
+  >>> .el-input__inner {
+    border-top-left-radius: unset !important;
+    border-bottom-left-radius: unset !important;
+  }
+}
+.addonAfter {
+  width: 100%;
+  >>> .el-input__inner {
+    border-bottom-right-radius: unset !important ;
+    border-top-right-radius: unset !important ;
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
   }
 }
 .amountChinese {
