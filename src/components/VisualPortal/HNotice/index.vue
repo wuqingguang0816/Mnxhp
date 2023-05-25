@@ -19,13 +19,13 @@
                 :width="item.width" :key="i" :sortable="item.sortable"
                 :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 1">
                 <template slot-scope="scope">
-                  <div>
+                  <a class="scope-a">
                     <span
                       v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
-                    <span>
+                    <span class="title">
                       {{ scope.row[item.filedName] }}
                     </span>
-                  </div>
+                  </a>
                 </template>
               </el-table-column>
             </template>
@@ -35,7 +35,6 @@
           <template v-if="defaultValue.length">
             <div style="padding: 0 18px;">
               <div v-for="(item, i) in defaultValue" :key="i" class="portal-list-box"
-                @click="readInfo(item)"
                 :style="{'border-bottom':i == defaultValue.length-1 ? 'none':'1px solid #ebeef5'}">
                 <div v-if=' i% 2 == 0' class="portal-list-item"
                   :style="{'background': activeData.option.noticeOddLineColor ? activeData.option.noticeOddLineColor : activeData.option.noticeBgColor }">
@@ -56,10 +55,10 @@
                           size="mini">通知</el-tag>
                         <el-tag v-else :hit="false" size="mini" type="warning">其它</el-tag>
                       </div>
-                      <p class="item-r-title" v-if="list[1].show"
+                      <a class="item-r-title" v-if="list[1].show" @click="readInfo(item)"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
                         {{ item.fullName }}
-                      </p>
+                      </a>
                       <div v-if="activeData.option.styleType==2 && list[3].show">
                         <p v-if="list[3].timeClassify === '创建时间'"
                           :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
@@ -101,10 +100,10 @@
                           size="mini">通知</el-tag>
                         <el-tag v-else :hit="false" size="mini" type="warning">其它</el-tag>
                       </div>
-                      <p class="item-r-title" v-if="list[1].show"
+                      <a class="item-r-title" v-if="list[1].show" @click="readInfo(item)"
                         :style="{'color':list[1].fontColor,'font-size':list[1].fontSize+'px','font-weight':list[1].fontWeight?700:400}">
                         {{ item.fullName }}
-                      </p>
+                      </a>
                       <div v-if="activeData.option.styleType==2 && list[3].show">
                         <p v-if="list[3].timeClassify === '创建时间'"
                           :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
@@ -241,10 +240,12 @@ export default {
   .portal-notice-box-body {
     height: 100%;
     overflow: auto;
+    .scope-a .title:hover {
+      color: #189eff;
+    }
     .portal-list-box {
       display: flex;
       flex-direction: column;
-
       .portal-list-item {
         display: flex;
         height: 100%;
@@ -255,7 +256,6 @@ export default {
           width: 52px;
           height: 52px;
           flex-shrink: 0;
-
           .item-image {
             width: 100%;
             height: 100%;
@@ -284,6 +284,9 @@ export default {
               white-space: nowrap;
               text-overflow: ellipsis;
               padding-right: 10px;
+            }
+            .item-r-title:hover {
+              color: #189eff !important;
             }
           }
           .item-r-content {

@@ -48,7 +48,7 @@
       <div class="option-box-tip">
         设置数据库之间的字段转换规则，规则设置错误会导致同步的功能数据转换失败
       </div>
-      <template :gutter="10" v-for="(item, i) in configureList">
+      <template v-for="(item, i) in configureList">
         <el-row :key="i" class="mb-10">
           <el-col :span="3" class="rule-cell">字段类型</el-col>
           <el-col :span="7" class="rule-cell">
@@ -133,11 +133,11 @@ export default {
         if (valid) {
           if (this.dataForm.dbConnectionFrom === this.dataForm.dbConnectionTo) {
             this.$message({
-              message: '不能与数据库连接 From 相同',
+              message: '数据库连接不能相同',
               type: 'error',
               duration: 1000,
             })
-            return
+            return this.list = []
           }
           this.listLoading = true
           checkDbLink(this.dataForm).then((res) => {
@@ -164,6 +164,8 @@ export default {
               this.$set(this.list[i], 'btnLoading', false)
             }
             this.listLoading = false
+          }).catch(res => {
+            this.list = []
           })
         }
       })

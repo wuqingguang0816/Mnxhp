@@ -508,7 +508,7 @@ export default {
       return val && val.startsWith('@') ? true : false
     },
     getTipLabel() {
-      return this.dataForm.messageSource == '2' ? '系统参数格式：{@系统参数名}；自定义参数格式：{自定义参数名}' : '系统参数格式：{@系统参数名}；'
+      return this.dataForm.messageSource == '2' ? '系统参数格式：{@系统参数名}；自定义参数格式：{自定义参数名}' : '系统参数格式：{@系统参数名}'
     }
   }
 }
