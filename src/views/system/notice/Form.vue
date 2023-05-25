@@ -17,7 +17,7 @@
       <el-form ref="dataForm" :model="dataForm" :rules="dataRule" v-loading="formLoading"
         label-width="100px" class="main">
         <jnpf-form-tip-item label="标题" prop="title">
-          <el-input v-model="dataForm.title" placeholder="公告标题" />
+          <el-input v-model="dataForm.title" placeholder="请输入公告标题" />
         </jnpf-form-tip-item>
         <jnpf-form-tip-item label="用户" prop="toUserIds">
           <usersSelect v-model="toUserIds" placeholder="全部用户" multiple clearable />
