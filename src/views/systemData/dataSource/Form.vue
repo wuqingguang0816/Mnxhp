@@ -229,6 +229,7 @@ export default {
       this.dataForm.serviceName = '';
       this.dataForm.port = port
       this.dataForm.dbSchema = dbSchema
+      this.$refs['dataForm'].clearValidate()
     },
     test() {
       this.$refs['dataForm'].validate((valid) => {
