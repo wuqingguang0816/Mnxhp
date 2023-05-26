@@ -154,6 +154,7 @@ export default {
           })
         } else {
           this.dataForm.customUrl = ''
+          this.dataForm.appCustomUrl = ''
           this.dataForm.linkType = 0
         }
       })
