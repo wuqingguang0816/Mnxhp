@@ -398,7 +398,7 @@ const defaultDataHandler = '(data) => {\r\n    // 处理数据逻辑\r\n\r\n    
 const defaultPageParameters = [
   { fieldName: 'currentPage', field: 'currentPage' },
   { fieldName: 'pageSize', field: 'pageSize' },
-  { fieldName: 'keyword ', field: 'keyword' },
+  { fieldName: 'keyword', field: 'keyword' },
 ]
 const defaultEchoParameters = [
   { fieldName: 'showKey', field: '' },
