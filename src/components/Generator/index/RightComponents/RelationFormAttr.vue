@@ -43,7 +43,7 @@ export default {
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
         if (data.__config__ && data.__config__.jnpfKey) {
-          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__) {
+          if (data.__config__.jnpfKey === 'relationForm' && data.__vModel__ && this.getRelationForm(data)) {
             list.push(data)
           }
         }
@@ -54,6 +54,12 @@ export default {
         prop: o.__config__ && o.__config__.tableName ? o.__vModel__ + '_jnpfTable_' + o.__config__.tableName + (o.__config__.isSubTable ? '0' : "1") : o.__vModel__
       }))
       this.getFieldOptions()
+    },
+    getRelationForm(data) {
+      const isSubTable = this.activeData.__config__.isSubTable
+      if (!isSubTable && !data.__config__.isSubTable) return true
+      if (isSubTable && data.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable) return true
+      return false
     },
     getFieldOptions() {
       if (!this.activeData.relationField || !this.options.length) return
