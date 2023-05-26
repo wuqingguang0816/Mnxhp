@@ -23,7 +23,8 @@
       <template v-if="!currRow.pcIsRelease">
         <el-form-item label="应用" prop="pcModuleParentId" v-if="releaseQuery.pc">
           <el-select v-model="releaseQuery.pcModuleParentId" multiple placeholder="选择应用">
-            <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
+            <el-option v-for="item in treeData" :key="item.id" :label="item.fullName"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -33,7 +34,8 @@
         </el-form-item>
         <el-form-item label="应用" prop="appModuleParentId" v-if="releaseQuery.app">
           <el-select v-model="releaseQuery.appModuleParentId" multiple placeholder="选择应用">
-            <el-option v-for="item in treeData" :key="item.id" :label="item.name" :value="item.id">
+            <el-option v-for="item in treeData" :key="item.id" :label="item.fullName"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -51,6 +53,7 @@ import {
   Release
 } from "@/api/system/portal";
 import { mapGetters } from "vuex";
+import { getSystem } from "@/api/system/system";
 export default {
   props: [],
   name: 'releaseDialog',
@@ -110,7 +113,9 @@ export default {
       this.$nextTick(() => {
         this.$refs['releaseForm'] && this.$refs['releaseForm'].resetFields()
       })
-      this.treeData = this.userInfo.systemIds || []
+      getSystem({ enableMark: 1 }).then((res) => {
+        this.treeData = res.data.list;
+      }).catch(() => { });
     },
     selectToggle(key) {
       this.releaseQuery[key] = this.releaseQuery[key] === 1 ? 0 : 1
