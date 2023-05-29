@@ -101,7 +101,7 @@
               :dataType="item.dataType" :relationField="item.relationField+'_id'"
               :formData="formValue"></jnpf-qrcode>
           </template>
-          <template v-else-if="item.__config__.jnpfKey==='calculate'">
+          <template v-else-if="item.__config__.jnpfKey==='calculate'&&item.__config__.isStorage==1">
             <calculate :expression="item.expression" :isStorage="1" :formData="formValue"
               :isAmountChinese="item.isAmountChinese" :thousands="item.thousands"
               :precision="item.precision" :detailed="true" />
@@ -191,7 +191,8 @@
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
-                  :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='calculate'">
+                  :prop="column.__vModel__"
+                  v-else-if="column.__config__.jnpfKey==='calculate' &&column.__config__.isStorage==1">
                   <template slot-scope="scope">
                     <calculate :rowIndex="scope.$index" :expression="column.expression"
                       :isStorage="1" :formData="formValue" :isAmountChinese="column.isAmountChinese"

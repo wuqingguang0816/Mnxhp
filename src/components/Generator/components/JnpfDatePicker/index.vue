@@ -1,7 +1,7 @@
 <template>
   <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
     :picker-options='pickerOptions' :format="format" @change="change" :disabled="disabled"
-    :clearable="clearable" :readonly="readOnly" :key="key"></el-date-picker>
+    @blur="onblur($event)" :clearable="clearable" :readonly="readOnly" :key="key"></el-date-picker>
 </template>
 <script>
 export default {
@@ -100,6 +100,9 @@ export default {
     change(val) {
       this.$emit('input', this.innerValue)
       this.$emit('change', this.innerValue)
+    },
+    onblur(event) {
+      this.$emit('blur', event)
     }
   }
 }

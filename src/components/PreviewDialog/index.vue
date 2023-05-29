@@ -37,16 +37,8 @@ export default {
   },
   computed: {
     title() {
-      let title = '预览已发布的表单'
-      if (this.type === 'flow') {
-        title = '表单预览'
-      } else if (this.previewType == 0) {
-        title = '预览设计中的表单'
-      } else if (this.previewType == 2) {
-        title = '预览'
-      }
-      // return this.type === 'flow' ? '表单预览' : this.previewType == 0 ? '预览设计中的表单' : '预览已发布的表单'
-      return title
+      if (this.type === 'webDesign' || this.type === 'flow') return this.previewType == 0 ? '预览设计中的表单' : '预览已发布的表单'
+      return '预览'
     }
   },
   methods: {

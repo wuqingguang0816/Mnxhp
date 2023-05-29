@@ -204,7 +204,7 @@ export default {
         socket.onmessage = (event) => {
           let data = JSON.parse(event.data)
           if (data.method == 'initMessage') {
-            this.messageCount = data.unreadMessageCount + data.unreadNoticeCount+data.unreadSystemMessageCount
+            this.messageCount = data.unreadTotalCount || 0
             this.isTwinkle = !!data.unreadNums.length
           }
           //用户在线

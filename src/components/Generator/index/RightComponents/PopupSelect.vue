@@ -28,7 +28,7 @@
     </el-form-item>
     <el-form-item label="远端数据">
       <interface-dialog :value="activeData.interfaceId" :title="activeData.interfaceName"
-        popupTitle="远端数据" @change="onInterfaceIdChange" />
+        popupTitle="远端数据" @change="onInterfaceIdChange" :hasPage='1' />
     </el-form-item>
     <el-form-item label="存储字段">
       <el-input v-model="activeData.propsValue" placeholder="请输入存储字段" />

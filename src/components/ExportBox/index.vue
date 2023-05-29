@@ -14,7 +14,7 @@
           @change="handleCheckAllChange">全选</el-checkbox>
         <el-checkbox-group v-model="columns" @change="handleCheckedChange">
           <el-checkbox v-for="item in columnList" :label="item.prop" :key="item.prop"
-            class="column-item">
+            class="column-item" :title="item.label">
             {{item.label}}
           </el-checkbox>
         </el-checkbox-group>

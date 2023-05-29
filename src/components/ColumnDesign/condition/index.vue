@@ -220,7 +220,7 @@
                   :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'address'">
-                <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level"
+                <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level" :key="+new Date()"
                   :multiple="item.multiple" clearable :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'groupSelect'">

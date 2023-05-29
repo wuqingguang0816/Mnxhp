@@ -570,12 +570,19 @@
 
   .column-item.el-checkbox {
     width: calc(33.33% - 30px);
+
+    .el-checkbox__label {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
   }
 
   .export-label {
     font-size: 18px;
     font-weight: bold;
-
     width: 100%;
 
     span {
@@ -1925,6 +1932,7 @@ textarea.el-textarea__inner {
 
 .el-form .el-form-item__content .el-alert__content {
   line-height: 20px;
+  min-height: 20px;
 }
 
 .el-input-number.el-input-number--small {

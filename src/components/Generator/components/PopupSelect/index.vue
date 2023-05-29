@@ -232,7 +232,7 @@ export default {
     }
   },
   created() {
-    this.listQuery.pageSize = this.hasPage ? this.pageSize : 10000
+    this.listQuery.pageSize = this.hasPage ? this.pageSize : 100000
     this.setDefault()
   },
   methods: {
@@ -241,6 +241,7 @@ export default {
       this.listLoading = true
       const paramList = this.getParamList()
       const columnOptions = this.columnOptions.map(o => o.value)
+      this.listQuery.pageSize = this.hasPage ? this.pageSize : 100000
       let query = {
         ...this.listQuery,
         interfaceId: this.interfaceId,

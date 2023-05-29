@@ -351,9 +351,11 @@
                   :fixed="getFixed(item, i)" :width="item.width" :key="i"
                   :sortable="item.sortable?'custom':item.sortable">
                   <template slot-scope="scope">
-                    <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands"
-                      :precision="item.precision">
-                    </JnpfNumber>
+                    <template v-if="scope.row[item.__vModel__]">
+                      <JnpfNumber v-model="scope.row[item.__vModel__]" :thousands="item.thousands"
+                        :precision="item.precision">
+                      </JnpfNumber>
+                    </template>
                   </template>
                 </el-table-column>
               </template>
@@ -1025,7 +1027,9 @@ export default {
       row.rowEdit = true
       this.addHandleForRowEdit(true)
       if (!row.flowId) return
-      const list = this.flowList.filter(o => o.id === row.flowId)
+      const flowId = record.flowId || this.flowList[0].id;
+      if (!flowId) return
+      const list = this.flowList.filter(o => o.id === flowId)
       if (!list.length) return
       this.currFlow = list[0]
       let flowTemplateJson = this.currFlow.flowTemplateJson ? JSON.parse(this.currFlow.flowTemplateJson) : {}
@@ -1290,7 +1294,7 @@ export default {
       if (this.config.enableFlow == 1) {
         let data = {
           id: row.id,
-          flowId: row.flowId,
+          flowId: row.flowId || this.flowList[0].id,
           type: 1,
           opType: '-1',
           modelId: this.modelId,

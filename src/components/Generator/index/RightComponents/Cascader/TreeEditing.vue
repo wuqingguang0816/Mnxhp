@@ -155,7 +155,7 @@ export default {
     width: 260px;
   }
   .demo-box-cell {
-    line-height: 30px;
+    line-height: 36px;
     border-bottom: 1px solid #d9d9d9;
     padding: 0 15px;
     &:last-child {
