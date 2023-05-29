@@ -751,13 +751,16 @@ export default {
       this.$refs.SQLEditorRef.insert('{' + item.field + '}')
     },
     dataFormSubmit() {
-      this.btnLoading = true
       if (this.dataForm.dataType !== 2) {
+        this.btnLoading = true
         this.dataForm.dataProcessing = this.text
         this.handleSubmit()
       } else {
         this.$refs['dataForm'].validate(valid => {
-          if (valid) this.handleSubmit()
+          if (valid) {
+            this.btnLoading = true
+            this.handleSubmit()
+          }
         })
       }
     },
