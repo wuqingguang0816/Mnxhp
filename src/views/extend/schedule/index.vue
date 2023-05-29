@@ -1,23 +1,24 @@
 <template>
   <div class="Schedule-container app-container">
-    <!-- <FullCalendar class='demo-app-calendar' ref="fullCalendar" defaultView="dayGridMonth" :header="{
+    <FullCalendar class='demo-app-calendar' ref="fullCalendar" defaultView="dayGridMonth" :header="{
         left: 'prev,next today',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       }" :plugins="calendarPlugins" :weekends="calendarWeekends" :events="calendarEvents"
       @dateClick="handleDateClick" locale='zh-cn' @eventClick='eventClick' :buttonText='buttonText'
       height='parent' :eventLimit='true' allDayText='全天' :editable='true'
+      @datesRender="datesRender" />
     <!-- :dayNamesShort='dayNamesShort' :dayNames='dayNamesShort' axisFormat='HH:mm' timeFormat='HH:mm' -->
     <Form v-if="formVisible" ref="Form" @refreshDataList="refreshDataList" />
   </div>
 </template>
 <script>
-// import { AppDayList, AppList, List } from '@/api/extend/schedule'
-// // import FullCalendar from '@fullcalendar/vue'
-// // import dayGridPlugin from '@fullcalendar/daygrid'
-// // import timeGridPlugin from '@fullcalendar/timegrid'
-// import interactionPlugin from '@fullcalendar/interaction'
-// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import { AppDayList, AppList, List } from '@/api/extend/schedule'
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 import Form from './Form'
 export default {
   name: 'extend-schedule',
@@ -116,10 +117,10 @@ export default {
 <style lang='scss'>
 // you must include each plugins' css
 // paths prefixed with ~ signify node_modules
-// @import '~@fullcalendar/core/main.css';
-// @import '~@fullcalendar/daygrid/main.css';
-// @import '~@fullcalendar/timegrid/main.css';
-// @import '~@fullcalendar/bootstrap/main.css';
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/bootstrap/main.css';
 .Schedule-container {
   padding: 0;
   .fc-toolbar.fc-header-toolbar {
