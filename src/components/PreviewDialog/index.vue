@@ -37,7 +37,8 @@ export default {
   },
   computed: {
     title() {
-      return this.previewType == 0 ? '预览设计中的表单' : '预览已发布的表单'
+      if (this.type === 'webDesign' || this.type === 'flow') return this.previewType == 0 ? '预览设计中的表单' : '预览已发布的表单'
+      return '预览'
     }
   },
   methods: {
