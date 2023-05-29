@@ -3,9 +3,7 @@ import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
 import { getAmountChinese } from "@/components/Generator/utils/index"
-/**
- * 打印模板
- */
+
 const printOptionApi = {
   computed: {
     ...mapGetters(['userInfo'])
@@ -35,20 +33,15 @@ const printOptionApi = {
         this.recordList = data.operatorRecordList || []
         this.$nextTick(async () => {
           this.printTemplate = domCurrent.innerHTML
-
+          this.replaceMyValue(domCurrent, 'p')
           this.createTable(domCurrent)
-         
-          this.replaceOutValue(domCurrent)
           this.replaceSysValue()
           this.replaceQrCode()
           this.replaceBarCode()
           this.qrbarReplace()
-
-          this.removeEmptyTable(domCurrent)
-
+          // this.removeEmptyTable(domCurrent)
           const pageBreak = '<p style="page-break-after:always;"></p>'
           this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
-          // 移除文字
           this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
           this.printTemplate = this.printTemplate.replaceAll('千位分隔符(', '')
           this.thousandsPlaceMap.forEach(element => {
@@ -59,8 +52,103 @@ const printOptionApi = {
         })
       })
     },
+    getTdTrueValue(text) {
+      if (!text.match(/tablekey="([^"]*)"/)) return
+      let info = text.match(/tablekey="([^"]*)"/)[1]
+      let dataTag = info.split('.')[0]
+      let line = info.split('.')[1]
+      let field = text.match(/{([^}]*)}/)[1]
+      let value = ''
+      if (dataTag == 'headTable') {
+        value = this.data[field]
+      } else {
+        value = this.data[dataTag][line][field]
+      }
+      return value
+    },
+    getTrueValue(text) {
+      let info = text.match(/data-tag="([^"]*)"/)[1]
+      let dataTag = info.split('.')[0]
+      let field = text.match(/{([^}]*)}/)[1]
+      let value = ''
+      if (dataTag == 'headTable') {
+        value = this.data[field]
+      } else {
+        // 子表设计在外面而且有多条则合并显示
+        let data = this.data[dataTag]
+        if (data) {
+          let re = ''
+          for (const item of data) {
+            re += item[field] + '-'
+          }
+          value = re.substring(0, re.length - 1)
+        }
+      }
+      return value
+    },
+    replaceMyValue(domCurrent, tag) {
+      let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
+      let domList = domCurrent.querySelectorAll(tag)
+      for (const dom of domList) {
+        // 二维码，条码跳过处理
+        let pcontent = dom.outerHTML
+        if (pcontent.includes('qrCode') || pcontent.includes('barCode')) {
+          continue
+        }
+        // 字段
+        if (pcontent.includes('{')) {
+          // 替换千分符
+          if (pcontent.includes('千位分隔符')) {
+            let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+/)[0];
+            let place = 0
+            if (text.includes(`</span>,`)) {
+              place = text.split('</span>,')[1]
+            }
+            let value = getTrueValue(tag == 'td' ? pcontent : text)
+            let transValue = this.getThousands(value, place)
+            this.replaceMe(text, transValue)
+            continue
+          }
+          // 替换数字金额
+          if (pcontent.includes('大写金额')) {
+            let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+/)[0];
+            let value = getTrueValue(tag == 'td' ? pcontent : text)
+            let transValue = getAmountChinese(value)
+            this.replaceMe(text, transValue)
+            continue
+          }
+          // 替换图片
+          if (pcontent.includes('&lt;img')) {
+            let value = getTrueValue(pcontent)
+            if (!value) value = '[]'
+            this.replaceMyImg(dom, value)
+            continue
+          }
+          // 替换普通值
+          let value = getTrueValue(pcontent)
+          let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+          this.replaceMe(spanText, value)
+        } else {
+          // 不是字段,只解析千分和数字金额
+          if (pcontent.includes('千位分隔符')) {
+            let data = pcontent.match(/千位分隔符\((.*?)\)/);
+            let arr = data && data[1].split(',')
+            let value = arr[0] ? arr[0] : ''
+            let place = arr[1] ? arr[1] : 0
+            let transValue = this.getThousands(value, place)
+            this.replaceMe(dom.innerHTML, transValue)
+            continue
+          }
+          if (pcontent.includes('大写金额')) {
+            let value = pcontent.match(/大写金额\((.*?)\)/)[1];
+            let transValue = getAmountChinese(value)
+            this.replaceMe(dom.innerHTML, transValue)
+            continue
+          }
+        }
+      }
+    },
     removeEmptyTable() {
-
       var regex = /<table\s+style="border-collapse:\s*collapse;\s*width:\s*100%;\s*height:\s*(\d+)px;"\s+border="1"><div>/gi
       var matches = this.printTemplate.match(regex);
       if (matches) {
@@ -71,25 +159,39 @@ const printOptionApi = {
         }
       }
     },
-    createTr(table, tableKey, index) {
+    /**
+     * @param {*} table 表格dom
+     * @param {*} tableKey 表格的key
+     * @param {*} index 记录下标
+     * @param {*} removeTitleTr 是否移除标题行
+     */
+    createTr(table, tableKey, index, removeTitleTr, tableBody) {
       let cloneTable = table.cloneNode(true);
-      cloneTable.setAttribute('tableKey', tableKey + "." + index)
-      if (index == 0) return cloneTable
-
-      cloneTable.style.borderTop = 'none'
-      let trs = cloneTable.querySelectorAll('tr')
       let tbody = cloneTable.querySelector('tbody')
+      let trs = cloneTable.querySelectorAll('tr')
       for (const tr of trs) {
-        if (!tr.innerHTML.includes('{')) {
-          tbody.removeChild(tr);
+        if (removeTitleTr && !tr.innerHTML.includes('{')) {
+          continue
         }
+        let tds = tr.querySelectorAll('td')
+        for (const td of tds) {
+          if (td.innerHTML.includes('{')) {
+            td.setAttribute('tableKey', tableKey + "." + index)
+          }
+        }
+        tableBody.appendChild(tr)
       }
-      return cloneTable;
+      return cloneTable
     },
+    /**
+     * 创建表格
+     * @param {*} domCurrent 
+     */
     createTable(domCurrent) {
       let tableList = domCurrent.querySelectorAll('table')
       for (let j = 0; j < tableList.length; j++) {
-        let tableWrap = document.createElement('div');
+        let tableWrap = document.createElement('table');
+        let tableBody = tableWrap.appendChild(document.createElement('tbody'))
         let table = tableList[j];
         let tableKey = this.getTableKey(table)
         let data = this.data[tableKey]
@@ -97,132 +199,28 @@ const printOptionApi = {
           // 子表
           let tableSize = (data && Array.isArray(data)) ? data.length : 0
           for (let index = 0; index < tableSize; index++) {
-            tableWrap.appendChild(this.createTr(table, tableKey, index))
-          }
-          this.replaceMe(table.innerHTML, tableWrap.innerHTML)
-          this.replaceTableCell(tableWrap)
-        } else {
-          this.handleTable(table, null, null, 'main')
-        }
-      }
-    },
-    handleTable(table, tableKey, tableDataIndex, tag) {
-      let allCells = table.querySelectorAll('td')
-      for (const cell of allCells) {
-        let tdDom = cell.querySelector("span")
-        if (!tdDom) continue
-        let dataTag = tdDom.getAttribute('data-tag')
-        let reg = /\{(.+?)\}/g;
-        let reg2 = /\((.+?)\)/g;
-        let content = tdDom.innerText.match(reg);
-        let place = tdDom.innerText.substring(tdDom.innerText.length - 3)
-        // 异常数据处理
-        if (!content) {
-          content = tdDom.innerText.match(reg2);
-          if (!content) continue
-          content = content[0].replace("，", ",").replace('(', '').replace(')', '')
-          if (['thousands'].includes(dataTag)) {
-            if (!content.includes(',')) {
-              this.parseThousand(tdDom, content, 0)
+            if (index == 0) {
+              this.createTr(table, tableKey, index, false, tableBody)
             } else {
-              let value = content.split(',')[0]
-              let place = content.split(',')[1]
-              this.parseThousand(tdDom, value, place)
+              this.createTr(table, tableKey, index, true, tableBody)
             }
           }
-          if (['isAmountChinese'].includes(dataTag)) {
-            this.parseChinese(tdDom, content)
-            let replaceDom = tdDom.cloneNode(true);
-            replaceDom.innerHTML = getAmountChinese(content)
-            this.replaceMe(tdDom.outerHTML, replaceDom.outerHTML)
-          }
-          continue
+        } else {
+          this.createTr(table, 'headTable', '', false, tableBody)
         }
-
-        // 正常数据逻辑
-        content = content[0].replace('{', '').replace('}', '')
-        let mainValue = ''
-        if (tag == 'main') {
-          mainValue = this.data[content]
-        }
-
-        let value = mainValue ? mainValue : this.data[tableKey][tableDataIndex][content]
-        let isImg = cell.innerText.includes("<img width='100' height='100'>")
-        if (isImg) {
-          this.replaceMyImg(cell, value)
-        }
-
-        if (!value) return
-
-        if (['thousands'].includes(dataTag)) {
-
-          if (place.charAt(0) === ',') place = place.charAt(1)
-          place = isNaN(place) ? 0 : place
-          this.parseThousand(tdDom, value, place)
-        }
-        if (['isAmountChinese'].includes(dataTag)) {
-          this.parseChinese(tdDom, value)
-        }
-        this.replaceMe(tdDom.outerHTML, value)
-
+        this.replaceMe(table.innerHTML, tableWrap.innerHTML)
+        this.replaceMyValue(tableWrap, 'td')
       }
     },
-    replaceTableCell(domCurrent) {
-      const tableList = domCurrent.querySelectorAll('table')
-      for (let j = 0; j < tableList.length; j++) {
-        let table = tableList[j]
-        let tableData = table.getAttribute("tableKey")
-        if (!tableData) continue
-        let tableKey = tableData.split('.')[0]
-        let tableDataIndex = tableData.split('.')[1]
-
-        this.handleTable(table, tableKey, tableDataIndex, null)
-
-      }
-
-    },
-    /**获取节点的数字精度位数 */
-    placeNum(dom) {
-      let place = dom.innerText.substring(dom.innerText.length - 3)
-      if (place.charAt(0) === ',') place = place.charAt(1)
-      place = isNaN(place) ? 0 : place
-      return place
-    },
-    /**替换表格以外的数字 */
-    replaceMyNum(element, dataTag) {
-      let spanNum = element.querySelectorAll('span')
-      let last = spanNum[spanNum.length - 1]
-      let pre = spanNum[spanNum.length - 2]
-      let place = this.placeNum(pre)
-      let spanTag = last.getAttribute('data-tag')
-      if (!spanTag) return
-
-      let tableKey = spanTag.split('.')[0]
-      let field = spanTag.split('.')[1]
-      let value = ''
-      if (tableKey == 'headTable') {
-        value = this.data[field]
-      } else {
-        if (!field) return
-        if (Array.isArray(this.data[tableKey])) {
-          for (const arr of this.data[tableKey]) {
-            value = arr[field]
-          }
-        }
-
-      }
-      if (dataTag == 'thousands') {
-        this.parseThousand(pre, value, place)
-      }
-
-      if (dataTag == 'isAmountChinese') {
-        this.parseChinese(pre, value)
-      }
-    },
+    /**
+     * 替换图片
+     * @param {*} dom 
+     * @param {*} data 替换的值 
+     */
     replaceMyImg(dom, data) {
+      if (!data) return
       let list = JSON.parse(data)
-      
-      if(JSON.stringify(list)=='[]'){
+      if (JSON.stringify(list) == '[]') {
         let replaceDom = dom.cloneNode(true);
         replaceDom.innerHTML = ''
         this.replaceMe(dom.innerHTML, replaceDom.innerHTML)
@@ -237,52 +235,9 @@ const printOptionApi = {
           template += `<img width='${width}' height='${height}' src='${value}'/>`
         }
       }
-
       let replaceDom = dom.cloneNode(true);
       replaceDom.innerHTML = template
       this.replaceMe(dom.innerHTML, replaceDom.innerHTML)
-     
-    },
-    replaceOutValue(dom) {
-      let dataList = dom.querySelectorAll('p')
-      for (const element of dataList) {
-        let innerText = element.innerText.trim()
-        if (!innerText.includes('{') && !innerText.includes('(')) continue
-
-        let span = element.querySelector('span')
-        if (!span.getAttribute('data-tag')) continue
-        let dataTag = span.getAttribute('data-tag').split('.')[0]
-        let dataKey = span.getAttribute('data-tag').split('.')[1]
-
-        span.getAttribute('data-tag').split('.')[0]
-
-        let isQrcode = element.innerText.includes("<qrCode width='100' height='100'>")
-        let isBarcode = element.innerText.includes("<barCode width='100' height='100'>")
-        if (isQrcode || isBarcode) continue
-
-
-        if (['thousands', 'isAmountChinese'].includes(dataTag)) {
-          this.replaceMyNum(element, dataTag)
-        } else {
-          let isImg = element.innerText.includes("<img width='100' height='100'>")
-          if (dataTag == 'headTable') {
-            if (isImg) {
-              this.replaceMyImg(element, this.data[dataKey])
-            } else {
-              this.replaceMe(element.innerHTML, this.data[dataKey])
-            }
-          } else {
-            let subData = this.data[dataTag] && this.data[dataTag].length > 0 && this.data[dataTag][0]
-            if (subData) {
-              if (isImg) {
-                this.replaceMyImg(element, subData[dataKey])
-              } else {
-                this.replaceMe(element.innerHTML, subData[dataKey])
-              }
-            }
-          }
-        }
-      }
     },
     qrbarReplace() {
       if (this.barTemp.length > 0) {
@@ -324,41 +279,6 @@ const printOptionApi = {
         }
       }
     },
-    parseThousand(dom, value, place) {
-      let span = dom.querySelector('span')
-      let replaceDom = ''
-      if (span) {
-        replaceDom = span.cloneNode(true);
-
-        replaceDom.innerHTML = this.getThousands(value, place)
-        this.replaceMe(span.outerHTML, replaceDom.outerHTML)
-      } else {
-        // 异常数据
-        replaceDom = dom.cloneNode(true);
-
-        replaceDom.innerHTML = this.getThousands(value, place)
-        this.replaceMe(dom.outerHTML, replaceDom.outerHTML)
-      }
-
-      this.thousandsPlaceMap.push(`,${place})`)
-
-    },
-    parseChinese(dom, value) {
-
-      let span = dom.querySelector('span')
-      let replaceDom = ''
-      if (span) {
-        replaceDom = span.cloneNode(true);
-        replaceDom.innerText = getAmountChinese(value)
-        this.replaceMe(span.outerHTML, replaceDom.outerHTML)
-      } else {
-        // 异常数据
-        replaceDom = dom.cloneNode(true);
-        replaceDom.innerText = getAmountChinese(value)
-        this.replaceMe(dom.outerHTML, replaceDom.outerHTML)
-      }
-
-    },
     replaceMe(key, value) {
       this.printTemplate = this.printTemplate.replace(key, value)
     },
@@ -375,7 +295,6 @@ const printOptionApi = {
         }
       }
       return ''
-
     },
     getHandleName(handleStatus) {
       if (handleStatus == 0) return "退回"
@@ -528,14 +447,6 @@ const printOptionApi = {
       let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
       let base64Text = canvas.toDataURL("image/png");
       return base64Text
-    },
-    getAmount(element) {
-      let reg = /\((.+?)\)/g;
-      let res = element.match(reg);
-      let data = res ? res[0] : ''
-      data = data.replace('(', '')
-      data = data.replace(')', '')
-      return data
     },
     word() {
       let print = this.$refs.tsPrint.innerHTML
