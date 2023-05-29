@@ -367,30 +367,14 @@ export default {
       }
       return res
     },
-    // setTableShowOrHide(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].__config__.noShow = value
-    //       break
-    //     }
-    //   }
-    // },
-    // setTableRequired(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].__config__.required = value
-    //       break
-    //     }
-    //   }
-    // },
-    // setTableDisabled(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].disabled = value
-    //       break
-    //     }
-    //   }
-    // },
+    setTableShowOrHide(prop, value) {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].__vModel__ === prop) {
+          this.tableData[i].__config__.noShow = value
+          break
+        }
+      }
+    },
     onFormBlur(rowIndex, colIndex, tag) {
       const data = this.tableFormData[rowIndex][colIndex]
       if (data && data.on && data.on.blur) {

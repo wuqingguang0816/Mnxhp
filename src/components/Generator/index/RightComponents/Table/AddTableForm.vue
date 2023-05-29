@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item label="远端数据" prop="interfaceName">
         <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
-          @change="onInterfaceChange" />
+          @change="onInterfaceChange" :hasPage='1' />
       </el-form-item>
       <el-form-item label="参数设置" style="margin-bottom: 0;"></el-form-item>
       <el-table :data="dataForm.templateJson" style="margin-bottom: 18px;">
