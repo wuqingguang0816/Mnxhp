@@ -508,7 +508,8 @@ export default {
       },
       text: '',
       key: +new Date(),
-      sqlType: 0
+      sqlType: 0,
+      keyword: ""
     }
   },
   computed: {
