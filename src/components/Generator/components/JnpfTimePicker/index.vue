@@ -1,7 +1,7 @@
 <template>
   <el-time-picker v-model="innerValue" :placeholder="placeholder" :value-format="valueFormat"
     :picker-options='pickerOptions' :format="format" :disabled="disabled" :clearable="clearable"
-    @change="change" :readonly="readOnly"></el-time-picker>
+    @change="change" :readonly="readOnly" @blur="onblur($event)"></el-time-picker>
 </template>
 <script>
 export default {
@@ -93,6 +93,9 @@ export default {
     change() {
       this.$emit('input', this.innerValue)
       this.$emit('change', this.innerValue)
+    },
+    onblur(event) {
+      this.$emit('blur', event)
     }
   }
 }

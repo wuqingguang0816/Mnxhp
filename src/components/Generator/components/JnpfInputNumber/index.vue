@@ -7,7 +7,7 @@
           :step="step" :precision="precision" :disabled="disabled" v-thousands
           :class="addonBefore&&addonAfter? 'addon':addonBefore?'addonBefore':addonAfter?'addonAfter':'input-number'"
           :controls-position="controlsPosition==='right'?'right':''" :key="key2"
-          :controls="!controlsPosition?false:true" @change="change">
+          :controls="!controlsPosition?false:true" @change="change" @blur="onblur($event)">
         </el-input-number>
         <div class="el-input-group__append" v-if="addonAfter">{{ addonAfter }}</div>
       </div>
@@ -15,7 +15,7 @@
     <template v-else>
       <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
         :step="step" :precision="precision" :disabled="disabled"
-        :controls-position="controlsPosition==='right'?'right':''"
+        :controls-position="controlsPosition==='right'?'right':''" @blur="onblur($event)"
         :controls="!controlsPosition?false:true" @change="change">
       </el-input-number>
     </template>
@@ -168,7 +168,7 @@ export default {
           el = el.getElementsByTagName('input')[0]
         }
         el.value = el.value ? el.value : null
-      },
+      }
     }
   },
   mounted() {
@@ -202,6 +202,9 @@ export default {
       }
       num = num.replace(/\$\s?|(,*)/g, '')
       return num
+    },
+    onblur(event) {
+      this.$emit('blur', event)
     }
   }
 }
