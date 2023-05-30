@@ -241,7 +241,6 @@ export default {
       this.listLoading = true
       const paramList = this.getParamList()
       const columnOptions = this.columnOptions.map(o => o.value)
-      this.listQuery.pageSize = this.hasPage ? this.pageSize : 100000
       let query = {
         ...this.listQuery,
         interfaceId: this.interfaceId,

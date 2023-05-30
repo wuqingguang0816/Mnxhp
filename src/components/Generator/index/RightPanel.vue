@@ -30,7 +30,7 @@
                 <template v-if="!activeData.__config__.isSubTable">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型">
+                    <el-form-item label="控件用途">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
                         @change="changeStorage" filterable>
                         <el-option :label="item.label" :value="item.value"
@@ -80,7 +80,7 @@
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型">
+                    <el-form-item label="控件用途">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
                         @change="changeStorage" filterable>
                         <el-option :label="item.label" :value="item.value"
