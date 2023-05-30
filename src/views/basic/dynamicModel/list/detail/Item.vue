@@ -117,6 +117,8 @@
                 v-if="item.__slot__&&item.__slot__.prepend">{{item.__slot__.prepend}}</span>{{getValue(item)}}<span
                 v-if="item.__slot__&&item.__slot__.append">{{item.__slot__.append}}</span>
             </p>
+            <p v-if="item.isAmountChinese" class="isAmountChinese jnpf-detail-text">
+              {{ amountChinese(item.__config__.defaultValue) }}</p>
           </template>
         </jnpf-form-tip-item>
       </template>
@@ -227,8 +229,10 @@
                   </template>
                   <template slot-scope="scope">
                     <span
-                      v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{scope.row[column.__vModel__]}}<span
+                      v-if="column.__slot__&&column.__slot__.prepend">{{column.__slot__.prepend}}</span>{{getThousandsValue(column,scope.row[column.__vModel__])}}<span
                       v-if="column.__slot__&&column.__slot__.append">{{column.__slot__.append}}</span>
+                    <p v-if="column.isAmountChinese" class="isAmountChinese jnpf-detail-text">
+                      {{ amountChinese(scope.row[column.__vModel__]) }}</p>
                   </template>
                 </el-table-column>
               </template>
@@ -278,7 +282,8 @@
 </template>
 <script>
 import { getDownloadUrl } from '@/api/common'
-import { thousandsFormat } from '@/components/Generator/utils/index.js'
+import { getAmountChinese, thousandsFormat } from '@/components/Generator/utils/index.js'
+
 export default {
   name: 'Item',
   props: {
@@ -323,7 +328,15 @@ export default {
         }
         return item.__config__.defaultValue.join()
       }
+      if (item.thousands) return thousandsFormat(item.__config__.defaultValue)
       return item.__config__.defaultValue
+    },
+    amountChinese(val) {
+      return getAmountChinese(val)
+    },
+    getThousandsValue(item, val) {
+      if (item.thousands) return thousandsFormat(val)
+      return val
     },
     getSummaries(param) {
       const summaryField = this.item.summaryField
