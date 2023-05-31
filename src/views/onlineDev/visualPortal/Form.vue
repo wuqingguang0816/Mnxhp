@@ -33,15 +33,11 @@
               <el-radio-button :label="1">外链</el-radio-button>
             </el-radio-group>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="PC地址" prop="customUrl"
+          <jnpf-form-tip-item label="链接地址" prop="customUrl"
             :tip-label="dataForm.linkType == 1?'地址以http://或https://为开头':''">
-            <el-input v-model="dataForm.customUrl" placeholder="请输入PC地址">
+            <el-input v-model="dataForm.customUrl" placeholder="请输入链接地址">
               <template slot="prepend" v-if="dataForm.linkType===0">@/views/</template>
             </el-input>
-          </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="APP地址" prop="appCustomUrl"
-            :tip-label="dataForm.linkType == 1?'地址以http://或https://为开头':''">
-            <el-input v-model="dataForm.appCustomUrl" placeholder="请输入APP地址"></el-input>
           </jnpf-form-tip-item>
         </template>
         <template v-if="dataForm.type==0">
@@ -123,13 +119,9 @@ export default {
           { required: true, message: '链接类型不能为空', trigger: 'change' },
         ],
         customUrl: [
-          { required: true, message: 'PC地址不能为空', trigger: 'blur' },
+          { required: true, message: '链接地址不能为空', trigger: 'blur' },
           { validator: validateUrl, trigger: 'blur' }
         ],
-        appCustomUrl: [
-          { required: true, message: 'APP地址不能为空', trigger: 'blur' },
-          { validator: validateUrl, trigger: 'blur' }
-        ]
       }
     }
   },
@@ -154,7 +146,6 @@ export default {
           })
         } else {
           this.dataForm.customUrl = ''
-          this.dataForm.appCustomUrl = ''
           this.dataForm.linkType = 0
         }
       })
@@ -162,11 +153,9 @@ export default {
     changeType() {
       this.dataForm.enabledLock = 1
       this.dataForm.customUrl = ''
-      this.dataForm.appCustomUrl = ''
     },
     changeLinkType() {
       this.dataForm.customUrl = ''
-      this.dataForm.appCustomUrl = ''
     },
     dataFormSubmit(type) {
       this.$refs['dataForm'].validate((valid) => {
