@@ -34,7 +34,7 @@ export default {
       PreviewFile(id, type).then(res => {
         if (res.data) {
           if (type === 'localPreview') {
-            this.url = `${filePreviewServer}/onlinePreview?url=` + Base64.encode(res.data) + '&token=' + this.$store.getters.token
+            this.url = `${filePreviewServer}/onlinePreview?url=` + encodeURIComponent(Base64.encode(res.data)) + '&token=' + this.$store.getters.token
             return
           }
           this.url = res.data
