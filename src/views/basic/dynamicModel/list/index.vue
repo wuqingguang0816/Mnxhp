@@ -1026,8 +1026,7 @@ export default {
     editForRowEdit(row) {
       row.rowEdit = true
       this.addHandleForRowEdit(true)
-      if (!row.flowId) return
-      const flowId = record.flowId || this.flowList[0].id;
+      const flowId = row.flowId || this.flowList[0].id;
       if (!flowId) return
       const list = this.flowList.filter(o => o.id === flowId)
       if (!list.length) return

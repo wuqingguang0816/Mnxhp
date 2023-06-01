@@ -574,7 +574,7 @@ export default {
             item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage != 2) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
             item.__vModel__ = ""
           }
         }
