@@ -165,6 +165,7 @@ export default {
             }
             this.listLoading = false
           }).catch(res => {
+            this.listLoading = false
             this.list = []
           })
         }
