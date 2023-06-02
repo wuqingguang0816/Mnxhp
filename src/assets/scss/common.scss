@@ -2102,6 +2102,11 @@ textarea.el-textarea__inner {
     margin-left: 15px;
   }
 
+  .el-input-group--append,
+  .el-input-group--prepend {
+    padding: 0 15px;
+  }
+
   .el-input-number {
     margin-left: 15px;
   }

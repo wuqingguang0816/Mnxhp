@@ -215,6 +215,7 @@ export default {
   border-radius: 4px !important;
   >>> .el-input__inner {
     border-radius: 4px !important;
+    text-align: left;
   }
 }
 .addon {
