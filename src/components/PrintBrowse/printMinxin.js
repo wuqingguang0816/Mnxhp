@@ -170,6 +170,10 @@ const printOptionApi = {
       let tbody = cloneTable.querySelector('tbody')
       let trs = cloneTable.querySelectorAll('tr')
       for (const tr of trs) {
+        if ( tr.innerText.trim() == '') {
+          tableBody.appendChild(tr)
+          continue
+        }
         if (removeTitleTr && !tr.innerHTML.includes('{')) {
           continue
         }
