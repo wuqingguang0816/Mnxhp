@@ -14,7 +14,7 @@
     </template>
     <template v-else>
       <el-input-number v-model="innerValue" :placeholder="placeholder" :max="max" :min="min"
-        :step="step" :precision="precision" :disabled="disabled"
+        :step="step" :precision="precision" :disabled="disabled" class="work-number"
         :controls-position="controlsPosition==='right'?'right':''" @blur="onblur($event)"
         :controls="!controlsPosition?false:true" @change="change">
       </el-input-number>
