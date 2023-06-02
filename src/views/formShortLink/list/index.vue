@@ -133,7 +133,7 @@ const getFormDataFields = item => {
   const jnpfKey = item.__config__.jnpfKey
   const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate",
     "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
-    "tab", "row", "card"
+    "tab", "row", "card", 'groupTitle', 'divider'
   ]
   const fieldsSelectList = ["radio", "checkbox", "select", "cascader", "treeSelect"]
   if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===
@@ -304,7 +304,7 @@ export default {
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
           } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true) {
             //组织机构
-            if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
             } else {
               initQueryJson[searchList[i].__vModel__] = []
