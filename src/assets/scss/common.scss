@@ -2037,6 +2037,8 @@ textarea.el-textarea__inner {
     border: 0 !important;
   }
 
+
+
   textarea {
     border: 0 !important;
   }
@@ -2098,12 +2100,26 @@ textarea.el-textarea__inner {
     padding: 0 15px;
   }
 
+  .input-number {
+    margin-left: 0px;
+  }
+
+
   .amountChinese {
     margin-left: 15px;
   }
 
+  .el-input-group--append,
+  .el-input-group--prepend {
+    padding: 0 15px;
+  }
+
   .el-input-number {
-    margin-left: 15px;
+    margin-left: -15px !important;
+  }
+
+  .work-number {
+    margin-left: 15px !important;
   }
 
   .JNPFAmount {
