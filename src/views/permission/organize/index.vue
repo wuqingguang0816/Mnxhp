@@ -138,14 +138,10 @@ export default {
     },
     // 树形列表index层级，实现方法（可复制直接调用）
     setTableIndex(arr, index) {
-      arr.forEach((item, key) => {
-        item.index = key + 1;
-        if (index) {
-          item.index = index + 1;
-        }
-        if (item.children) {
-          this.setTableIndex(item.children, item.index);
-        }
+      arr.forEach((item) => {
+        item.index = 1;
+        if (index) item.index = index + 1;
+        if (item.children) this.setTableIndex(item.children, item.index);
       });
     },
     reset() {
