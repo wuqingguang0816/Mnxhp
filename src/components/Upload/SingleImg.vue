@@ -16,7 +16,8 @@
       </li>
     </div>
     <el-upload class="img-uploader" :action="define.comUploadUrl+'/'+type" :show-file-list="false"
-      :on-success="handleSuccess" :headers="uploadHeaders" accept="image/*" v-else>
+      :on-success="handleSuccess" :headers="uploadHeaders" accept="image/*"
+      :before-upload="beforeUpload" v-else>
       <div class="icon-box">
         <i class="el-icon-plus img-uploader-icon"></i>
         <p class="upload-tip" v-if="tip">{{tip}}</p>
@@ -66,6 +67,13 @@ export default {
     }
   },
   methods: {
+    beforeUpload(file) {
+      let isAccept = new RegExp('image/*').test(file.type)
+      if (!isAccept) {
+        this.$message.error(`请上传图片`)
+        return isAccept;
+      }
+    },
     handleSuccess(res, file) {
       if (res.code == 200) {
         this.imageUrl = res.data.url;
