@@ -179,7 +179,7 @@ export default {
     handleNodeClick(node) {
       if (node.disabled) return
       if (!this.multiple) {
-        if (this.lastLevel && node[this.lastLevelKey] && node[this.lastLevelKey] != this.lastLevelValue) return
+        if (this.lastLevel && node[this.lastLevelKey] != undefined && node[this.lastLevelKey] != this.lastLevelValue) return
         this.valueTitle = node[this.props.label]
         this.$emit('input', node[this.props.value], node)
         this.$emit('change', node[this.props.value], node)
