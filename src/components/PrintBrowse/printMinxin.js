@@ -344,7 +344,7 @@ const printOptionApi = {
         let content = ''
         for (let i = 0; i < recordList.length; i++) {
           const record = recordList[i];
-          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.handleNameMap[record.handleStatus]}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
+          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(record.handleStatus)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
         }
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
@@ -402,6 +402,19 @@ const printOptionApi = {
       let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
       let base64Text = canvas.toDataURL("image/png");
       return base64Text
+    },
+    getHandleName(handleStatus) {
+      if (handleStatus == 0) return "退回"
+      if (handleStatus == 1) return "通过"
+      if (handleStatus == 2) return "发起"
+      if (handleStatus == 3) return "撤回"
+      if (handleStatus == 4) return "终止"
+      if (handleStatus == 5) return "指派"
+      if (handleStatus == 6) return "加签"
+      if (handleStatus == 7) return "转审"
+      if (handleStatus == 8) return "变更"
+      if (handleStatus == 9) return "复活"
+      return ''
     },
     word() {
       let print = this.$refs.tsPrint.innerHTML
