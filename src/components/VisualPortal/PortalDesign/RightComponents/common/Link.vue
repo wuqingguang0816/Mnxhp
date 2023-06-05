@@ -11,7 +11,8 @@
         </el-form-item>
         <el-form-item label="菜单名称" v-if="activeData.option.linkType==1">
           <JNPF-TreeSelect :options="menuList" v-model="activeData.option.moduleId"
-            placeholder="请选择菜单" lastLevel clearable @change="getSelectValue">
+            placeholder="请选择菜单" lastLevelKey="hasModule" :lastLevelValue="true" lastLevel clearable
+            @change="getSelectValue">
           </JNPF-TreeSelect>
         </el-form-item>
         <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
@@ -34,7 +35,8 @@
         </el-form-item>
         <el-form-item label="菜单名称" v-if="activeData.option.appLinkType==1">
           <JNPF-TreeSelect :options="appMenuList" v-model="activeData.option.appModuleId"
-            placeholder="请选择菜单" lastLevel clearable @change="getSelectValue">
+            placeholder="请选择菜单" lastLevelKey="hasModule" :lastLevelValue="true" lastLevel clearable
+            @change="getSelectValue">
           </JNPF-TreeSelect>
         </el-form-item>
         <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
@@ -54,7 +56,8 @@
         </el-form-item>
         <el-form-item label="菜单名称" v-if="activeData.card.linkType==1">
           <JNPF-TreeSelect :options="menuList" v-model="activeData.card.moduleId"
-            placeholder="请选择菜单" lastLevel clearable @change="getSelectVal">
+            placeholder="请选择菜单" lastLevelKey="hasModule" :lastLevelValue="true" lastLevel clearable
+            @change="getSelectVal">
           </JNPF-TreeSelect>
         </el-form-item>
         <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
@@ -77,7 +80,8 @@
         </el-form-item>
         <el-form-item label="菜单名称" v-if="activeData.card.appLinkType==1">
           <JNPF-TreeSelect :options="appMenuList" v-model="activeData.card.appModuleId"
-            placeholder="请选择菜单" lastLevel clearable @change="getSelectVal">
+            placeholder="请选择菜单" lastLevelKey="hasModule" :lastLevelValue="true" lastLevel clearable
+            @change="getSelectVal">
           </JNPF-TreeSelect>
         </el-form-item>
         <jnpf-form-tip-item label="链接地址" tip-label="地址以http://或https://开头"
