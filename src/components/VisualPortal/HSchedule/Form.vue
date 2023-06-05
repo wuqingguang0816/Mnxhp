@@ -93,7 +93,8 @@
           </el-form-item>
         </template>
         <el-form-item label="重复提醒" prop="repetition">
-          <el-select v-model="dataForm.repetition" placeholder="请选择重复提醒" filterable>
+          <el-select v-model="dataForm.repetition" placeholder="请选择重复提醒" filterable
+            @change="repetitionChange">
             <el-option v-for="item in repeatReminderList" :key="item.id" :label="item.fullName"
               :value="item.id">
             </el-option>
@@ -415,11 +416,16 @@ export default {
       })
     },
     change_providerType(val) {
-      if (val) this.dataForm.endDay = this.dataForm.startDay
-      if (!val) this.dataForm.endDay = 0
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate('duration')
       })
+      if (val) this.dataForm.endDay = this.dataForm.startDay
+      if (!val) this.dataForm.endDay = 0
+    },
+    repetitionChange(val) {
+      let time = new Date()
+      time.setFullYear(time.getFullYear() + 1)
+      if (val != 1) this.dataForm.repeatTime = time.getTime()
     },
     onMsgChange(id, item) {
       if (!id) {
@@ -444,6 +450,10 @@ export default {
           if (this.dataForm.duration != -1 && this.dataForm.allDay == 0 && (this.dataForm.startDay == this.dataForm.endDay)) {
             if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束时间重复', type: 'error' })
             if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束时间不能为空', type: 'error' })
+          }
+          if (this.dataForm.repetition != 1 && this.dataForm.allDay == 1) {
+            let startDay = this.jnpf.toDate(this.dataForm.startDay, "yyyy-MM-dd 00:00:00")
+            this.dataForm.startDay = new Date(startDay).getTime()
           }
           if (this.dataForm.repetition != 1 && (this.dataForm.startDay > this.dataForm.repeatTime)) return this.$message({ message: '结束重复必须晚于开始时间', type: 'error' })
           const formMethod = this.dataForm.id ? ScheduleUpdate : ScheduleCreate
