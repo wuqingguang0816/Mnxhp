@@ -17,7 +17,7 @@ const printOptionApi = {
       showContainer: false,
       qrTemp: [],
       barTemp: [],
-      thousandsPlaceMap: []
+      handleNameMap: { "0": "退回", "1": "通过", "2": "发起", "3": "撤回", "4": "终止", "5": "指派", "6": "加签", "7": "转审", "8": "变更", "9": "复活" }
     }
   },
   methods: {
@@ -27,30 +27,20 @@ const printOptionApi = {
       this.batchData = [];
       this.printTemplate = "";
     },
-    async handleData(data, domCurrent, index) {
-      return new Promise(async (resolve, reject) => {
-        this.data = data.printData
-        this.recordList = data.operatorRecordList || []
-        this.$nextTick(async () => {
-          this.printTemplate = domCurrent.innerHTML
-          this.replaceMyValue(domCurrent, 'p')
-          this.createTable(domCurrent)
-          this.replaceSysValue()
-          this.replaceQrCode()
-          this.replaceBarCode()
-          this.qrbarReplace()
-          // this.removeEmptyTable(domCurrent)
-          const pageBreak = '<p style="page-break-after:always;"></p>'
-          this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
-          this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
-          this.printTemplate = this.printTemplate.replaceAll('千位分隔符(', '')
-          this.thousandsPlaceMap.forEach(element => {
-            this.printTemplate = this.printTemplate.replaceAll(element, '')
-          });
-          this.printTemplate = this.printTemplate.replaceAll(')', '')
-          resolve(this.printTemplate)
-        })
-      })
+    async handleData(data, domCurrent) {
+      this.data = data.printData
+      this.recordList = data.operatorRecordList || []
+      this.printTemplate = domCurrent.innerHTML
+      this.replaceMyValue(domCurrent, 'p')
+      this.createTable(domCurrent)
+      this.replaceSysValue()
+      this.qrbarReplace()
+      const pageBreak = '<p style="page-break-after:always;"></p>'
+      this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
+      this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
+      this.printTemplate = this.printTemplate.replaceAll('千位分隔符(', '')
+      this.printTemplate = this.printTemplate.replaceAll(')', '')
+
     },
     getTdTrueValue(text) {
       if (!text.match(/tablekey="([^"]*)"/)) return
@@ -90,12 +80,7 @@ const printOptionApi = {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
       let domList = domCurrent.querySelectorAll(tag)
       for (const dom of domList) {
-        // 二维码，条码跳过处理
         let pcontent = dom.outerHTML
-        if (pcontent.includes('qrCode') || pcontent.includes('barCode')) {
-          continue
-        }
-        // 字段
         if (pcontent.includes('{')) {
           // 替换千分符
           if (pcontent.includes('千位分隔符')) {
@@ -124,6 +109,28 @@ const printOptionApi = {
             this.replaceMyImg(dom, value)
             continue
           }
+          // 替换二维码
+          if (pcontent.includes('qrCode')) {
+            let value = getTrueValue(pcontent)
+            if (value.trim() == '') {
+              let cloneNode = dom.cloneNode(true)
+              cloneNode.innerText = ''
+              this.replaceMe(pcontent, cloneNode.outerHTML)
+              continue
+            }
+            this.replaceMyQrCode(dom, value)
+            continue
+          }
+          // 替换条码
+          if (pcontent.includes('barCode')) {
+            let value = getTrueValue(pcontent)
+            if (value.trim() == '') {
+              this.replaceMe(pcontent, '')
+              continue
+            }
+            this.replaceMyBarCode(dom, value)
+            continue
+          }
           // 替换普通值
           let value = getTrueValue(pcontent)
           let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
@@ -148,18 +155,8 @@ const printOptionApi = {
         }
       }
     },
-    removeEmptyTable() {
-      var regex = /<table\s+style="border-collapse:\s*collapse;\s*width:\s*100%;\s*height:\s*(\d+)px;"\s+border="1"><div>/gi
-      var matches = this.printTemplate.match(regex);
-      if (matches) {
-        for (var i = 0; i < matches.length; i++) {
-          var match = matches[i];
-          let str = match.replaceAll('\\', '');
-          this.printTemplate = this.printTemplate.replaceAll(str, '')
-        }
-      }
-    },
     /**
+     * 创建表格行
      * @param {*} table 表格dom
      * @param {*} tableKey 表格的key
      * @param {*} index 记录下标
@@ -167,10 +164,9 @@ const printOptionApi = {
      */
     createTr(table, tableKey, index, removeTitleTr, tableBody) {
       let cloneTable = table.cloneNode(true);
-      let tbody = cloneTable.querySelector('tbody')
       let trs = cloneTable.querySelectorAll('tr')
       for (const tr of trs) {
-        if ( tr.innerText.trim() == '') {
+        if (tr.innerText.trim() == '') {
           tableBody.appendChild(tr)
           continue
         }
@@ -243,6 +239,44 @@ const printOptionApi = {
       replaceDom.innerHTML = template
       this.replaceMe(dom.innerHTML, replaceDom.innerHTML)
     },
+    replaceMyQrCode(dom, value) {
+      let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
+      let imgList = dom.innerHTML.match(imgRegular)
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const id = this.jnpf.idGenerator()
+          let info = {
+            replaceStr: item,
+            width, height,
+            barcodeId: `qrCode${id}`,
+            value
+          }
+          this.qrTemp.push(info)
+        }
+      }
+    },
+    replaceMyBarCode(dom, value) {
+      let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
+      let imgList = dom.innerHTML.match(imgRegular)
+      if (imgList && imgList.length) {
+        for (var i = 0; i < imgList.length; i++) {
+          const item = imgList[i]
+          const width = this.getWidthHeight(item)
+          const height = this.getWidthHeight(item, 'height')
+          const id = this.jnpf.idGenerator()
+          let info = {
+            replaceStr: item,
+            width, height,
+            barcodeId: `barcode${id}`,
+            value
+          }
+          this.barTemp.push(info)
+        }
+      }
+    },
     qrbarReplace() {
       if (this.barTemp.length > 0) {
         let array = this.barTemp
@@ -300,19 +334,6 @@ const printOptionApi = {
       }
       return ''
     },
-    getHandleName(handleStatus) {
-      if (handleStatus == 0) return "退回"
-      if (handleStatus == 1) return "通过"
-      if (handleStatus == 2) return "发起"
-      if (handleStatus == 3) return "撤回"
-      if (handleStatus == 4) return "终止"
-      if (handleStatus == 5) return "指派"
-      if (handleStatus == 6) return "加签"
-      if (handleStatus == 7) return "转审"
-      if (handleStatus == 8) return "变更"
-      if (handleStatus == 9) return "复活"
-      return ''
-    },
     replaceSysValue() {
       const recordList = this.recordList
       const systemPrinter = this.userInfo.userName + '/' + this.userInfo.userAccount
@@ -323,7 +344,7 @@ const printOptionApi = {
         let content = ''
         for (let i = 0; i < recordList.length; i++) {
           const record = recordList[i];
-          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.getHandleName(record.handleStatus)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
+          content += `<tr><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.nodeName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.userName}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.jnpf.toDate(record.handleTime)}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${this.handleNameMap[record.handleStatus]}</span></td><td style="width: 20%;" data-mce-style="width: 20%;"><span class="wk-print-tag-wukong wk-tiny-color--common" contenteditable="false">${record.handleOpinion || ""}</span></td></tr>`
         }
         systemApprovalContent += content
         systemApprovalContent += '</tbody></table>'
@@ -347,60 +368,6 @@ const printOptionApi = {
       var count = value.toString().length - index;
       return count
     },
-    replaceBarCode(childItem) {
-      let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
-      let imgList = []
-      if (childItem) {
-        const element = childItem.innerHTML
-        imgList = element.match(imgRegular)
-      } else {
-        imgList = this.printTemplate.match(imgRegular)
-      }
-      if (imgList && imgList.length) {
-        for (var i = 0; i < imgList.length; i++) {
-          const item = imgList[i]
-          const width = this.getWidthHeight(item)
-          const height = this.getWidthHeight(item, 'height')
-          const value = this.getValue(item)
-          const id = this.jnpf.idGenerator()
-          // 先收集码生成的信息
-          let info = {
-            replaceStr: item,
-            width, height,
-            barcodeId: `barcode${id}`,
-            value
-          }
-          this.barTemp.push(info)
-        }
-      }
-    },
-    replaceQrCode(childItem) {
-      let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
-      let imgList = []
-      if (childItem) {
-        const element = childItem.innerHTML
-        imgList = element.match(imgRegular)
-      } else {
-        imgList = this.printTemplate.match(imgRegular)
-      }
-      if (imgList && imgList.length) {
-        for (var i = 0; i < imgList.length; i++) {
-          const item = imgList[i]
-          const width = this.getWidthHeight(item)
-          const height = this.getWidthHeight(item, 'height')
-          const value = this.getValue(item)
-          const id = this.jnpf.idGenerator()
-          // 先收集码生成的信息
-          let info = {
-            replaceStr: item,
-            width, height,
-            barcodeId: `qrCode${id}`,
-            value
-          }
-          this.qrTemp.push(info)
-        }
-      }
-    },
     getWidthHeight(item, type = 'width') {
       let regular = ""
       if (type == 'width') regular = /width=[\"|'](.*?)[\"|']/gi;
@@ -413,22 +380,6 @@ const printOptionApi = {
         value = res && res.length ? res[1] : 100
       }
       return value
-    },
-    getValue(item) {
-      let regexp = /((^(<|&lt;)[a-zA-Z-]+?){0,1}(>|&gt;))([\s\S]+)((<|&lt;)\/[a-zA-Z-]+((>|&gt;){0,1}))/g
-      let data = regexp.exec(item)
-      let value = data && data.length ? data[5] : ''
-      let regexp_ = /<span(\S|\s)*?<\/span>/g
-      let data_ = value.match(regexp_)
-      if (data_ && data_.length) {
-        let res = data_[0].match(regexp)
-        value = res && res.length ? res[0] : ''
-        value = value.replace('</span>', "");
-        value = value.replace('>', "");
-        return this.data[value] ? this.data[value] : value
-      } else {
-        return this.data[value] ? this.data[value] : value
-      }
     },
     getJsBarcode(value, id, width, height) {
       if (!value) return
