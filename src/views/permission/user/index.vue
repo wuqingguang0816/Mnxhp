@@ -204,6 +204,7 @@ export default {
       this.search()
     },
     toggleExpand(expands) {
+      this.filterText = ''
       this.refreshTree = false
       this.expands = expands
       this.$nextTick(() => {
