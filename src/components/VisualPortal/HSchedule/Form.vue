@@ -159,13 +159,15 @@ export default {
         this.dataForm.startDay = new Date(startDay).getTime()
         let endDay = this.jnpf.toDate(value, "yyyy-MM-dd 00:00:00")
         value = new Date(endDay).getTime()
-        if (this.dataForm.startDay == value) {
-          if (this.dataForm.allDay == 0 && (this.dataForm.startTime > this.dataForm.endTime)) {
+        if (this.dataForm.duration == -1) {
+          if (this.dataForm.startDay == value) {
+            if (this.dataForm.allDay == 0 && (this.dataForm.startTime > this.dataForm.endTime)) {
+              callback(new Error('结束时间必须晚于开始时间'));
+            }
+          }
+          if (this.dataForm.startDay > value) {
             callback(new Error('结束时间必须晚于开始时间'));
           }
-        }
-        if (this.dataForm.startDay > value) {
-          callback(new Error('结束时间必须晚于开始时间'));
         }
         callback();
       }
