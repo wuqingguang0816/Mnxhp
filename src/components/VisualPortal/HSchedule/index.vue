@@ -144,8 +144,8 @@ export default {
           //对应月视图
           dayGridMonth: {
             displayEventTime: false,//是否显示时间
-            eventLimit: 5,
-            dayMaxEventRows: 4,
+            eventLimit: 4,
+            dayMaxEventRows: 3,
             // eventMaxStack: 30,
             // moreLinkContent: "更多",
             moreLinkClick: "popover",
