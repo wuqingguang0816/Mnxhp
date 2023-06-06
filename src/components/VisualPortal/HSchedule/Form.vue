@@ -419,8 +419,11 @@ export default {
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate('duration')
       })
-      if (val) this.dataForm.endDay = this.dataForm.startDay
-      if (!val) this.dataForm.endDay = 0
+      if (val) {
+        this.dataForm.endDay = this.dataForm.startDay
+      } else {
+        this.dataForm.duration = 60
+      }
     },
     repetitionChange(val) {
       let time = new Date()
