@@ -454,7 +454,6 @@ export default {
             if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束时间不能为空', type: 'error' })
           }
           if (this.dataForm.duration == -1 && this.dataForm.allDay == 0 && (this.dataForm.startDay == this.dataForm.endDay)) {
-            if (this.dataForm.startTime == this.dataForm.endTime) return this.$message({ message: '开始时间与结束时间重复', type: 'error' })
             if (!this.dataForm.endTime && this.dataForm.duration == -1) return this.$message({ message: '结束时间不能为空', type: 'error' })
           }
           if (this.dataForm.repetition != 1 && this.dataForm.allDay == 1) {
