@@ -194,7 +194,7 @@ export default {
         sendName: '',
         repetition: '1',
         repeatTime: '',
-        color: '#188ae2'
+        color: '#FFFFFF'
       },
       repetitionType: false,
       checked: 1,
@@ -375,7 +375,7 @@ export default {
           this.dataForm.toUserIds = []
           this.dataForm.startDay = startTime || ''
           this.dataForm.endDay = startTime || ''
-          this.dataForm.color = '#188ae2'
+          this.dataForm.color = '#FFFFFF'
           this.dataForm.reminderTime = -2
           this.dataForm.duration = 60
           this.dataForm.content = ''
@@ -423,6 +423,7 @@ export default {
         this.dataForm.endDay = this.dataForm.startDay
       } else {
         this.dataForm.duration = 60
+        this.dataForm.endDay = 0
       }
     },
     repetitionChange(val) {
