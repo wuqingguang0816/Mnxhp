@@ -234,11 +234,11 @@ export default {
   color: #06c !important;
 }
 .main {
-  margin-top: 8px !important;
+  margin-top: 0px !important;
 }
 .notice-wrapper {
   .notice-hd {
-    padding-top: 24px;
+    padding: 24px 0;
     .title {
       color: #303133;
       margin-top: 0;
@@ -251,8 +251,8 @@ export default {
     }
   }
   .excerpt {
-    padding: 20px 0 0px;
     color: #303133;
+    margin-bottom: 8px !important;
   }
 }
 .JNPF-messageList {

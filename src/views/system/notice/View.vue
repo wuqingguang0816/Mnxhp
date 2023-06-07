@@ -9,7 +9,7 @@
           <span>{{jnpf.dateFormat(dataForm.releaseTime)}}</span><span>{{dataForm.releaseUser}}</span>
         </div>
       </div>
-      <p class="excerpt">{{ dataForm.excerpt }}</p>
+      <p class="excerpt" v-if="dataForm.excerpt">{{ dataForm.excerpt }}</p>
       <div class="main" v-html="dataForm.bodyText"></div>
       <div class="file-list" v-if="files.length">
         <JNPF-UploadFz v-model="files" disabled detailed />
@@ -60,11 +60,11 @@ export default {
   color: #06c !important;
 }
 .main {
-  margin-top: 8px !important;
+  margin-top: 0px !important;
 }
 .notice-wrapper {
   .notice-hd {
-    padding-top: 24px;
+    padding: 24px 0;
     .title {
       color: #303133;
       margin-top: 0;
@@ -77,8 +77,8 @@ export default {
     }
   }
   .excerpt {
-    padding: 20px 0 0px;
     color: #303133;
+    margin-bottom: 8px !important;
   }
 }
 </style>
