@@ -30,7 +30,7 @@
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
               <el-select v-model="dataForm.messageSource" placeholder="请选择消息来源" clearable
-                :disabled="this.dataForm.id?true:false" filterable>
+                :disabled="this.dataForm.id?true:false" filterable @change="onMessageSourceChange">
                 <el-option v-for="(item,index) in msgSourceList" :key="index" :label="item.fullName"
                   :value="item.enCode">
                 </el-option>
@@ -233,6 +233,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.View.init(id, this.messageTypeList)
       })
+    },
+    onMessageSourceChange() {
+      this.dataForm.sendConfigTemplateList = []
     }
   }
 }
