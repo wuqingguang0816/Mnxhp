@@ -359,7 +359,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -797,7 +797,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -854,7 +854,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -911,7 +911,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -968,7 +968,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -1025,7 +1025,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -1082,7 +1082,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -1133,7 +1133,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -1938,7 +1938,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -1995,7 +1995,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -2052,7 +2052,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -2109,7 +2109,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
@@ -2160,7 +2160,7 @@
                   <el-table-column prop="field" label="参数名称" width="150">
                     <template slot-scope="scope">
                       <div class="parameter-box" v-for="(item,index) in scope.row.paramJson"
-                        :key="index">
+                        :key="index" :title="item.field+'('+item.fieldName+')'">
                         {{item.field}}({{item.fieldName}})
                       </div>
                     </template>
