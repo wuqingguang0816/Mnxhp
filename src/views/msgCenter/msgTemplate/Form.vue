@@ -303,12 +303,7 @@ export default {
       messageTypeList: [],
       isEdit: false,
       keyword: "",
-      parameterList: [
-        {
-          field: '@flowLink',
-          fieldName: '流程链接'
-        }
-      ],
+      parameterList: [],
       allParameterList: [],
       smsList: [],
       wxSkipList: [
@@ -320,10 +315,7 @@ export default {
   methods: {
     init(id) {
       this.dataForm.id = id || ''
-      this.parameterList = [{
-        field: '@flowLink',
-        fieldName: '流程链接'
-      }]
+      this.parameterList = []
       this.allParameterList = this.parameterList
       this.getConfig()
       this.$nextTick(() => {
@@ -481,8 +473,9 @@ export default {
         }
       }
     },
-    onMessageSourceChange() {
-      this.parameterList = []
+    onMessageSourceChange(val) {
+      if (val == '3') return this.parameterList = []
+      this.parameterList = [{ field: '@flowLink', fieldName: '流程链接' }]
     }
   }
 }
