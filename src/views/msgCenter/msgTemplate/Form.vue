@@ -30,7 +30,7 @@
           <el-col :span="12">
             <el-form-item label="消息来源" prop="messageSource">
               <el-select v-model="dataForm.messageSource" placeholder="选择消息来源" clearable
-                :disabled="this.dataForm.id?true:false">
+                :disabled="this.dataForm.id?true:false" @change="onMessageSourceChange">
                 <el-option v-for="(item,index) in messageSourceList" :key="index"
                   :label="item.fullName" :value="item.enCode">
                 </el-option>
@@ -101,7 +101,8 @@
                       </el-table-column>
                     </el-table>
                   </div>
-                  <div class="table-actions" @click="addEditParameter()">
+                  <div class="table-actions" @click="addEditParameter()"
+                    v-if="dataForm.messageSource != '3'">
                     <el-button type="text" icon="el-icon-plus">添加参数</el-button>
                   </div>
                 </div>
@@ -480,6 +481,9 @@ export default {
         }
       }
     },
+    onMessageSourceChange() {
+      this.parameterList = []
+    }
   }
 }
 </script>
