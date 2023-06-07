@@ -12,7 +12,7 @@
         <template slot-scope="scope">
           <div style="display: flex;">
             <el-input v-model="scope.row.fullName" placeholder="请输入名称"
-              :disabled="type !=1?true:false" v-if="showType == 'pc'" />
+              :disabled="scope.row.filedName =='classify'?true:false" v-if="showType == 'pc'" />
             <el-input v-model="scope.row.fullName" placeholder="请输入名称" disabled
               v-if="showType == 'app'" />
             <el-select v-model="scope.row.classify" multiple placeholder="请选择类型"

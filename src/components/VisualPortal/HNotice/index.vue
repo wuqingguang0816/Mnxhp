@@ -6,7 +6,7 @@
       <template>
         <template v-if="activeData.option.styleType==1">
           <JNPF-table :data="defaultValue" :show-header='activeData.option.showHeader'
-            @row-click="readInfo" :hasNO="false" :border='activeData.border' :header-cell-style="{'font-size':activeData.option.headerFontSize+'px',
+            :hasNO="false" :border='activeData.border' :header-cell-style="{'font-size':activeData.option.headerFontSize+'px',
         'text-align':activeData.option.headerLeft, 
         background:activeData.option.headerBgColor,color:activeData.option.headerFontColor,
         'font-weight':activeData.option.headerFontWeight?'bolder':'normal'}"
@@ -19,13 +19,15 @@
                 :width="item.width" :key="i" :sortable="item.sortable"
                 :fixed='item.fixed=="none"?"":item.fixed' v-if="item.id != 1">
                 <template slot-scope="scope">
-                  <a class="scope-a">
+                  <a class="scope-a" @click="readInfo(scope.row)"
+                    v-if="item.filedName === 'fullName'">
                     <span
-                      v-if="item.filedName === 'fullName' && list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
+                      v-if="list.filter(o=>o.id=='1')[0].show">{{ `【${scope.row.category}】` }}</span>
                     <span class="title">
                       {{ scope.row[item.filedName] }}
                     </span>
                   </a>
+                  <span v-else>{{ scope.row[item.filedName] }}</span>
                 </template>
               </el-table-column>
             </template>
@@ -240,7 +242,7 @@ export default {
   .portal-notice-box-body {
     height: 100%;
     overflow: auto;
-    .scope-a .title:hover {
+    .scope-a:hover {
       color: #189eff;
     }
     .portal-list-box {
