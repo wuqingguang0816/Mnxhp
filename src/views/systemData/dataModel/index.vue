@@ -151,6 +151,8 @@ export default {
         const list = res.data.list || []
         this.dbOptions = list.filter(o => o.children && o.children.length)
         this.getTableData()
+      }).catch(() => {
+        this.listLoading = false
       })
     },
     getTableData() {
@@ -167,6 +169,8 @@ export default {
           this.$set(this.list[i], 'childTableLoading', false)
           this.$set(this.list[i], 'childTable', [])
         }
+        this.listLoading = false
+      }).catch(() => {
         this.listLoading = false
       })
     },
