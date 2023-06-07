@@ -465,6 +465,7 @@ export default {
         this.dataForm.content += content
       }
       this.dataForm.title += content
+      this.$refs.dataForm.clearValidate(['title', 'content'])
     },
     searchParameter() {
       this.parameterList = this.allParameterList.filter(item => {
