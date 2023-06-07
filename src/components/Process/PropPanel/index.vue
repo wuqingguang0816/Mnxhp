@@ -4209,6 +4209,9 @@ export default {
   height: 30px;
   line-height: 30px;
   margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .variable-box {
   margin-bottom: 8px;
