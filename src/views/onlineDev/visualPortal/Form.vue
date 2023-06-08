@@ -35,7 +35,7 @@
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="链接地址" prop="customUrl"
             :tip-label="dataForm.linkType == 1?'地址以http://或https://为开头':''">
-            <el-input v-model="dataForm.customUrl" placeholder="请输入链接地址">
+            <el-input v-model="dataForm.customUrl" placeholder="请输入链接地址" style="height: 32px;">
               <template slot="prepend" v-if="dataForm.linkType===0">@/views/</template>
             </el-input>
           </jnpf-form-tip-item>
