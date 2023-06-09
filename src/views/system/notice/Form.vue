@@ -184,8 +184,6 @@ export default {
           this.dataForm.files = JSON.stringify(this.files)
           this.dataForm.toUserIds = this.toUserIds.join(',')
           const formMethod = this.dataForm.id ? updateNotice : createNotice
-          this.visible = false
-          this.btnLoading = false
           formMethod(this.dataForm).then(res => {
             this.$message({
               message: res.msg,
