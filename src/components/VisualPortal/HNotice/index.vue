@@ -62,7 +62,7 @@
                         {{ item.fullName }}
                       </a>
                       <div v-if="activeData.option.styleType==2 && list[3].show">
-                        <p v-if="list[3].timeClassify === '创建时间'"
+                        <p v-if="list[3].timeClassify == 1"
                           :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
                           {{ item.creatorTime| toDateValue()}}</p>
                         <p v-else
@@ -74,7 +74,7 @@
                       class="item-r-content" v-if="list[2].show">
                       {{ item.excerpt }}</p>
                     <div v-if="activeData.option.styleType==3 && list[3].show" class="item-r-time">
-                      <p v-if="list[3].timeClassify === '创建时间'"
+                      <p v-if="list[3].timeClassify == 1"
                         :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
                         {{ item.creatorTime| toDateValue()}}</p>
                       <p v-else
@@ -107,7 +107,7 @@
                         {{ item.fullName }}
                       </a>
                       <div v-if="activeData.option.styleType==2 && list[3].show">
-                        <p v-if="list[3].timeClassify === '创建时间'"
+                        <p v-if="list[3].timeClassify == 1"
                           :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
                           {{ item.creatorTime| toDateValue()}}</p>
                         <p v-else
@@ -119,7 +119,7 @@
                       class="item-r-content" v-if="list[2].show">
                       {{ item.excerpt }}</p>
                     <div v-if="activeData.option.styleType==3 && list[3].show" class="item-r-time">
-                      <p v-if="list[3].timeClassify === '创建时间'"
+                      <p v-if="list[3].timeClassify == 1"
                         :style="{'color':list[3].fontColor,'font-size':list[3].fontSize+'px','font-weight':list[3].fontWeight?700:400}">
                         {{ item.creatorTime| toDateValue()}}</p>
                       <p v-else

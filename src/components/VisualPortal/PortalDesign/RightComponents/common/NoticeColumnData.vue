@@ -23,7 +23,7 @@
             </el-select>
             <el-select v-model="scope.row.timeClassify" placeholder="请选择" style="margin-left: 5px;"
               v-if="scope.row.filedName == 'time'" filterable>
-              <el-option v-for="item in timeOptions" :key="item.fullName" :label="item.fullName"
+              <el-option v-for="item in timeOptions" :key="item.value" :label="item.fullName"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -173,18 +173,18 @@ export default {
       classifyOptions: [],
       timeOptions: [
         {
-          value: '1',
+          value: 1,
           fullName: '创建时间'
         }, {
-          value: '2',
+          value: 2,
           fullName: '发布时间'
         }],
       userOptions: [
         {
-          value: '1',
+          value: 1,
           fullName: '创建人'
         }, {
-          value: '2',
+          value: 2,
           fullName: '发布人'
         }],
     }
