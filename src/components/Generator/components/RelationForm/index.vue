@@ -121,6 +121,8 @@
 <script>
 import { getFieldDataSelect, getDataChange, getConfigData } from '@/api/onlineDev/visualDev'
 import Detail from '@/views/basic/dynamicModel/list/detail'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'PopupSelect',
   components: { Detail },
@@ -279,11 +281,13 @@ export default {
       this.checkedRow = {}
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
     },
     select() {
       if (!this.checked) return
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       this.visible = false
     },
     rowClick(row) {

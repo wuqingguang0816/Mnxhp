@@ -194,6 +194,8 @@ import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/re
 import { getPositionSelector } from '@/api/permission/position'
 import { getRoleSelector } from '@/api/permission/role'
 import { getGroupSelector } from '@/api/permission/group'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 const defaultSelectedList = [
   {
     id: "department",
@@ -486,11 +488,13 @@ export default {
         let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds)
         this.$emit('change', selectedIds, this.selectedData)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
       } else {
         if (!this.selectedData.length) {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           this.visible = false
           return
         }
@@ -498,6 +502,7 @@ export default {
         let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds[0])
         this.$emit('change', selectedIds[0], this.selectedData[0])
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds[0])
       }
       this.visible = false
     },

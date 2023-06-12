@@ -483,7 +483,7 @@ export const inputComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click"
+      trigger: "change"
     },
     on: {
       change:
@@ -517,7 +517,7 @@ export const inputComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click"
+      trigger: "change"
     },
     on: {
       change:
@@ -858,7 +858,7 @@ export const selectComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click",
+      trigger: "change",
       relationField: '',
     },
     on: {
@@ -896,7 +896,7 @@ export const selectComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click"
+      trigger: "change"
     },
     on: {
       change:
@@ -954,7 +954,7 @@ export const selectComponents = [
       visibility: ["pc", "app"],
       tableName: "",
       regList: [],
-      trigger: "click"
+      trigger: "change"
     },
     on: {
       change:

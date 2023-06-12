@@ -81,6 +81,8 @@
 <script>
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { getPositionByPositionCondition } from '@/api/permission/position'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 
 export default {
   name: 'groupSelect',
@@ -290,11 +292,13 @@ export default {
         let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds)
         this.$emit('change', selectedIds, this.selectedData)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
       } else {
         if (!this.selectedData.length) {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           this.visible = false
           return
         }
@@ -302,6 +306,7 @@ export default {
         let selectedIds = this.selectedData[0].id
         this.$emit('input', selectedIds)
         this.$emit('change', selectedIds, this.selectedData[0])
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
       }
       this.visible = false
     },
