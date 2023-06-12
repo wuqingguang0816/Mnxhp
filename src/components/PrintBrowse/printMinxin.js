@@ -81,7 +81,7 @@ const printOptionApi = {
       let domList = domCurrent.querySelectorAll(tag)
       for (const dom of domList) {
         let pcontent = dom.outerHTML
-        if (pcontent.includes('{')) {
+        if (pcontent.includes('{') && pcontent.includes('data-tag')) {
           // 替换千分符
           if (pcontent.includes('千位分隔符')) {
             let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+/)[0];
@@ -136,7 +136,7 @@ const printOptionApi = {
           let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
           this.replaceMe(spanText, value)
         } else {
-          // 不是字段,只解析千分和数字金额
+          // 不是字段
           if (pcontent.includes('千位分隔符')) {
             let data = pcontent.match(/千位分隔符\((.*?)\)/);
             let arr = data && data[1].split(',')
@@ -152,6 +152,22 @@ const printOptionApi = {
             this.replaceMe(dom.innerHTML, transValue)
             continue
           }
+
+          // 替换二维码
+          console.log(pcontent, 21);
+          if (pcontent.includes('qrCode')) {
+            let value = pcontent.match(/\{(.*?)\}/g)
+            this.replaceMyQrCode(dom, value)
+            continue
+          }
+          // 替换条码
+          if (pcontent.includes('barCode')) {
+            let value = pcontent.match(/\{(.*?)\}/g)
+            this.replaceMyBarCode(dom, value)
+            continue
+          }
+
+
         }
       }
     },
