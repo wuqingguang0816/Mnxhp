@@ -116,6 +116,8 @@
 
 <script>
 import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'PopupSelect',
   props: {
@@ -300,6 +302,7 @@ export default {
       this.checkedRow = {}
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       event.stopPropagation();
     },
     select() {
@@ -307,6 +310,7 @@ export default {
       this.innerValue = this.checkedTxt
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       this.visible = false
     },
     rowClick(row) {

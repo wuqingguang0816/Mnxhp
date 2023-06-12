@@ -39,6 +39,8 @@
 import { getDownloadUrl, getPackDownloadUrl } from '@/api/common'
 import Preview from './Preview'
 import FileUploader from './vue-simple-uploader/fileUploader'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'UploadFile',
   components: { Preview, FileUploader },
@@ -150,6 +152,7 @@ export default {
       this.fileList.splice(index, 1)
       this.$emit("input", this.fileList)
       this.$emit('change', this.fileList)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     handleClick(file) {
       // 点击下载文件
@@ -179,6 +182,7 @@ export default {
       this.fileList.push(data)
       this.$emit('input', this.fileList)
       this.$emit('change', this.fileList)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     downloadAll() { //下载全部（打包下载）
       if (!this.fileList.length) {

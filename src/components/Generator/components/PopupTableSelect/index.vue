@@ -88,6 +88,8 @@
 <script>
 import { getDataInterfaceDataSelect, getDataInterfaceDataInfoByIds } from '@/api/systemData/dataInterface'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'PopupTableSelect',
   inject: {
@@ -344,18 +346,21 @@ export default {
         this.selectedIds = this.selectedData.map(o => o[this.propsValue])
         this.$emit('input', this.selectedIds)
         this.$emit('change', this.selectedIds, this.selectedData)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
       } else {
         if (!this.checked) {
           this.innerValue = ''
           this.checkedRow = {}
           this.$emit('input', '')
           this.$emit('change', '', {})
+          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           this.closePopover()
           return
         }
         this.innerValue = this.checkedTxt
         this.$emit('input', this.checked)
         this.$emit('change', this.checked, this.checkedRow)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       }
       this.closePopover()
     },
@@ -437,6 +442,7 @@ export default {
       this.selectedData = []
       this.$emit('input', this.checked)
       this.$emit('change', this.checked, this.checkedRow)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       event.stopPropagation();
     },
     resetInputWidth() {

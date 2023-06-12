@@ -82,6 +82,8 @@
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import { getDepartmentSelectorByAuth } from "@/api/permission/department";
 import { getOrganizeSelectorByAuth } from '@/api/permission/organize'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'comSelect',
   inject: {
@@ -263,6 +265,7 @@ export default {
       this.tagsList = []
       this.$emit('input', [])
       this.$emit('change', [], [])
+      dispatch.call(this, 'ElFormItem', 'el.form.change', [])
     },
     openDialog() {
       if (this.selectDisabled) return
@@ -328,10 +331,12 @@ export default {
         this.tagsList = JSON.parse(JSON.stringify(this.selectedData))
         this.$emit('input', this.selectedIds)
         this.$emit('change', this.selectedIds, selectedData)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.selectedIds)
       } else {
         this.innerValue = this.selectedData.join(',')
         this.$emit('input', this.selectedIds[0])
         this.$emit('change', this.selectedIds[0], selectedData[0])
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.selectedIds[0])
       }
       this.visible = false
     },
