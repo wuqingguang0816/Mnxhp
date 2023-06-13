@@ -56,6 +56,12 @@ export default {
       }))
       this.getFieldOptions()
     },
+    getRelationForm(data) {
+      const isSubTable = this.activeData.__config__.isSubTable
+      if (!isSubTable && !data.__config__.isSubTable) return true
+      if (isSubTable && data.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable) return true
+      return false
+    },
     getFieldOptions() {
       if (!this.activeData.relationField || !this.options.length) return
       let list = this.options.filter(o => o.prop === this.activeData.relationField)

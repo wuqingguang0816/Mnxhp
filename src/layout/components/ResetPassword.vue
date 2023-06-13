@@ -48,6 +48,7 @@ export default {
       const includeUppercaseLetters = /[A-Z]+/
       //是否包含字符
       const containsCharacters = /\W/
+      const containsCharacters2 = /_/
 
       if (value === '') {
         callback(new Error('新密码不能为空'));
@@ -73,7 +74,7 @@ export default {
           }
         }
         if(this.baseForm.containsCharacters){
-          if (!containsCharacters.test(value)) {
+          if (!containsCharacters.test(value) && !containsCharacters2.test(value)) {
             callback(new Error('新密码必须包含字符'));
           }
         }

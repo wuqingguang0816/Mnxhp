@@ -29,7 +29,7 @@
                 <template v-if="!activeData.__config__.isSubTable">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型">
+                    <el-form-item label="控件用途">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
                         @change="changeStorage">
                         <el-option :label="item.label" :value="item.value"
@@ -79,7 +79,7 @@
                 <template v-if="activeData.__config__.isSubTable && subTable.length">
                   <template
                     v-if="activeData.__config__.jnpfKey==='calculate' ||activeData.__config__.jnpfKey==='popupAttr' ||activeData.__config__.jnpfKey==='relationFormAttr'">
-                    <el-form-item label="控件类型">
+                    <el-form-item label="控件用途">
                       <el-select v-model="activeData.__config__.isStorage" placeholder="请选择"
                         @change="changeStorage">
                         <el-option :label="item.label" :value="item.value"
@@ -1111,7 +1111,7 @@ export default {
     },
     setDefaultOptions() {
       if (!this.$store.getters.hasTable) return
-      if (this.activeData.__vModel__ === undefined || this.activeData.__config__.jnpfKey === 'table') return
+      if ((this.activeData.__vModel__ === undefined && this.activeData.__config__.isStorage != 2) || this.activeData.__config__.jnpfKey === 'table') return
       if (!this.activeData.__config__.tableName || this.activeData.__config__.tableName === this.mainTable) {
         let fieldOptions = this.formItemList.map(o => ({ ...o, realField: o.field }))
         this.fieldOptions = fieldOptions.filter(o => o.primaryKey != 1)

@@ -883,9 +883,9 @@ export default {
             initQueryJson[searchList[i].__vModel__] = [startDateTime.getTime(), endDateTime.getTime()]
           } else if (searchList[i].jnpfKey === 'comSelect' && searchList[i].__config__.defaultCurrent == true) {
             //组织机构
-            if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
               initQueryJson[searchList[i].__vModel__] = searchList[i].searchMultiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList;
-            }else {
+            } else {
               initQueryJson[searchList[i].__vModel__] = undefined
             }
           } else if (searchList[i].jnpfKey === 'depSelect' && searchList[i].__config__.defaultCurrent == true && this.userInfo.departmentId != null && this.userInfo.departmentId != '') {
@@ -984,8 +984,9 @@ export default {
     },
     editForRowEdit(row) {
       row.rowEdit = true
-      if (!row.flowId) return
-      const list = this.flowList.filter(o => o.id === row.flowId)
+      const flowId = row.flowId || this.flowList[0].id;
+      if (!flowId) return
+      const list = this.flowList.filter(o => o.id === flowId)
       if (!list.length) return
       this.currFlow = list[0]
       let flowTemplateJson = this.currFlow.flowTemplateJson ? JSON.parse(this.currFlow.flowTemplateJson) : {}
@@ -1087,7 +1088,7 @@ export default {
         if (e.__config__.jnpfKey === 'date' && e.__config__.defaultCurrent == true) {
           item[e.__vModel__] = new Date().getTime()
         } else if (e.__config__.jnpfKey === 'comSelect' && e.__config__.defaultCurrent == true) {
-          if(this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+          if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
             item[e.__vModel__] = e.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
           } else {
             item[e.__vModel__] = []
@@ -1146,7 +1147,7 @@ export default {
       if (this.config.enableFlow == 1) {
         let data = {
           id: row.id,
-          flowId: row.flowId,
+          flowId: row.flowId || this.flowList[0].id,
           type: 1,
           opType: '-1',
           modelId: this.modelId,

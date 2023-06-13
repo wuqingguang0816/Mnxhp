@@ -181,6 +181,8 @@
 <script>
 import { getImUserSelector, getUserInfoList, getSubordinates, getOrganization, getUsersByUserCondition } from '@/api/permission/user'
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'userSelect',
   inject: {
@@ -464,11 +466,13 @@ export default {
         let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds)
         this.$emit('change', selectedIds, this.selectedData)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
       } else {
         if (!this.selectedData.length) {
           this.innerValue = ''
           this.$emit('input', '')
           this.$emit('change', '', {})
+          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           this.visible = false
           return
         }
@@ -476,6 +480,7 @@ export default {
         let selectedIds = this.selectedData.map(o => o.id)
         this.$emit('input', selectedIds[0])
         this.$emit('change', selectedIds[0], this.selectedData[0])
+        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds[0])
       }
       this.visible = false
     },
@@ -486,7 +491,7 @@ export default {
         this.tagsList = []
         this.$nextTick(() => {
           this.resetInputHeight();
-        }) 
+        })
         return
       }
       const arr = this.multiple ? this.value : [this.value]

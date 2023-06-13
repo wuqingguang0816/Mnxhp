@@ -29,8 +29,8 @@
             <template v-if="['select', 'checkbox','radio'].includes(head.__config__.jnpfKey)">
               <el-select v-model="tableFormData[scope.$index][cIndex].value"
                 v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
-                @blur="onFormBlur(scope.$index, cIndex, 'el-select')"
-                @change="onFormDataChange(scope.$index, cIndex, 'el-select',arguments)">
+                @blur="onFormBlur(scope.$index, cIndex, head.__config__.tag)"
+                @change="onFormDataChange(scope.$index, cIndex, head.__config__.tag,arguments)">
                 <el-option v-for="(opt,oIndex) in tableFormData[scope.$index][cIndex].options"
                   :key="oIndex" :label="opt[head.__config__.props.label]"
                   :value="opt[head.__config__.props.value]">
@@ -41,8 +41,8 @@
             <template v-else-if="head.__config__.jnpfKey==='comInput'">
               <el-input v-model="tableFormData[scope.$index][cIndex].value"
                 v-bind="getConfById(head.__config__.formId,scope.$index)" :rowIndex="scope.$index"
-                @blur="onFormBlur(scope.$index, cIndex, 'el-input')"
-                @change="onFormDataChange(scope.$index, cIndex, 'el-input',arguments)">
+                @blur="onFormBlur(scope.$index, cIndex, head.__config__.tag)"
+                @change="onFormDataChange(scope.$index, cIndex, head.__config__.tag,arguments)">
                 <template v-if="head.__slot__">
                   <template slot="prepend" v-if="head.__slot__.prepend">
                     {{ head.__slot__.prepend }}
@@ -58,7 +58,9 @@
               <JNPF-TreeSelect v-model="tableFormData[scope.$index][cIndex].value"
                 :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
                 :placeholder="head.placeholder" :clearable="head.clearable"
-                :multiple="head.multiple" :filterable="head.filterable" :disabled="head.disabled" />
+                :multiple="head.multiple" :filterable="head.filterable" :disabled="head.disabled"
+                @blur="onFormBlur(scope.$index, cIndex, head.__config__.tag)"
+                @change="onFormDataChange(scope.$index, cIndex, head.__config__.tag,arguments)" />
             </template>
             <!-- 级联选择 -->
             <template v-else-if="head.__config__.jnpfKey==='cascader'">
@@ -66,7 +68,9 @@
                 :options="tableFormData[scope.$index][cIndex].options" :props="head.props.props"
                 :placeholder="head.placeholder" :clearable="head.clearable"
                 :show-all-levels="head['show-all-levels']" :separator="head.separator"
-                :filterable="head.filterable" :disabled="head.disabled" />
+                :filterable="head.filterable" :disabled="head.disabled"
+                @blur="onFormBlur(scope.$index, cIndex, head.__config__.tag)"
+                @change="onFormDataChange(scope.$index, cIndex, head.__config__.tag,arguments)" />
             </template>
             <!-- 其他 -->
             <component v-else :is="head.__config__.tag" :rowIndex="scope.$index"
@@ -367,30 +371,14 @@ export default {
       }
       return res
     },
-    // setTableShowOrHide(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].__config__.noShow = value
-    //       break
-    //     }
-    //   }
-    // },
-    // setTableRequired(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].__config__.required = value
-    //       break
-    //     }
-    //   }
-    // },
-    // setTableDisabled(prop, value) {
-    //   for (let i = 0; i < this.tableData.length; i++) {
-    //     if (this.tableData[i].__vModel__ === prop) {
-    //       this.tableData[i].disabled = value
-    //       break
-    //     }
-    //   }
-    // },
+    setTableShowOrHide(prop, value) {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].__vModel__ === prop) {
+          this.tableData[i].__config__.noShow = value
+          break
+        }
+      }
+    },
     onFormBlur(rowIndex, colIndex, tag) {
       const data = this.tableFormData[rowIndex][colIndex]
       if (data && data.on && data.on.blur) {

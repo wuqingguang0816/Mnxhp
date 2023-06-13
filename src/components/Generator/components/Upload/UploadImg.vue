@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 const units = {
   KB: 1024,
   MB: 1024 * 1024,
@@ -142,11 +144,13 @@ export default {
         })
         this.$emit('input', this.fileList)
         this.$emit('change', this.fileList)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
       } else {
         this.$refs.elUpload.uploadFiles.splice(fileList.length - 1, 1)
         fileList.filter(o => o.uid != file.uid)
         this.$emit('input', this.fileList)
         this.$emit('change', this.fileList)
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
         this.$message({ message: res.msg, type: 'error', duration: 1500 })
       }
     },
@@ -161,6 +165,7 @@ export default {
       this.$refs.elUpload.uploadFiles.splice(index, 1)
       this.$emit("input", this.fileList)
       this.$emit('change', this.fileList)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     getImgList(list) {
       const newList = list.map(o => this.define.comUrl + o.url)

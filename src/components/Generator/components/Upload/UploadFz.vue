@@ -4,8 +4,8 @@
       <el-button size="small" icon="el-icon-upload" @click="uploadFile" :disabled="disabled">
         {{buttonText}}
       </el-button>
-      <a type="text" @click="downloadAll" style="float:right;" v-if="fileList.length" class="el-button el-button--text el-button--small"><i
-          class="el-icon-download"></i>全部下载</a>
+      <a type="text" @click="downloadAll" style="float:right;" v-if="fileList.length"
+        class="el-button el-button--text el-button--small"><i class="el-icon-download"></i>全部下载</a>
       <div class="el-upload__tip" v-if="showTip">
         只能上传不超过{{fileSize}}{{sizeUnit}}的{{acceptText}}文件
       </div>
@@ -36,6 +36,8 @@
 import { getDownloadUrl, getPackDownloadUrl } from '@/api/common'
 import Preview from './Preview'
 import FileUploader from './vue-simple-uploader/fileUploader'
+import emitter from 'element-ui/src/mixins/emitter'
+let { methods: { dispatch } } = emitter
 export default {
   name: 'UploadFile',
   components: { Preview, FileUploader },
@@ -143,6 +145,7 @@ export default {
       this.fileList.splice(index, 1)
       this.$emit("input", this.fileList)
       this.$emit('change', this.fileList)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     handleClick(file) {
       // 点击下载文件
@@ -172,6 +175,7 @@ export default {
       this.fileList.push(data)
       this.$emit('input', this.fileList)
       this.$emit('change', this.fileList)
+      dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     downloadAll() { //下载全部（打包下载）
       if (!this.fileList.length) {
