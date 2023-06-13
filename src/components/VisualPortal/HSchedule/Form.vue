@@ -102,7 +102,7 @@
         </el-form-item>
         <el-form-item label="结束重复" prop="repeatTime" v-if='dataForm.repetition!="1"'>
           <el-date-picker v-model="dataForm.repeatTime" type="date" placeholder="请选择结束重复" clearable
-            format="yyyy-MM-dd" value-format="timestamp">
+            format="yyyy-MM-dd" value-format="timestamp" style="width:100%">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -366,6 +366,7 @@ export default {
       this.checked = 1
       this.dataForm.endTime = ''
       this.$nextTick(() => {
+        this.$refs.dataForm.clearValidate()
         if (this.dataForm.id) {
           ScheduleInfo(this.dataForm.id).then(res => {
             this.dataForm = res.data
