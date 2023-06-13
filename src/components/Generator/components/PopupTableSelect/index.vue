@@ -346,24 +346,24 @@ export default {
         this.selectedIds = this.selectedData.map(o => o[this.propsValue])
         this.$emit('input', this.selectedIds)
         this.$emit('change', this.selectedIds, this.selectedData)
-        dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
         this.closePopover()
+        dispatch.call(this, 'ElFormItem', 'el.form.change', this.selectedIds)
       } else {
         if (!this.checked) {
           this.innerValue = ''
           this.checkedRow = {}
           this.$emit('input', '')
           this.$emit('change', '', {})
-          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           this.closePopover()
+          dispatch.call(this, 'ElFormItem', 'el.form.change', '')
           return
         }
         this.innerValue = this.checkedTxt
         this.$emit('input', this.checked)
         this.$emit('change', this.checked, this.checkedRow)
+        this.closePopover()
         dispatch.call(this, 'ElFormItem', 'el.form.change', this.checked)
       }
-      this.closePopover()
     },
     rowClick(row) {
       if (this.multiple) {
