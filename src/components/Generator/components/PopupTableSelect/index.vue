@@ -347,6 +347,7 @@ export default {
         this.$emit('input', this.selectedIds)
         this.$emit('change', this.selectedIds, this.selectedData)
         dispatch.call(this, 'ElFormItem', 'el.form.change', selectedIds)
+        this.closePopover()
       } else {
         if (!this.checked) {
           this.innerValue = ''
