@@ -1,11 +1,14 @@
 <script>
 import { deepClone } from '@/utils'
+import jnpf from '@/utils/jnpf'
 import render from '@/components/Generator/render/render.js'
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
 import { mapGetters } from "vuex"
+
+const formClass = 'form-' + jnpf.idGenerator()
 
 const layouts = {
   colFormItem(h, scheme) {
@@ -113,7 +116,7 @@ const layouts = {
 
 function renderFrom(h) {
   const { formConfCopy } = this
-  let classStyle = []
+  let classStyle = [formClass]
   if (formConfCopy.formStyle) classStyle.push(formConfCopy.formStyle)
   if (formConfCopy.className) classStyle = [...classStyle, ...formConfCopy.className]
   return (
@@ -299,14 +302,24 @@ export default {
       if (document.getElementById('styleId')) {
         document.getElementById('styleId').remove()
       }
-      let classJson = formCopy.classJson
       let head = document.getElementsByTagName('head')[0]
       let style = document.createElement('style')
       style.type = 'text/css'
       style.id = 'styleId'
-      let html = classJson
-      style.innerText = html
+      style.innerText = this.buildCSS(formCopy.classJson)
       head.appendChild(style)
+    },
+    buildCSS(str) {
+      str = str.trim();
+      let newStr = '';
+      let cut = str.split('}');
+      cut.forEach(item => {
+        if (item) {
+          item = '.' + formClass + ' ' + item + '}';
+          newStr += item;
+        }
+      });
+      return newStr;
     },
     initFormData(componentList, formData) {
       this.$store.commit('generator/UPDATE_RELATION_DATA', {})
