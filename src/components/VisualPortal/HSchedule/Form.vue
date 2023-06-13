@@ -317,7 +317,7 @@ export default {
         }
         , {
           id: 1440,
-          fullName: '一天前'
+          fullName: '1天前'
         }
       ],
       remindList: [
