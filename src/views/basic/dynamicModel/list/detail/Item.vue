@@ -167,6 +167,15 @@
                 <el-table-column :key="columnIndex" :prop="column.__vModel__"
                   :label="column.__config__.label"
                   v-if="column.__config__.jnpfKey==='relationForm'">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <el-link :underline="false" type="primary"
                       @click.native="toTableDetail(column,scope.row[column.__vModel__+'_id'])">
@@ -176,6 +185,15 @@
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   :prop="column.__vModel__"
                   v-else-if="['relationFormAttr','popupAttr'].includes(column.__config__.jnpfKey)">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <p v-if="!column.__vModel__">
                       {{ scope.row[column.relationField.split('_jnpfTable_')[0]+'_'+column.showField] }}
@@ -188,6 +206,15 @@
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   :prop="column.__vModel__" min-width="250px"
                   v-else-if="column.__config__.jnpfKey==='uploadFz'">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <JNPFUploadFz v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
@@ -195,6 +222,15 @@
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   :prop="column.__vModel__"
                   v-else-if="column.__config__.jnpfKey==='calculate' &&column.__config__.isStorage==1">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <calculate :rowIndex="scope.$index" :expression="column.expression"
                       :isStorage="1" :formData="formValue" :isAmountChinese="column.isAmountChinese"
@@ -204,12 +240,30 @@
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='uploadImg'">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <JNPFUploadImg v-model="scope.row[column.__vModel__]" detailed disabled />
                   </template>
                 </el-table-column>
                 <el-table-column :key="columnIndex" :label="column.__config__.label"
                   :prop="column.__vModel__" v-else-if="column.__config__.jnpfKey==='numInput'">
+                  <template slot="header">
+                    <span slot="label"
+                      v-if="column.__config__.tipLabel &&column.__config__.label">{{column.__config__['label']}}
+                      <el-tooltip placement="top" :content=column.__config__.tipLabel>
+                        <a class='el-icon-question tooltip-question'></a>
+                      </el-tooltip>
+                    </span>
+                    <span v-else>{{ column.__config__['label'] }}</span>
+                  </template>
                   <template slot-scope="scope">
                     <JnpfNumber v-model="scope.row[column.__vModel__]" :thousands="column.thousands"
                       :isAmountChinese="column.isAmountChinese" :addonBefore="column.addonBefore"
