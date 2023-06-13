@@ -505,18 +505,11 @@ export default {
         })
       })
     }
-
-
     this.btnsList = this.columnData.btnsList.map(o => o.value)
     this.columnBtnsList = this.columnData.columnBtnsList.map(o => o.value)
   },
   mounted() {
     this.setSort()
-    this.$nextTick(() => {
-      this.columnData.columnList = this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
-      this.columnData.searchList = this.setListValue(this.columnData.searchList, this.searchOptions, 'search')
-      this.columnData.sortList = this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
-    })
   },
   methods: {
     filterPanelShow() {
