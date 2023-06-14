@@ -282,7 +282,8 @@ const defaultColumnData = {
       func: "",
       name: "脚本事件"
     }
-  }
+  },
+  loading: false
 }
 export default {
   name: 'columnDesign',
@@ -373,20 +374,12 @@ export default {
       this.columnData.columnBtnsList = list
     },
     currentTab(val) {
-      const list = this.columnData[val + 'List']
-      this.$nextTick(() => {
-        if (this.$refs[val + 'Table']) {
-          list.forEach(row => {
-            this.$refs[val + 'Table'].toggleRowSelection(row, true)
-          })
-        }
-      })
+      if (!this.loading) this.handleToggleRowSelection(val)
     },
   },
   created() {
-    if (typeof this.conf === 'object' && this.conf !== null) {
-      this.columnData = Object.assign({}, defaultColumnData, this.conf)
-    }
+    this.loading = false
+    if (typeof this.conf === 'object' && this.conf !== null) this.columnData = Object.assign({}, defaultColumnData, this.conf)
     if (this.webType != 4) {
       let list = []
       let list1 = []
@@ -448,11 +441,17 @@ export default {
       if (!this.sortOptions.length) this.columnData.sortList = []
       this.setBtnValue(this.columnData.btnsList, this.btnsOption)
       this.setBtnValue(this.columnData.columnBtnsList, this.columnBtnsOption)
+      this.$nextTick(() => {
+        this.columnData.columnList = this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
+        this.columnData.searchList = this.setListValue(this.columnData.searchList, this.searchOptions, 'search')
+        this.columnData.sortList = this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+      })
     } else {
       if (!this.interfaceId) return
       const query = {
         paramList: this.templateJson || []
       }
+      this.loading = true
       getFields(this.interfaceId, query).then(res => {
         let fieldsList = res.data
         this.columnOptions = fieldsList.map(o => ({
@@ -502,6 +501,8 @@ export default {
           this.columnData.columnList = this.setListValue(this.columnData.columnList, this.columnOptions, 'column')
           this.columnData.searchList = this.setListValue(this.columnData.searchList, this.searchOptions, "search")
           this.columnData.sortList = this.setListValue(this.columnData.sortList, this.sortOptions, 'sort')
+          this.handleToggleRowSelection(this.currentTab)
+          this.loading = false
         })
       })
     }
@@ -512,6 +513,16 @@ export default {
     this.setSort()
   },
   methods: {
+    handleToggleRowSelection(val) {
+      const list = this.columnData[val + 'List']
+      this.$nextTick(() => {
+        if (this.$refs[val + 'Table']) {
+          list.forEach(row => {
+            this.$refs[val + 'Table'].toggleRowSelection(row, true)
+          })
+        }
+      })
+    },
     filterPanelShow() {
       this.$refs.conditionpane.show(this.columnData.ruleListApp)
     },
