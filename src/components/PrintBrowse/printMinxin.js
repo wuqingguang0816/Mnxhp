@@ -145,7 +145,7 @@ const printOptionApi = {
         let pcontent = dom.outerHTML
         if (pcontent.includes('{') && pcontent.includes('data-tag')) {
           // 替换千分符
-          if (pcontent.includes('千位分隔符')) {
+          if (pcontent.includes('千位分隔符(')) {
             let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+/)[0];
             let place = 0
             if (text.includes(`</span>,`)) {
@@ -157,7 +157,7 @@ const printOptionApi = {
             continue
           }
           // 替换数字金额
-          if (pcontent.includes('大写金额')) {
+          if (pcontent.includes('大写金额(')) {
             let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+/)[0];
             let value = getTrueValue(tag == 'td' ? pcontent : text)
             let transValue = getAmountChinese(value)
@@ -201,7 +201,7 @@ const printOptionApi = {
           }
 
         } else {
-          if (pcontent.includes('千位分隔符')) {
+          if (pcontent.includes('千位分隔符(')) {
             let data = pcontent.match(/千位分隔符\((.*?)\)/);
             let arr = data && data[1].split(',')
             let value = arr[0] ? arr[0] : ''
@@ -210,7 +210,7 @@ const printOptionApi = {
             this.replaceMe(dom.innerHTML, transValue)
             continue
           }
-          if (pcontent.includes('大写金额')) {
+          if (pcontent.includes('大写金额(')) {
             let value = pcontent.match(/大写金额\((.*?)\)/)[1];
             let transValue = getAmountChinese(value)
             this.replaceMe(dom.innerHTML, transValue)
