@@ -26,63 +26,11 @@
 </template>
 <script>
 import printOptionApi from "./printMinxin.js";
-import { getData } from "@/api/system/printDev";
 export default {
   mixins: [printOptionApi],
-  props: ["id", "formId", "fullName"],
-  data() {
-    return {
-      batchData: [],
-    };
-  },
   methods: {
-    getNowDocument(index) {
-      let dom = this.$refs["tsPrint"];
-      let domCurrent = dom.querySelectorAll(".print-content")[index];
-      return domCurrent;
-    },
-    tagTable(domCurrent) {
-      const tableList = domCurrent.getElementsByTagName("table");
-      if (tableList.length) {
-        for (let j = 0; j < tableList.length; j++) {
-          const tableObj = tableList[j];
-          tableObj.setAttribute("tagid", +new Date());
-        }
-      }
-    },
     onOpen() {
-      if (!this.id) return;
-      this.initData();
-      //刚开始清空数据
-      this.data = {};
-      let query = {
-        id: this.id,
-        formId: this.formId,
-      };
-      this.loading = true;
-      this.showContainer = true;
-      getData(query).then(async (res) => {
-        if (!res.data) return (this.loading = false);
-        this.batchData.push(res.data.printTemplate);
-        this.$nextTick(async () => {
-          let dom = this.$refs["tsPrint"];
-          for (let index = 0; index < this.batchData.length; index++) {
-            let domCurrent = dom.querySelectorAll(".print-content")[index];
-            // 给table加标识
-            this.tagTable(domCurrent);
-            if (!res.data.printData) {
-              this.printTemplate = domCurrent.innerHTML
-              this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "")
-              this.loading = false;
-              break
-            }
-            await this.handleData(res.data, domCurrent, index);
-            this.batchData[index] = this.printTemplate.replace(/\{(.*?)\}/g, "");
-            this.showContainer = false;
-            this.loading = false;
-          }
-        });
-      });
+      this.initData()
     },
   },
 };
