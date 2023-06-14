@@ -17,7 +17,7 @@
       </div>
       <div class="options">
         <el-button type="primary" size="small" @click="word">下 载</el-button>
-        <el-button type="primary" size="small" @click="print">打 印</el-button>
+        <el-button type="primary" size="small" @click="print('batch')">打 印</el-button>
         <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
@@ -32,16 +32,11 @@
 </template>
 <script>
 import printOptionApi from "./printMinxin.js";
-import { getBatchData } from "@/api/system/printDev";
-import request from "@/utils/request";
-
 export default {
-  props: ["id", "formId", "fullName", "batchIds", "printTitle"],
   mixins: [printOptionApi],
   data() {
     return {
       pageIndex: 1,
-      batchData: [],
     };
   },
   watch: {
@@ -67,80 +62,7 @@ export default {
       });
     },
     onOpen() {
-      // 打开时候初始化位置为第一页
-      this.pageIndex = 0;
-      if (!this.id) return;
-      this.initData();
-      this.batchData = [];
-      this.printTemplate = "";
-      this.data = {};
-      this.loading = true;
-      let query = {
-        id: this.id,
-        formId: this.batchIds,
-      };
-      getBatchData(query).then((res) => {
-        if (!res.data) return;
-        let array = res.data;
-        for (let index = 0; index < array.length; index++) {
-          const element = array[index];
-          this.batchData.push(element.printTemplate);
-        }
-        this.showContainer = true
-        this.$nextTick(async () => {
-          let dom = this.$refs["tsPrint"];
-          for (let index = 0; index < array.length; index++) {
-            const element = array[index];
-            // 获取每一页dom
-            let domCurrent = dom.querySelectorAll(".print-content")[index];
-            if (!element.printData) {
-              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
-            }
-            await this.handleData(element, domCurrent);
-            this.$set(this.batchData,index,this.printTemplate.replace(/\{(.*?)\}/g, ""))
-            if (index == array.length - 1) {
-              this.showContainer = false
-            }
-          }
-        });
-        this.loading = false;
-      });
-    },
-    print() {
-      let print = this.$refs.tsPrint.innerHTML;
-      print = print + `<style>html * {word-break:break-all}</style>`;
-      let iframe = document.createElement("IFRAME");
-      document.body.appendChild(iframe);
-      iframe.setAttribute(
-        "style",
-        "position:absolute;width:0px;height:0px;left:-500px;top:-500px;"
-      );
-      iframe.contentWindow.focus();
-      let doc = iframe.contentWindow.document;
-      let _this = this;
-      iframe.onload = function () {
-        let oldTitle = document.title;
-        iframe.contentWindow.onafterprint = function (e) {
-          // 插入日志
-          let title = oldTitle.split("-")[0];
-          let data = {
-            printTitle: _this.fullName ? _this.fullName : title,
-            printNum: _this.batchIds.split(",").length,
-            printId: _this.id,
-          };
-          request({
-            url: `/api/system/printLog/save`,
-            method: "post",
-            data,
-          }).then((res) => { });
-        };
-        document.title = "JNPF快速开发平台";
-        iframe.contentWindow.print();
-        document.title = oldTitle;
-        document.body.removeChild(iframe);
-      };
-      doc.write(print);
-      doc.close();
+      this.initData('batch')
     },
   },
 };

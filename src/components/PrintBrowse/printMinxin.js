@@ -4,13 +4,19 @@ import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
 import { getAmountChinese } from "@/components/Generator/utils/index"
 
+
+import { getData } from "@/api/system/printDev";
+import { getBatchData } from "@/api/system/printDev";
+
 const printOptionApi = {
   computed: {
     ...mapGetters(['userInfo'])
   },
+  props: ["id", "formId", "fullName", "batchIds", "printTitle"],
   data() {
     return {
       data: {},
+      batchData: [],
       printTemplate: "",
       recordList: [],
       loading: false,
@@ -21,11 +27,54 @@ const printOptionApi = {
     }
   },
   methods: {
-    initData() {
+    initData(tag) {
+      if (!this.id) return;
+      this.data = {};
       this.barTemp = []
       this.qrTemp = []
       this.batchData = [];
       this.printTemplate = "";
+      let query = {
+        id: this.id,
+        formId: this.formId,
+      };
+      let getDataApi = getData
+      if (tag == 'batch') {
+        // 打开时候初始化位置为第一页
+        this.pageIndex = 0;
+        query = {
+          id: this.id,
+          formId: this.batchIds,
+        };
+        getDataApi = getBatchData
+      }
+      this.loading = true;
+      getDataApi(query).then((res) => {
+        if (!res.data) return;
+        let array = tag == 'batch' ? res.data : [res.data]
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
+          this.batchData.push(element.printTemplate);
+        }
+        this.showContainer = true
+        this.$nextTick(async () => {
+          let dom = this.$refs["tsPrint"];
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            // 获取每一页dom
+            let domCurrent = dom.querySelectorAll(".print-content")[index];
+            if (!element.printData) {
+              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
+            }
+            await this.handleData(element, domCurrent);
+            this.$set(this.batchData, index, this.printTemplate.replace(/\{(.*?)\}/g, ""))
+            if (index == array.length - 1) {
+              this.showContainer = false
+            }
+          }
+        });
+        this.loading = false;
+      });
     },
     async handleData(data, domCurrent) {
       this.data = data.printData
@@ -35,6 +84,7 @@ const printOptionApi = {
       this.createTable(domCurrent)
       this.replaceSysValue()
       this.qrbarReplace()
+      this.replaceCommonValue()
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
       this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
@@ -75,6 +125,18 @@ const printOptionApi = {
         }
       }
       return value
+    },
+    // 替换普通值
+    replaceCommonValue() {
+      this.$nextTick(() => {
+        let spanList = this.printTemplate.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/g)
+        spanList.forEach(element => {
+          if (element.includes('{') && element.includes('data-tag')) {
+            this.replaceMe(element, this.getTrueValue(element))
+          }
+        });
+
+      })
     },
     replaceMyValue(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
@@ -132,11 +194,13 @@ const printOptionApi = {
             continue
           }
           // 替换普通值
-          let value = getTrueValue(pcontent)
-          let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-          this.replaceMe(spanText, value)
+          if (tag == 'td') {
+            let value = getTrueValue(pcontent)
+            let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+            this.replaceMe(spanText, value)
+          }
+
         } else {
-          // 不是字段
           if (pcontent.includes('千位分隔符')) {
             let data = pcontent.match(/千位分隔符\((.*?)\)/);
             let arr = data && data[1].split(',')
@@ -152,7 +216,6 @@ const printOptionApi = {
             this.replaceMe(dom.innerHTML, transValue)
             continue
           }
-
           // 替换二维码
           console.log(pcontent, 21);
           if (pcontent.includes('qrCode')) {
@@ -166,7 +229,11 @@ const printOptionApi = {
             this.replaceMyBarCode(dom, value)
             continue
           }
-
+          // 替换图片
+          if (pcontent.includes('&lt;img')) {
+            let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
+            this.replaceMyImg(dom, JSON.stringify([{ url: value }]))
+          }
 
         }
       }
@@ -247,7 +314,7 @@ const printOptionApi = {
       for (let index = 0; index < list.length; index++) {
         const element = list[index];
         if (element.url) {
-          let value = this.define.comUrl + element.url
+          let value = element.url.includes('http') ? element.url : this.define.comUrl + element.url
           template += `<img width='${width}' height='${height}' src='${value}'/>`
         }
       }
@@ -453,7 +520,7 @@ const printOptionApi = {
       document.body.removeChild(downloadElement)
       window.URL.revokeObjectURL(href)
     },
-    print() {
+    print(tag) {
       let print = this.$refs.tsPrint.innerHTML
       print = print + `<style>html * {word-break:break-all}</style>`
       let iframe = document.createElement('IFRAME');
@@ -468,7 +535,7 @@ const printOptionApi = {
           let title = oldTitle.split('-')[0]
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
-            printNum: 1,
+            printNum: tag ? _this.batchIds.split(",").length : 1,
             printId: _this.id
           }
           request({
