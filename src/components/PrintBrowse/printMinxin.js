@@ -33,6 +33,7 @@ const printOptionApi = {
       this.createTable(domCurrent)
       this.replaceSysValue()
       this.qrbarReplace()
+      this.replaceCommonValue()
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
       this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
@@ -74,6 +75,18 @@ const printOptionApi = {
       }
       return value
     },
+    // 替换普通值
+    replaceCommonValue(){
+      this.$nextTick(()=>{
+        let spanList  = this.printTemplate.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/g)
+        spanList.forEach(element => {
+          if (element.includes('{') && element.includes('data-tag')) {
+            this.replaceMe(element,this.getTrueValue(element))
+          }
+        });
+        
+      })
+    },
     replaceMyValue(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
       let domList = domCurrent.querySelectorAll(tag)
@@ -110,9 +123,12 @@ const printOptionApi = {
             continue
           }
           // 替换普通值
-          let value = getTrueValue(pcontent)
-          let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-          this.replaceMe(spanText, value)
+          if(tag =='td'){
+            let value = getTrueValue(pcontent)
+            let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+            this.replaceMe(spanText, value)
+          }
+          
         } else {
          
 
@@ -128,7 +144,11 @@ const printOptionApi = {
             this.replaceMyBarCode(dom, value)
             continue
           }
-
+          // 替换图片
+          if (pcontent.includes('&lt;img')) {
+            let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
+            this.replaceMyImg(dom, JSON.stringify([{ url: value }]))
+          }
 
         }
       }
@@ -209,7 +229,7 @@ const printOptionApi = {
       for (let index = 0; index < list.length; index++) {
         const element = list[index];
         if (element.url) {
-          let value = this.define.comUrl + element.url
+          let value = element.url.includes('http') ? element.url : this.define.comUrl + element.url
           template += `<img width='${width}' height='${height}' src='${value}'/>`
         }
       }
