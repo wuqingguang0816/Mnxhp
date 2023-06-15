@@ -78,18 +78,15 @@ const printOptionApi = {
       this.data = data.printData
       this.recordList = data.operatorRecordList || []
       this.printTemplate = domCurrent.innerHTML
-      this.replaceMyValue(domCurrent, 'p')
       this.createTable(domCurrent)
+      this.replaceMyValue(domCurrent, 'p')
       this.replaceSysValue()
       this.qrbarReplace()
       this.replaceCommonValue()
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
-      this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
-      this.printTemplate = this.printTemplate.replaceAll('千位分隔符(', '')
-      this.printTemplate = this.printTemplate.replaceAll(')', '')
-
     },
+
     getTdTrueValue(text) {
       if (!text.match(/tablekey="([^"]*)"/)) return
       let info = text.match(/tablekey="([^"]*)"/)[1]
@@ -151,6 +148,7 @@ const printOptionApi = {
           // 替换二维码
           if (pcontent.includes('&lt;qrCode')) {
             let value = getTrueValue(pcontent)
+            if (!value) return
             if (value.trim() == '') {
               let cloneNode = dom.cloneNode(true)
               cloneNode.innerText = ''
@@ -163,6 +161,7 @@ const printOptionApi = {
           // 替换条码
           if (pcontent.includes('&lt;barCode')) {
             let value = getTrueValue(pcontent)
+            if (!value) return
             if (value.trim() == '') {
               this.replaceMe(pcontent, '')
               continue
@@ -178,7 +177,6 @@ const printOptionApi = {
           }
 
         } else {
-
 
           // 替换二维码
           if (pcontent.includes('&lt;qrCode')) {
