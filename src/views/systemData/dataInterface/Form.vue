@@ -270,7 +270,7 @@
               </el-table-column>
             </el-table>
           </div>
-          <jnpf-form-tip-item label="分页参数">
+          <jnpf-form-tip-item label="分页参数" v-if="dataForm.checkType">
             <el-table :data="pageParameters" row-key="id" size='mini'>
               <el-table-column prop="fieldName" label="分页字段">
                 <template slot-scope="scope">
@@ -541,6 +541,7 @@ export default {
         { value: '@showValue', tips: "回显字段值" },
       ]
       const keyword = { value: '@keyword', tips: "关键词搜索" }
+      if (!this.dataForm.checkType) return list
       if (this.active === 2) return [...list, keyword]
       if (this.active === 3) return [...list, ...dataEchoList]
       return [...list, ...dataConfigList, keyword]

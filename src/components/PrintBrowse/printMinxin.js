@@ -133,11 +133,10 @@ const printOptionApi = {
             this.replaceMe(element, this.getTrueValue(element))
           }
         });
-
       })
     },
-    replaceAmountThousands(){
-      const list= this.printTemplate.match(/大写金额\((.*?)\)/g) || [];
+    replaceAmountThousands() {
+      const list = this.printTemplate.match(/大写金额\((.*?)\)/g) || [];
       for (let i = 0; i < list.length; i++) {
         const element = list[i];
         let value = element.match(/大写金额\((.*?)\)/)[1];
@@ -215,7 +214,6 @@ const printOptionApi = {
             let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
             this.replaceMe(spanText, value)
           }
-
         } else {
           if (pcontent.includes('千位分隔符(')) {
             let data = pcontent.match(/千位分隔符(.*?)/);
@@ -249,7 +247,6 @@ const printOptionApi = {
             let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
             this.replaceMyImg(dom, JSON.stringify([{ url: value }]))
           }
-
         }
       }
     },
