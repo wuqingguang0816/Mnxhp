@@ -22,8 +22,7 @@ const printOptionApi = {
       loading: false,
       showContainer: false,
       qrTemp: [],
-      barTemp: [],
-      handleNameMap: { "0": "退回", "1": "通过", "2": "发起", "3": "撤回", "4": "终止", "5": "指派", "6": "加签", "7": "转审", "8": "变更", "9": "复活" }
+      barTemp: []
     }
   },
   methods: {
@@ -160,7 +159,7 @@ const printOptionApi = {
         if (pcontent.includes('{') && pcontent.includes('data-tag')) {
           // 替换千分符
           if (pcontent.includes('千位分隔符(')) {
-            let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+/)[0];
+            let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
             let place = 0
             if (text.includes(`</span>,`)) {
               place = text.split('</span>,')[1]
@@ -172,7 +171,7 @@ const printOptionApi = {
           }
           // 替换数字金额
           if (pcontent.includes('大写金额(')) {
-            let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+/)[0];
+            let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
             let value = getTrueValue(tag == 'td' ? pcontent : text)
             let transValue = getAmountChinese(value)
             this.replaceMe(text, transValue)
