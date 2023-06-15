@@ -145,12 +145,11 @@ const printOptionApi = {
           // 替换图片
           if (pcontent.includes('&lt;img')) {
             let value = getTrueValue(pcontent)
-            if (!value) value = '[]'
-            this.replaceMyImg(dom, value)
+            this.replaceMyImg(dom, value || '[]')
             continue
           }
           // 替换二维码
-          if (pcontent.includes('qrCode')) {
+          if (pcontent.includes('&lt;qrCode')) {
             let value = getTrueValue(pcontent)
             if (value.trim() == '') {
               let cloneNode = dom.cloneNode(true)
@@ -162,7 +161,7 @@ const printOptionApi = {
             continue
           }
           // 替换条码
-          if (pcontent.includes('barCode')) {
+          if (pcontent.includes('&lt;barCode')) {
             let value = getTrueValue(pcontent)
             if (value.trim() == '') {
               this.replaceMe(pcontent, '')
@@ -182,14 +181,14 @@ const printOptionApi = {
 
 
           // 替换二维码
-          if (pcontent.includes('qrCode')) {
-            let value = pcontent.match(/\{(.*?)\}/g)
+          if (pcontent.includes('&lt;qrCode')) {
+            let value = pcontent.match(/&gt;(.*?)&lt;/g)
             this.replaceMyQrCode(dom, value)
             continue
           }
           // 替换条码
-          if (pcontent.includes('barCode')) {
-            let value = pcontent.match(/\{(.*?)\}/g)
+          if (pcontent.includes('&lt;barCode')) {
+            let value = pcontent.match(/&gt;(.*?)&lt;/g)
             this.replaceMyBarCode(dom, value)
             continue
           }
