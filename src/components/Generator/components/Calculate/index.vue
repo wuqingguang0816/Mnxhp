@@ -79,7 +79,7 @@ export default {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
       this.innerValue = Number.parseFloat(calcRPN(temp)).toFixed(this.precision || 0)
       this.setValue = JSON.parse(JSON.stringify(this.innerValue))
-      if (isNaN(this.innerValue)) this.innerValue = 0
+      if (isNaN(this.innerValue)) this.innerValue = Number(0).toFixed(this.precision || 0)
       if (isNaN(this.setValue)) this.setValue = 0
       this.innerValue = this.innerValue
       this.$emit('input', this.setValue)
