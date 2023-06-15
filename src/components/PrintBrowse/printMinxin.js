@@ -202,7 +202,7 @@ const printOptionApi = {
 
         } else {
           if (pcontent.includes('千位分隔符(')) {
-            let data = pcontent.match(/千位分隔符\((.*?)\)/);
+            let data = pcontent.match(/千位分隔符(.*?)/);
             let arr = data && data[1].split(',')
             let value = arr[0] ? arr[0] : ''
             let place = arr[1] ? arr[1] : 0
@@ -211,13 +211,12 @@ const printOptionApi = {
             continue
           }
           if (pcontent.includes('大写金额(')) {
-            let value = pcontent.match(/大写金额\((.*?)\)/)[1];
+            let value = pcontent.match(/大写金额(.*?)/)[1];
             let transValue = getAmountChinese(value)
             this.replaceMe(dom.innerHTML, transValue)
             continue
           }
           // 替换二维码
-          console.log(pcontent, 21);
           if (pcontent.includes('qrCode')) {
             let value = pcontent.match(/\{(.*?)\}/g)
             this.replaceMyQrCode(dom, value)
