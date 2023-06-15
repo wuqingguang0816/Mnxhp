@@ -80,18 +80,16 @@ const printOptionApi = {
       this.data = data.printData
       this.recordList = data.operatorRecordList || []
       this.printTemplate = domCurrent.innerHTML
-      this.replaceMyValue(domCurrent, 'p')
       this.createTable(domCurrent)
+      this.replaceMyValue(domCurrent, 'p')
       this.replaceSysValue()
       this.qrbarReplace()
       this.replaceCommonValue()
+      this.replaceAmountThousands()
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
-      this.printTemplate = this.printTemplate.replaceAll('大写金额(', '')
-      this.printTemplate = this.printTemplate.replaceAll('千位分隔符(', '')
-      this.printTemplate = this.printTemplate.replaceAll(')', '')
-
     },
+
     getTdTrueValue(text) {
       if (!text.match(/tablekey="([^"]*)"/)) return
       let info = text.match(/tablekey="([^"]*)"/)[1]
@@ -138,6 +136,23 @@ const printOptionApi = {
 
       })
     },
+    replaceAmountThousands(){
+      const list= this.printTemplate.match(/大写金额\((.*?)\)/g) || [];
+      for (let i = 0; i < list.length; i++) {
+        const element = list[i];
+        let value = element.match(/大写金额\((.*?)\)/)[1];
+        this.replaceMe(element, getAmountChinese(value));
+      }
+      const list_ = this.printTemplate.match(/千位分隔符\((.*?)\)/g) || [];
+      for (let i = 0; i < list_.length; i++) {
+        const element = list_[i];
+        let data = element.match(/千位分隔符\((.*?)\)/);
+        let arr = data && data[1].split(',');
+        let value = arr[0] ? arr[0] : '';
+        let place = arr[1] ? arr[1] : 0;
+        this.replaceMe(element, this.getThousands(value, place));
+      }
+    },
     replaceMyValue(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
       let domList = domCurrent.querySelectorAll(tag)
@@ -173,6 +188,7 @@ const printOptionApi = {
           // 替换二维码
           if (pcontent.includes('&lt;qrCode')) {
             let value = getTrueValue(pcontent)
+            if (!value) return
             if (value.trim() == '') {
               let cloneNode = dom.cloneNode(true)
               cloneNode.innerText = ''
@@ -185,6 +201,7 @@ const printOptionApi = {
           // 替换条码
           if (pcontent.includes('&lt;barCode')) {
             let value = getTrueValue(pcontent)
+            if (!value) return
             if (value.trim() == '') {
               this.replaceMe(pcontent, '')
               continue
