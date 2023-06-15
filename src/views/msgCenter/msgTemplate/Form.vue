@@ -141,7 +141,7 @@
                   </el-col>
                   <el-col :span="12" v-if="dataForm.messageType == 7&&dataForm.wxSkip == 1">
                     <jnpf-form-tip-item label="关联小程序ID" prop="xcxAppId" label-width="126px"
-                      tipLabel="在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
+                      tipLabel="请在【微信公众号管理后台-广告与服务-小程序管理】⻚⾯查看小程序ID">
                       <el-input v-model="dataForm.xcxAppId" placeholder="关联小程序ID" clearable />
                     </jnpf-form-tip-item>
                   </el-col>
@@ -153,17 +153,12 @@
                       <el-table-column label="序号" type="index" width="50"></el-table-column>
                       <el-table-column prop="name">
                         <template slot="header">
-                          <p v-if="dataForm.messageType==3">
-                            短信变量
-                            <el-tooltip content="内容在第三方平台维护，绑定第三方平台短信变量，如：腾讯云：{1}，阿里云格式：${name}"
-                              placement="top">
-                              <a class="el-icon-warning-outline"></a>
-                            </el-tooltip>
-                          </p>
-                          <p v-else>
+                          <p>
                             变量
-                            <el-tooltip content="内容在微信公众号管理后台维护，绑定模板变量，如：{first.DATA}。"
-                              placement="top">
+                            <el-tooltip placement="top">
+                              <div slot="content" v-if="dataForm.messageType==3">
+                                阿里云：在【阿里云管理后台-模板管理】维护模板变量参数<br />腾讯云：在【腾讯云管理后台-正⽂模板管理】维护模板变量参数</div>
+                              <div slot="content" v-else>在【微信公众号管理后台-广告与服务-模板消息】维护模板参数</div>
                               <a class="el-icon-warning-outline"></a>
                             </el-tooltip>
                           </p>
