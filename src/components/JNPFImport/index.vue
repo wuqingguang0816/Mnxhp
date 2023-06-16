@@ -13,7 +13,7 @@
         </div>
         <div class="up_right">
           <p class="title">
-            上传填好的数据表
+            上传填好的数据表</P>
           <p class="tip">文件后缀名必须是xls或xlsx，文件大小不超过500KB，最多支持导入1000条数据</p>
           <el-upload :action="actionUrl" :headers="{ Authorization: $store.getters.token}"
             :on-success="handleSuccess" :on-remove="handleRemove" :before-remove="beforeRemove"
