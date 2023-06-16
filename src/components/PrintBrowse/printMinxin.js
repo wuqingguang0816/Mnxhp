@@ -143,7 +143,7 @@ const printOptionApi = {
       for (let i = 0; i < list.length; i++) {
         const element = list[i];
         let value = element.match(/大写金额\((.*?)\)/)[1];
-        this.replaceMe(element, getAmountChinese(value));
+        this.replaceValue(element, getAmountChinese(value));
       }
       const list_ = this.printTemplate.match(/千位分隔符\((.*?)\)/g) || [];
       for (let i = 0; i < list_.length; i++) {
@@ -152,7 +152,7 @@ const printOptionApi = {
         let arr = data && data[1].split(',');
         let value = arr[0] ? arr[0] : '';
         let place = arr[1] ? arr[1] : 0;
-        this.replaceMe(element, this.getThousands(value, place));
+        this.replaceValue(element, this.getThousands(value, place));
       }
     },
     replaceContent(domCurrent, tag) {
@@ -170,7 +170,7 @@ const printOptionApi = {
             }
             let value = getTrueValue(tag == 'td' ? pcontent : text)
             let transValue = this.getThousands(value, place)
-            this.replaceMe(text, transValue)
+            this.replaceValue(text, transValue)
             continue
           }
           // 替换数字金额
@@ -178,7 +178,7 @@ const printOptionApi = {
             let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
             let value = getTrueValue(tag == 'td' ? pcontent : text)
             let transValue = getAmountChinese(value)
-            this.replaceMe(text, transValue)
+            this.replaceValue(text, transValue)
             continue
           }
           // 替换图片
@@ -220,13 +220,13 @@ const printOptionApi = {
             let value = arr[0] ? arr[0] : ''
             let place = arr[1] ? arr[1] : 0
             let transValue = this.getThousands(value, place)
-            this.replaceMe(dom.innerHTML, transValue)
+            this.replaceValue(dom.innerHTML, transValue)
             continue
           }
           if (pcontent.includes('大写金额(')) {
             let value = pcontent.match(/大写金额(.*?)/)[1];
             let transValue = getAmountChinese(value)
-            this.replaceMe(dom.innerHTML, transValue)
+            this.replaceValue(dom.innerHTML, transValue)
             continue
           }
           // 替换二维码
