@@ -13,10 +13,7 @@
         <el-button @click="closeDialog()">{{ $t("common.cancelButton") }}</el-button>
       </div>
     </div>
-    <div v-if="showContainer">
-      <div ref="barcodewrap"></div>
-      <div ref="qrcodewrap"></div>
-    </div>
+    <div ref="barcodewrap"></div>
     <div v-loading="loading">
       <div class="main" ref="tsPrint">
         <div class="print-content" v-html="item" v-for="(item, index) in batchData" :key="index" />
