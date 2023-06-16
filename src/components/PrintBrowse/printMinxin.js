@@ -3,7 +3,6 @@ import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
 
-
 import { getData } from "@/api/system/printDev";
 import { getBatchData } from "@/api/system/printDev";
 
@@ -19,34 +18,25 @@ const printOptionApi = {
       printTemplate: "",
       recordList: [],
       loading: false,
-      showContainer: false,
-      qrTemp: [],
-      barTemp: [],
     }
   },
   methods: {
     initData(tag) {
       if (!this.id) return;
       this.data = {};
-      this.barTemp = []
-      this.qrTemp = []
       this.batchData = [];
       this.printTemplate = "";
+      this.loading = true;
       let query = {
         id: this.id,
         formId: this.formId,
       };
       let getDataApi = getData
       if (tag == 'batch') {
-        // 打开时候初始化位置为第一页
         this.pageIndex = 0;
-        query = {
-          id: this.id,
-          formId: this.batchIds,
-        };
+        query.formId = this.batchIds
         getDataApi = getBatchData
       }
-      this.loading = true;
       getDataApi(query).then((res) => {
         if (!res.data) return;
         let array = tag == 'batch' ? res.data : [res.data]
@@ -54,21 +44,16 @@ const printOptionApi = {
           const element = array[index];
           this.batchData.push(element.printTemplate);
         }
-        this.showContainer = true
         this.$nextTick(async () => {
           let dom = this.$refs["tsPrint"];
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
-            // 获取每一页dom
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             if (!element.printData) {
               this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
             }
             await this.handleData(element, domCurrent);
             this.$set(this.batchData, index, this.printTemplate.replace(/\{(.*?)\}/g, ""))
-            if (index == array.length - 1) {
-              this.showContainer = false
-            }
           }
         });
         this.loading = false;
@@ -79,14 +64,32 @@ const printOptionApi = {
       this.recordList = data.operatorRecordList || []
       this.printTemplate = domCurrent.innerHTML
       this.createTable(domCurrent)
-      this.replaceMyValue(domCurrent, 'p')
+      this.replaceContent(domCurrent, 'p')
       this.replaceSysValue()
-      this.qrbarReplace()
       this.replaceCommonValue()
+      this.$nextTick(()=>{
+        this.replaceEmptyTag()
+      })
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
     },
-
+    replaceEmptyTag(){
+      let barEmpty = /&lt;barCode(\S|\s)*?\/barCode&gt;/g
+      let list = this.printTemplate.match(barEmpty) || []
+      list.forEach(element => {
+        this.replaceValue(element,'')
+      });
+      let qrEmpty = /&lt;qrCode(\S|\s)*?\/qrCode&gt;/g
+      let list2 =this.printTemplate.match(qrEmpty) || []
+      list2.forEach(element => {
+        this.replaceValue(element,'')
+      });
+      let imgEmpty = /&lt;img(\S|\s)*?\/img&gt;/g
+      let list3 =this.printTemplate.match(imgEmpty) || []
+      list3.forEach(element => {
+        this.replaceValue(element,'')
+      });
+    },
     getTdTrueValue(text) {
       if (!text.match(/tablekey="([^"]*)"/)) return
       let info = text.match(/tablekey="([^"]*)"/)[1]
@@ -95,9 +98,9 @@ const printOptionApi = {
       let field = text.match(/{([^}]*)}/)[1]
       let value = ''
       if (dataTag == 'headTable') {
-        value = this.data[field]
+        value = this.data[field] || ''
       } else {
-        value = this.data[dataTag][line][field]
+        value = this.data[dataTag][line][field] || ''
       }
       return value
     },
@@ -107,10 +110,10 @@ const printOptionApi = {
       let field = text.match(/{([^}]*)}/)[1]
       let value = ''
       if (dataTag == 'headTable') {
-        value = this.data[field]
+        value = this.data[field] || ''
       } else {
         // 子表设计在外面而且有多条则合并显示
-        let data = this.data[dataTag]
+        let data = this.data[dataTag] || ''
         if (data) {
           let re = ''
           for (const item of data) {
@@ -125,77 +128,66 @@ const printOptionApi = {
     replaceCommonValue() {
       this.$nextTick(() => {
         let spanList = this.printTemplate.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/g)
-        spanList.forEach(element => {
+        for (let index = 0; index < spanList.length; index++) {
+          const element = spanList[index];
           if (element.includes('{') && element.includes('data-tag')) {
-            this.replaceMe(element, this.getTrueValue(element))
+            this.replaceValue(element, this.getTrueValue(element))
           }
-        });
-
+        }
       })
     },
-    replaceMyValue(domCurrent, tag) {
+    replaceContent(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
       let domList = domCurrent.querySelectorAll(tag)
       for (const dom of domList) {
         let pcontent = dom.outerHTML
         if (pcontent.includes('{') && pcontent.includes('data-tag')) {
-          // 替换图片
           if (pcontent.includes('&lt;img')) {
             let value = getTrueValue(pcontent)
-            this.replaceMyImg(dom, value || '[]')
+            this.replaceImage(dom, value || '[]')
             continue
           }
-          // 替换二维码
           if (pcontent.includes('&lt;qrCode')) {
             let value = getTrueValue(pcontent)
             if (!value) return
             if (value.trim() == '') {
               let cloneNode = dom.cloneNode(true)
               cloneNode.innerText = ''
-              this.replaceMe(pcontent, cloneNode.outerHTML)
+              this.replaceValue(pcontent, cloneNode.outerHTML)
               continue
             }
-            this.replaceMyQrCode(dom, value)
+            this.replaceQrCode(dom, value)
             continue
           }
-          // 替换条码
           if (pcontent.includes('&lt;barCode')) {
             let value = getTrueValue(pcontent)
-            if (!value) return
             if (value.trim() == '') {
-              this.replaceMe(pcontent, '')
+              this.replaceValue(dom.innerHTML, '')
               continue
             }
-            this.replaceMyBarCode(dom, value)
+            this.replaceBarCode(dom, value)
             continue
           }
-          // 替换普通值
           if (tag == 'td') {
             let value = getTrueValue(pcontent)
             let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-            this.replaceMe(spanText, value)
+            this.replaceValue(spanText, value)
           }
-
         } else {
-
-          // 替换二维码
           if (pcontent.includes('&lt;qrCode')) {
-            let value = pcontent.match(/&gt;(.*?)&lt;/g)
-            this.replaceMyQrCode(dom, value)
+            let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
+            this.replaceQrCode(dom, value)
             continue
           }
-          // 替换条码
           if (pcontent.includes('&lt;barCode')) {
-            let value = pcontent.match(/&gt;(.*?)&lt;/g)
-            this.replaceMyBarCode(dom, value)
+            let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
+            this.replaceBarCode(dom, value)
             continue
           }
-          // 替换图片
           if (pcontent.includes('&lt;img')) {
             let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
-            this.replaceMyImg(dom, JSON.stringify([{ url: value }]))
+            this.replaceImage(dom, JSON.stringify([{ url: value }]))
           }
-
         }
       }
     },
@@ -238,7 +230,7 @@ const printOptionApi = {
         let tableBody = tableWrap.appendChild(document.createElement('tbody'))
         let table = tableList[j];
         let tableKey = this.getTableKey(table)
-        let data = this.data[tableKey]
+        let data = this.data[tableKey] || ''
         if (data && Array.isArray(data)) {
           // 子表
           let tableSize = (data && Array.isArray(data)) ? data.length : 0
@@ -252,8 +244,8 @@ const printOptionApi = {
         } else {
           this.createTr(table, 'headTable', '', false, tableBody)
         }
-        this.replaceMe(table.innerHTML, tableWrap.innerHTML)
-        this.replaceMyValue(tableWrap, 'td')
+        this.replaceValue(table.innerHTML, tableWrap.innerHTML)
+        this.replaceContent(tableWrap, 'td')
       }
     },
     /**
@@ -261,13 +253,13 @@ const printOptionApi = {
      * @param {*} dom 
      * @param {*} data 替换的值 
      */
-    replaceMyImg(dom, data) {
+    replaceImage(dom, data) {
       if (!data) return
       let list = JSON.parse(data)
       if (JSON.stringify(list) == '[]') {
         let replaceDom = dom.cloneNode(true);
         replaceDom.innerHTML = ''
-        this.replaceMe(dom.innerHTML, replaceDom.innerHTML)
+        this.replaceValue(dom.innerHTML, replaceDom.innerHTML)
       }
       let template = ''
       const width = this.getWidthHeight(dom.innerHTML)
@@ -276,33 +268,52 @@ const printOptionApi = {
         const element = list[index];
         if (element.url) {
           let value = element.url.includes('http') ? element.url : this.define.comUrl + element.url
-          template += `<img width='${width}' height='${height}' src='${value}'/>`
+          template += `<img style="width:${width}px;height:${height}px;display:inline-block;" src='${value}'/>`;
         }
       }
       let replaceDom = dom.cloneNode(true);
       replaceDom.innerHTML = template
-      this.replaceMe(dom.innerHTML, replaceDom.innerHTML)
+      this.replaceValue(dom.innerHTML, replaceDom.innerHTML)
     },
-    replaceMyQrCode(dom, value) {
+    /**
+     * 替换二维码
+     * @param {*} dom 
+     * @param {*} value 
+     */
+    replaceQrCode(dom, value) {
       let imgRegular = /&lt;qrCode(\S|\s)*?&lt;\/qrCode&gt;/g
       let imgList = dom.innerHTML.match(imgRegular)
       if (imgList && imgList.length) {
         for (var i = 0; i < imgList.length; i++) {
           const item = imgList[i]
-          const width = this.getWidthHeight(item)
+          let width = this.getWidthHeight(item)
           const height = this.getWidthHeight(item, 'height')
           const id = this.jnpf.idGenerator()
-          let info = {
-            replaceStr: item,
-            width, height,
-            barcodeId: `qrCode${id}`,
-            value
-          }
-          this.qrTemp.push(info)
+          const imgdom = document.createElement('img');
+          imgdom.width = width
+          imgdom.height = height
+          imgdom.id = id
+          this.$nextTick(() => {
+            let qrcode = new QRCode(imgdom, {
+              width: width ? width : 265,
+              height: height ? height : 265, // 高度
+              text: value, // 二维码内容
+              correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+            })
+            let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
+            let url = canvas.toDataURL("image/png");
+            let template = `<img style="width:${width}px;height:${height}px;display:inline-block;" src=${url} />`;
+            this.replaceValue(dom.innerHTML, template);
+          })
         }
       }
     },
-    replaceMyBarCode(dom, value) {
+    /**
+     * 替换条码
+     * @param {*} dom 
+     * @param {*} value 
+     */
+    replaceBarCode(dom, value) {
       let imgRegular = /&lt;barCode(\S|\s)*?&lt;\/barCode&gt;/g
       let imgList = dom.innerHTML.match(imgRegular)
       if (imgList && imgList.length) {
@@ -311,57 +322,26 @@ const printOptionApi = {
           const width = this.getWidthHeight(item)
           const height = this.getWidthHeight(item, 'height')
           const id = this.jnpf.idGenerator()
-          let info = {
-            replaceStr: item,
-            width, height,
-            barcodeId: `barcode${id}`,
-            value
-          }
-          this.barTemp.push(info)
-        }
-      }
-    },
-    qrbarReplace() {
-      if (this.barTemp.length > 0) {
-        let array = this.barTemp
-        for (let index = 0; index < array.length; index++) {
-          const element = array[index];
-          // 在页面中设置这个dom,获取码的html字符串
-          const id = this.jnpf.idGenerator()
-          let dom = this.$refs.barcodewrap
-          let imgdom = document.createElement('img');
-          imgdom.width = '100';
-          imgdom.height = '100';
-          imgdom.id = `barcode${id}`
-          dom.appendChild(imgdom)
+          const imgdom = document.createElement('img');
+          imgdom.width = width
+          imgdom.height = height
+          imgdom.id = 'barcode' + id
+          let domContainer = this.$refs.barcodewrap
+          domContainer.appendChild(imgdom)
           this.$nextTick(() => {
-            this.getJsBarcode(element.value, `#barcode${id}`, element.width, element.height)
-            let dom = document.querySelector(`#barcode${id}`)
-            if (!dom) return
-            this.printTemplate = this.printTemplate.replace(element.replaceStr, dom.outerHTML)
-          })
-        }
-      }
-      if (this.qrTemp.length > 0) {
-        let array = this.qrTemp
-        for (let index = 0; index < array.length; index++) {
-          const element = array[index];
-          // 在页面中设置这个dom,获取码的html字符串
-          const id = this.jnpf.idGenerator()
-          let dom = this.$refs.qrcodewrap
-          let imgdom = document.createElement('img');
-          imgdom.width = '100';
-          imgdom.height = '100';
-          imgdom.id = `qrCode${id}`
-          dom.appendChild(imgdom)
-          this.$nextTick(() => {
-            let base64Url = this.getJsQrcode(element.value, `qrCode${id}`, element.width, element.height)
-            this.printTemplate = this.printTemplate.replace(element.replaceStr, `<img id='qrCode${id}'  width='${element.width}' height='${element.height}' src='${base64Url}'/>`)
+            JsBarcode('#' + imgdom.id, value, {
+              width: width ? width : 4,
+              height: height ? height : 80,
+              displayValue: false
+            });
+            let imgDom = document.querySelector(`#barcode${id}`)
+            domContainer.removeChild(imgdom)
+            this.replaceValue(dom.innerHTML, imgDom.outerHTML)
           })
         }
       }
     },
-    replaceMe(key, value) {
+    replaceValue(key, value) {
       this.printTemplate = this.printTemplate.replace(key, value)
     },
     getTableKey(dom) {
@@ -417,20 +397,6 @@ const printOptionApi = {
         height: height ? height : 80,
         displayValue: false
       });
-    },
-    getJsQrcode(value, id, width, height) {
-      if (!value) return
-      let dom = document.getElementById(id)
-      if (!dom) return
-      let qrcode = new QRCode(dom, {
-        width: width ? width : 265,
-        height: height ? height : 265, // 高度
-        text: value, // 二维码内容
-        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
-      })
-      let canvas = qrcode._el.querySelector("canvas");//获取生成二维码中的canvas，并将canvas转换成base64
-      let base64Text = canvas.toDataURL("image/png");
-      return base64Text
     },
     getHandleName(handleStatus) {
       if (handleStatus == 0) return "退回"
