@@ -2,6 +2,7 @@ import { mapGetters } from "vuex";
 import QRCode from "qrcodejs2";
 import JsBarcode from "jsbarcode";
 import request from "@/utils/request";
+import { getAmountChinese } from "@/components/Generator/utils/index"
 
 
 import { getData } from "@/api/system/printDev";
