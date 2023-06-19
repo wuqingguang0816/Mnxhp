@@ -21,8 +21,10 @@
             </el-select>
           </template>
           <template v-else>
-            <template
-              v-if="item.__config__.jnpfKey==='numInput'||item.__config__.jnpfKey==='calculate'">
+            <template v-if="item.__config__.jnpfKey==='numInput'">
+              <num-range v-model="item.value" :precision="item.precision"></num-range>
+            </template>
+            <template v-if="item.__config__.jnpfKey==='calculate'">
               <num-range v-model="item.value" :precision="item.precision||0"></num-range>
             </template>
             <template v-if="item.__config__.jnpfKey==='cascader'">

@@ -119,9 +119,9 @@
               </template>
               <template v-else-if="item.jnpfKey === 'calculate'">
                 <NumRange v-model="item.fieldValue" v-if="item.symbol == 'between'"
-                  :precision="item.precision" :disabled="item.disabled"></NumRange>
+                  :precision="item.precision||0" :disabled="item.disabled"></NumRange>
                 <el-input-number v-else v-model="item.fieldValue" placeholder="请输入"
-                  :precision="item.precision" :disabled="item.disabled" :controls="false"
+                  :precision="item.precision ||0" :disabled=" item.disabled" :controls="false"
                   controls-position="right" />
               </template>
               <template v-else-if="['rate', 'slider'].includes(item.jnpfKey)">
@@ -220,8 +220,9 @@
                   :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'address'">
-                <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level" :key="+new Date()"
-                  :multiple="item.multiple" clearable :disabled="item.disabled" />
+                <JNPFAddress v-model="item.fieldValue" placeholder="请选择" :level="item.level"
+                  :key="+new Date()" :multiple="item.multiple" clearable
+                  :disabled="item.disabled" />
               </template>
               <template v-else-if="item.jnpfKey === 'groupSelect'">
                 <groupSelect v-model="item.fieldValue" :multiple="item.multiple" placeholder="请选择"
