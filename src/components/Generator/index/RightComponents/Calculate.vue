@@ -19,8 +19,8 @@
       </div>
     </el-form-item>
     <el-form-item label="精度">
-      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
-        controls-position="right" />
+      <el-input-number v-model="precision" :min="0" placeholder="精度" controls-position="right"
+        @change="precisionChange" />
     </el-form-item>
     <el-form-item label="千位分隔">
       <el-switch v-model="activeData.thousands" />
@@ -96,7 +96,17 @@ export default {
       expressionTemp: [],
       expDialogVisible: false,
       expValid: true,
+      precision: 0
     }
+  },
+  watch: {
+    'activeData.precision': {
+      handler(val) {
+        this.precision = val
+      },
+      immediate: true,
+      deep: true
+    },
   },
   computed: {
     calculateCmps() {
@@ -137,6 +147,10 @@ export default {
     onOpen() {
       this.expressionTemp = deepClone(this.activeData.expression)
       this.expValid = true
+    },
+    precisionChange(val) {
+      this.$set(this.activeData, 'precision', val || 0)
+      this.precision = this.activeData.precision || null
     },
     checkExpression() {
       if (!this.expressionTemp.length) {

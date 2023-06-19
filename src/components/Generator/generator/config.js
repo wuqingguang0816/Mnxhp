@@ -155,7 +155,7 @@ export const inputComponents = [
     max: undefined,
     step: 1,
     "step-strictly": false,
-    precision: undefined,
+    precision: 2,
     controlsPosition: "",
     addonBefore: null,
     addonAfter: null,

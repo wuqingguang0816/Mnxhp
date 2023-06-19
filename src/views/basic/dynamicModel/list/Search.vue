@@ -23,7 +23,7 @@
           <template v-else>
             <template
               v-if="item.__config__.jnpfKey==='numInput'||item.__config__.jnpfKey==='calculate'">
-              <num-range v-model="item.value"></num-range>
+              <num-range v-model="item.value" :precision="item.precision||0"></num-range>
             </template>
             <template v-if="item.__config__.jnpfKey==='cascader'">
               <el-cascader v-model="item.value" :options="item.options" clearable

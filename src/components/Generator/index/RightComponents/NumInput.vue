@@ -22,8 +22,8 @@
       <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
     </el-form-item>
     <el-form-item label="精度">
-      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" :max="15"
-        controls-position="right" />
+      <el-input-number v-model="precision" :min="0" placeholder="精度" :max="15"
+        controls-position="right" @change="precisionChange" />
     </el-form-item>
     <el-form-item label="按钮">
       <el-radio-group v-model="activeData.controlsPosition" @change="controlsPositionChange">
@@ -67,19 +67,31 @@ export default {
   mixins: [comMixin],
   data() {
     return {
-      innerVal: 0
+      innerVal: 0,
+      precision: 0
     }
   },
   created() { },
   watch: {
     'activeData.__config__.defaultValue'(val) {
       this.innerVal = val
-    }
+    },
+    'activeData.precision': {
+      handler(val) {
+        this.precision = val
+      },
+      immediate: true,
+      deep: true
+    },
   },
   methods: {
     change(val) {
       this.$set(this.activeData.__config__, 'defaultValue', val || 0)
       this.innerVal = this.activeData.__config__.defaultValue || null
+    },
+    precisionChange(val) {
+      this.$set(this.activeData, 'precision', val || 0)
+      this.precision = this.activeData.precision || null
     },
     controlsPositionChange() {
       this.activeData.thousands = false
