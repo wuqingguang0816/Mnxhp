@@ -65,9 +65,9 @@ const printOptionApi = {
       this.data = data.printData
       this.recordList = data.operatorRecordList || []
       this.printTemplate = domCurrent.innerHTML
+      this.replaceSysValue()
       this.createTable(domCurrent)
       this.replaceContent(domCurrent, 'p')
-      this.replaceSysValue()
       this.replaceCommonValue()
       this.replaceAmountThousands()
       this.$nextTick(() => {
@@ -194,7 +194,7 @@ const printOptionApi = {
             }
             if (pcontent.includes('&lt;qrCode')) {
               let value = getTrueValue(pcontent)
-              if (!value) return
+              if (!value) continue
               if (value.trim() == '') {
                 let cloneNode = dom.cloneNode(true)
                 cloneNode.innerText = ''
