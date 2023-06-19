@@ -50,10 +50,10 @@ const printOptionApi = {
             const element = array[index];
             let domCurrent = dom.querySelectorAll(".print-content")[index];
             if (!element.printData) {
-              this.batchData[index] = domCurrent.innerHTML.replace(/\{(.*?)\}/g, "");
+              this.batchData[index] = domCurrent.innerHTML;
             }
             await this.handleData(element, domCurrent);
-            this.$set(this.batchData, index, this.printTemplate.replace(/\{(.*?)\}/g, ""))
+            this.$set(this.batchData, index, this.printTemplate)
           }
         });
         this.loading = false;
@@ -202,6 +202,7 @@ const printOptionApi = {
       let cloneTable = table.cloneNode(true);
       let trs = cloneTable.querySelectorAll('tr')
       for (const tr of trs) {
+        tr.style.height = '17px'
         if (tr.innerText.trim() == '') {
           tableBody.appendChild(tr)
           continue
