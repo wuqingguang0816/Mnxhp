@@ -293,7 +293,7 @@ export default {
           if (item.__vModel__) {
             let val = data.hasOwnProperty(item.__vModel__) ? data[item.__vModel__] : item.__config__.defaultValue
             if (!item.__config__.isSubTable) item.__config__.defaultValue = val
-            if (flag == "add" || item.__config__.isSubTable == true) {//新增时候，默认当前
+            if (flag == "add") {//新增时候，默认当前
               if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent == true) {
                 val = new Date().getTime()
                 item.__config__.defaultValue = val

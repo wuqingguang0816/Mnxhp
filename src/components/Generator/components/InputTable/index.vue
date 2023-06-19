@@ -103,6 +103,7 @@ import { dyOptionsList } from '@/components/Generator/generator/comConfig'
 import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import SelectDialog from '@/components/SelectDialog/index'
+import {mapGetters} from "vuex";
 
 export default {
   name: 'input-table',
@@ -144,6 +145,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo']),
     childRelations() {
       let obj = {}
       for (let key in this.relations) {
@@ -523,6 +525,15 @@ export default {
         if (dyOptionsList.indexOf(t.__config__.jnpfKey) > -1) {
           let isTreeSelect = t.__config__.jnpfKey === 'treeSelect' || t.__config__.jnpfKey === 'cascader'
           options = isTreeSelect ? t.options : t.__slot__.options
+        }
+        if (t.__config__.jnpfKey === 'date' && t.__config__.defaultCurrent == true) {
+          t.__config__.defaultValue = new Date().getTime()
+        } else if (t.__config__.jnpfKey === 'comSelect' && t.__config__.defaultCurrent == true) {
+          if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            t.__config__.defaultValue = t.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+          } else {
+            t.__config__.defaultValue = []
+          }
         }
         let res = {
           tag: t.__config__.tag,
