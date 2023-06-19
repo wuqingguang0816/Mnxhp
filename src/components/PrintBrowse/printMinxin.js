@@ -202,8 +202,8 @@ const printOptionApi = {
       let cloneTable = table.cloneNode(true);
       let trs = cloneTable.querySelectorAll('tr')
       for (const tr of trs) {
+        tr.style.height = '17px'
         if (tr.innerText.trim() == '') {
-          tr.style.height = '17px'
           tableBody.appendChild(tr)
           continue
         }
