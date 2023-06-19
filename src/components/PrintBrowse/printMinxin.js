@@ -216,7 +216,10 @@ const printOptionApi = {
           }
         } else {
           if (pcontent.includes('千位分隔符(')) {
-            let data = pcontent.match(/千位分隔符(.*?)/);
+            let data = pcontent.match(/千位分隔符\((.*?)\)/) && pcontent.match(/千位分隔符\((.*?)\)/)[1];
+            if(!data  || isNaN(Number(data))) {
+              continue
+            }
             let arr = data && data[1].split(',')
             let value = arr[0] ? arr[0] : ''
             let place = arr[1] ? arr[1] : 0
@@ -224,8 +227,11 @@ const printOptionApi = {
             this.replaceValue(dom.innerHTML, transValue)
             continue
           }
-          if (pcontent.includes('大写金额(')) {
-            let value = pcontent.match(/大写金额(.*?)/)[1];
+          if (pcontent.includes('大写金额(') ) {
+            let value = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[1];
+            if(!value  || isNaN(Number(value))) {
+              continue
+            }
             let transValue = getAmountChinese(value)
             this.replaceValue(dom.innerHTML, transValue)
             continue
