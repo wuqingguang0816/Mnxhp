@@ -69,27 +69,28 @@ const printOptionApi = {
       this.replaceContent(domCurrent, 'p')
       this.replaceSysValue()
       this.replaceCommonValue()
-      this.$nextTick(()=>{
+      this.replaceAmountThousands()
+      this.$nextTick(() => {
         this.replaceEmptyTag()
       })
       const pageBreak = '<p style="page-break-after:always;"></p>'
       this.printTemplate = this.printTemplate.replace('<p><!-- pagebreak --></p>', pageBreak)
     },
-    replaceEmptyTag(){
+    replaceEmptyTag() {
       let barEmpty = /&lt;barCode(\S|\s)*?\/barCode&gt;/g
       let list = this.printTemplate.match(barEmpty) || []
       list.forEach(element => {
-        this.replaceValue(element,'')
+        this.replaceValue(element, '')
       });
       let qrEmpty = /&lt;qrCode(\S|\s)*?\/qrCode&gt;/g
-      let list2 =this.printTemplate.match(qrEmpty) || []
+      let list2 = this.printTemplate.match(qrEmpty) || []
       list2.forEach(element => {
-        this.replaceValue(element,'')
+        this.replaceValue(element, '')
       });
       let imgEmpty = /&lt;img(\S|\s)*?\/img&gt;/g
-      let list3 =this.printTemplate.match(imgEmpty) || []
+      let list3 = this.printTemplate.match(imgEmpty) || []
       list3.forEach(element => {
-        this.replaceValue(element,'')
+        this.replaceValue(element, '')
       });
     },
     getTdTrueValue(text) {
@@ -138,101 +139,124 @@ const printOptionApi = {
         }
       })
     },
+    replaceAmountThousands() {
+      const list = this.printTemplate.match(/大写金额\((.*?)\)/g) || [];
+
+      for (let i = 0; i < list.length; i++) {
+        const element = list[i];
+        let value = element.match(/大写金额\((.*?)\)/)[1];
+        if (isNaN(Number(value))) continue
+        this.replaceValue(element, getAmountChinese(value));
+      }
+      const list_ = this.printTemplate.match(/千位分隔符\((.*?)\)/g) || [];
+      for (let i = 0; i < list_.length; i++) {
+        const element = list_[i];
+        let data = element.match(/千位分隔符\((.*?)\)/);
+        let arr = data && data[1].split(',');
+        let value = arr[0] ? arr[0] : '';
+        if (isNaN(Number(value))) continue
+        let place = arr[1] ? arr[1] : 0;
+        this.replaceValue(element, this.getThousands(value, place));
+      }
+    },
     replaceContent(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
       let domList = domCurrent.querySelectorAll(tag)
       for (const dom of domList) {
-        let pcontent = dom.outerHTML
-        if (pcontent.includes('{') && pcontent.includes('data-tag')) {
-          // 替换千分符
-          if (pcontent.includes('千位分隔符(')) {
-            let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
-            let place = 0
-            if (text.includes(`</span>,`)) {
-              place = text.split('</span>,')[1]
-            }
-            let value = getTrueValue(tag == 'td' ? pcontent : text)
-            let transValue = this.getThousands(value, place)
-            this.replaceValue(text, transValue)
-            continue
-          }
-          // 替换数字金额
-          if (pcontent.includes('大写金额(')) {
-            let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
-            let value = getTrueValue(tag == 'td' ? pcontent : text)
-            let transValue = getAmountChinese(value)
-            this.replaceValue(text, transValue)
-            continue
-          }
-          // 替换图片
-          if (pcontent.includes('&lt;img')) {
-            let value = getTrueValue(pcontent)
-            this.replaceImage(dom, value || '[]')
-            continue
-          }
-          if (pcontent.includes('&lt;qrCode')) {
-            let value = getTrueValue(pcontent)
-            if (!value) return
-            if (value.trim() == '') {
-              let cloneNode = dom.cloneNode(true)
-              cloneNode.innerText = ''
-              this.replaceValue(pcontent, cloneNode.outerHTML)
+        try {
+          let pcontent = dom.outerHTML
+          if (pcontent.includes('{') && pcontent.includes('data-tag')) {
+            // 替换千分符
+            if (pcontent.includes('千位分隔符(')) {
+              let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
+              let place = 0
+              if (text.includes(`</span>,`)) {
+                place = text.split('</span>,')[1]
+              }
+              let value = getTrueValue(tag == 'td' ? pcontent : text)
+              let transValue = this.getThousands(value, place)
+              this.replaceValue(text, transValue)
               continue
             }
-            this.replaceQrCode(dom, value)
-            continue
-          }
-          if (pcontent.includes('&lt;barCode')) {
-            let value = getTrueValue(pcontent)
-            if (value.trim() == '') {
-              this.replaceValue(dom.innerHTML, '')
+            // 替换数字金额
+            if (pcontent.includes('大写金额(')) {
+              let text = pcontent.match(/大写金额\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
+              let value = getTrueValue(tag == 'td' ? pcontent : text)
+              let transValue = getAmountChinese(value)
+              this.replaceValue(text, transValue)
               continue
             }
-            this.replaceBarCode(dom, value)
-            continue
-          }
-          if (tag == 'td') {
-            let value = getTrueValue(pcontent)
-            let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-            this.replaceValue(spanText, value)
-          }
-        } else {
-          if (pcontent.includes('千位分隔符(')) {
-            let data = pcontent.match(/千位分隔符\((.*?)\)/) && pcontent.match(/千位分隔符\((.*?)\)/)[1];
-            if(!data  || isNaN(Number(data))) {
+            // 替换图片
+            if (pcontent.includes('&lt;img')) {
+              let value = getTrueValue(pcontent)
+              this.replaceImage(dom, value || '[]')
               continue
             }
-            let arr = data && data[1].split(',')
-            let value = arr[0] ? arr[0] : ''
-            let place = arr[1] ? arr[1] : 0
-            let transValue = this.getThousands(value, place)
-            this.replaceValue(dom.innerHTML, transValue)
-            continue
-          }
-          if (pcontent.includes('大写金额(') ) {
-            let value = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[1];
-            if(!value  || isNaN(Number(value))) {
+            if (pcontent.includes('&lt;qrCode')) {
+              let value = getTrueValue(pcontent)
+              if (!value) return
+              if (value.trim() == '') {
+                let cloneNode = dom.cloneNode(true)
+                cloneNode.innerText = ''
+                this.replaceValue(pcontent, cloneNode.outerHTML)
+                continue
+              }
+              this.replaceQrCode(dom, value)
               continue
             }
-            let transValue = getAmountChinese(value)
-            this.replaceValue(dom.innerHTML, transValue)
-            continue
+            if (pcontent.includes('&lt;barCode')) {
+              let value = getTrueValue(pcontent)
+              if (value.trim() == '') {
+                this.replaceValue(dom.innerHTML, '')
+                continue
+              }
+              this.replaceBarCode(dom, value)
+              continue
+            }
+            if (tag == 'td') {
+              let value = getTrueValue(pcontent)
+              let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+              this.replaceValue(spanText, value)
+            }
+          } else {
+            if (pcontent.includes('千位分隔符(')) {
+              let data = pcontent.match(/千位分隔符\((.*?)\)/)
+              let arr = data && data[1].split(',')
+              let value = arr[0] ? arr[0] : ''
+              if (isNaN(Number(value))) continue
+              let place = arr[1] ? arr[1] : 0
+              let transValue = this.getThousands(value, place)
+              this.replaceValue(dom.innerHTML, transValue)
+              continue
+            }
+            if (pcontent.includes('大写金额(')) {
+              let value = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[1];
+              if (!value || isNaN(Number(value))) {
+                continue
+              }
+              let transValue = getAmountChinese(value)
+              this.replaceValue(dom.innerHTML, transValue)
+              continue
+            }
+            // 替换二维码
+            if (pcontent.includes('&lt;qrCode')) {
+              let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
+              this.replaceQrCode(dom, value)
+              continue
+            }
+            if (pcontent.includes('&lt;barCode')) {
+              let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
+              this.replaceBarCode(dom, value)
+              continue
+            }
+            if (pcontent.includes('&lt;img')) {
+              let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
+              this.replaceImage(dom, JSON.stringify([{ url: value }]))
+            }
           }
-          // 替换二维码
-          if (pcontent.includes('&lt;qrCode')) {
-            let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
-            this.replaceQrCode(dom, value)
-            continue
-          }
-          if (pcontent.includes('&lt;barCode')) {
-            let value = pcontent.match(/&gt;(.*?)&lt;/)[1]
-            this.replaceBarCode(dom, value)
-            continue
-          }
-          if (pcontent.includes('&lt;img')) {
-            let value = pcontent.match(/&gt;(http.*)&lt;/)[1]
-            this.replaceImage(dom, JSON.stringify([{ url: value }]))
-          }
+
+        } catch (error) {
+          continue
         }
       }
     },
