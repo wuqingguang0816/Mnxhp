@@ -69,7 +69,6 @@ const printOptionApi = {
       this.replaceContent(domCurrent, 'p')
       this.replaceSysValue()
       this.replaceCommonValue()
-      this.replaceAmountThousands()
       this.$nextTick(()=>{
         this.replaceEmptyTag()
       })
@@ -138,23 +137,6 @@ const printOptionApi = {
           }
         }
       })
-    },
-    replaceAmountThousands() {
-      const list = this.printTemplate.match(/大写金额\((.*?)\)/g) || [];
-      for (let i = 0; i < list.length; i++) {
-        const element = list[i];
-        let value = element.match(/大写金额\((.*?)\)/)[1];
-        this.replaceValue(element, getAmountChinese(value));
-      }
-      const list_ = this.printTemplate.match(/千位分隔符\((.*?)\)/g) || [];
-      for (let i = 0; i < list_.length; i++) {
-        const element = list_[i];
-        let data = element.match(/千位分隔符\((.*?)\)/);
-        let arr = data && data[1].split(',');
-        let value = arr[0] ? arr[0] : '';
-        let place = arr[1] ? arr[1] : 0;
-        this.replaceValue(element, this.getThousands(value, place));
-      }
     },
     replaceContent(domCurrent, tag) {
       let getTrueValue = tag == 'td' ? this.getTdTrueValue : this.getTrueValue
