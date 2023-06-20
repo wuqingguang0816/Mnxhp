@@ -435,7 +435,7 @@
               <el-input-number v-model="activeData.__config__.columnWidth" placeholder="控件宽度"
                 :min="0" :precision="0" controls-position="right" />
             </el-form-item>
-            <el-form-item label="控件Class">
+            <el-form-item label="控件Class" v-if="modelType==1||modelType==6">
               <el-select v-model="activeData.__config__.className" multiple clearable
                 placeholder="请选择" filterable>
                 <el-option v-for="item in formConf.classNames" :key="item" :label="item"
@@ -508,10 +508,10 @@
                 :key="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="表单Css">
+          <el-form-item label="表单Css" v-if="modelType==1||modelType==6">
             <el-button style="width: 100%;" @click="addStyle">编写样式</el-button>
           </el-form-item>
-          <el-form-item label="表单Class">
+          <el-form-item label="表单Class" v-if="modelType==1||modelType==6">
             <el-select v-model="formConf.className" multiple clearable placeholder="请选择" filterable>
               <el-option v-for="item in formConf.classNames" :key="item" :label="item"
                 :value="item">
