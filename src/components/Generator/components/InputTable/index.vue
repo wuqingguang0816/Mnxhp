@@ -538,7 +538,7 @@ export default {
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
-          value: val && val[t.__vModel__] || t.__config__.defaultValue,
+          value: val? (val[t.__vModel__]) : t.__config__.defaultValue,
           options,
           valid: true,
           regValid: true,
