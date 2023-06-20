@@ -681,9 +681,7 @@ export default {
         if (t.__config__.jnpfKey === 'time' && t.__config__.defaultCurrent) {
           t.__config__.defaultValue = this.jnpf.toDate(new Date(), t.format)
         }
-        if (t.__config__.jnpfKey === 'date' && t.__config__.defaultCurrent == true) {
-          t.__config__.defaultValue = new Date().getTime()
-        } else if (t.__config__.jnpfKey === 'comSelect' && t.__config__.defaultCurrent == true) {
+        if (t.__config__.jnpfKey === 'comSelect' && t.__config__.defaultCurrent) {
           if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
             t.__config__.defaultValue = t.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
           } else {
