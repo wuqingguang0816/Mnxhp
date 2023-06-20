@@ -51,7 +51,7 @@ export default {
     },
     precision: {
       type: Number,
-      default: undefined
+      default: 15
     },
     disabled: {
       type: Boolean,
