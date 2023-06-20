@@ -19,7 +19,7 @@
       </div>
     </el-form-item>
     <el-form-item label="精度">
-      <el-input-number v-model="activeData.precision" :min="0" placeholder="精度"
+      <el-input-number v-model="activeData.precision" :min="0" :max="15" placeholder="精度"
         controls-position="right" />
     </el-form-item>
     <el-form-item label="千位分隔">
