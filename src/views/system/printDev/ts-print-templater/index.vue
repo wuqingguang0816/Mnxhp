@@ -28,7 +28,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import TsDesignerTinymce from "./ts-designer-tinymce";
 import pageSize from "./pageSize";
@@ -59,47 +58,22 @@ export default {
       activeTab: "",
       richHeight: document.documentElement.clientHeight - 42,
       systemData: [
-        {
-          fullName: "打印人员",
-          id: "systemPrinter"
-        },
-        {
-          fullName: "打印时间",
-          id: "systemPrintTime"
-        },
-        {
-          fullName: "审批内容",
-          id: "systemApprovalContent"
-        },
-        {
-          fullName: "图片",
-          id: "img"
-        },
-        {
-          fullName: "二维码",
-          id: "qrCode"
-        },
-        {
-          fullName: "条形码",
-          id: "barCode"
-        },
+        { fullName: "打印人员", id: "systemPrinter" },
+        { fullName: "打印时间", id: "systemPrintTime" },
+        { fullName: "审批内容", id: "systemApprovalContent" },
+        { fullName: "图片", id: "img" },
+        { fullName: "二维码", id: "qrCode" },
+        { fullName: "条形码", id: "barCode" },
       ],
-      parameter: [{
-        fullName: "千位分隔符(字段或数字,小数位数)",
-        id: "thousands"
-      },
-      {
-        fullName: "大写金额(字段或数字)",
-        id: "isAmountChinese"
-      }],
+      parameter: [
+        { fullName: "千位分隔符(字段或数字,小数位数)", id: "thousands" },
+        { fullName: "大写金额(字段或数字)", id: "isAmountChinese" }
+      ],
       defaultProps: {
         children: "children",
         label: "fullName"
       }
     };
-  },
-  mounted() {
-    // this.getEditConfig()
   },
   watch: {
     pageParam: {
@@ -111,9 +85,7 @@ export default {
     },
     value: {
       handler(val) {
-        if (val != this.content) {
-          this.content = val;
-        }
+        if (val != this.content) this.content = val
       },
       immediate: true,
       deep: true
@@ -140,9 +112,7 @@ export default {
   methods: {
     handleNodeClick(item, node) {
       if (item.children != null && item.children.length > 0) return;
-      const tableParent = this.getCurrentParentByTag(
-        'table[data-wk-table-tag="table"]'
-      );
+      const tableParent = this.getCurrentParentByTag('table[data-wk-table-tag="table"]');
       if (!tableParent) {
         this.editor.insertContent(this.getSpanNode(item, node));
         this.content = this.editor.getContent({ format: "html" });
@@ -172,7 +142,6 @@ export default {
         menubar: false,
         toolbar_sticky: true,
         statusbar: false,
-        // extended_valid_elements: 'span[class|title|wktag|style|contenteditable]',
         content_style: `html {
           background: #fff;
           padding: 20px 0;
@@ -185,7 +154,6 @@ export default {
           height: ${height}mm;
           padding: ${mt}mm ${mr}mm ${mb}mm ${ml}mm !important;
           margin: 0 auto !important;
-          // border: 1px solid rgb(210, 213, 216);
           background: white;
           min-height: 100%;
           box-sizing: border-box;
@@ -214,7 +182,6 @@ export default {
           color: #2362FB;
         }
         p { margin: 5px 0; line-height: 1.5;}`,
-        // content_css: ['/static/tinymce/css/tiny-wk-colors.css', '/static/tinymce/css/tiny-wk-word.css'],
         table_advtab: false,
         table_cell_advtab: false,
         table_row_advtab: false,
@@ -236,10 +203,8 @@ export default {
           });
           editor.on("keydown", e => {
             this.selectNodes = null;
-            if (
-              e.keyCode === 8 /* Backspace key */ ||
-              /* del key */ e.keyCode == 46
-            ) {
+            /* Backspace key and del key*/
+            if (e.keyCode === 8 || e.keyCode == 46) {
               const currentNode = editor.selection.getNode();
               if (
                 currentNode.getAttribute("data-wk-table-td-tag") === "value"
@@ -252,12 +217,12 @@ export default {
                   editor.dom.remove(currentNode);
                   return false;
                 } else {
-                  const farterSpan = this.getCurrentParentByTag(
+                  const span = this.getCurrentParentByTag(
                     "span[contenteditable]"
                   );
-                  if (farterSpan) {
+                  if (span) {
                     e.preventDefault();
-                    editor.dom.remove(farterSpan);
+                    editor.dom.remove(span);
                     return false;
                   }
                 }
@@ -273,12 +238,7 @@ export default {
                 currentNode.getAttribute("data-wk-table-td-tag") === "value"
               ) {
                 // 只允许输入上下左右
-                if (
-                  e.keyCode !== 37 &&
-                  e.keyCode !== 38 &&
-                  e.keyCode !== 39 &&
-                  e.keyCode !== 40
-                ) {
+                if (e.keyCode !== 37 && e.keyCode !== 38 && e.keyCode !== 39 && e.keyCode !== 40) {
                   e.preventDefault();
                   return false;
                 }
@@ -291,44 +251,28 @@ export default {
                   }
                   return false;
                 } else {
-                  const farterSpan = this.getCurrentParentByTag(
+                  const span = this.getCurrentParentByTag(
                     "span[contenteditable]"
                   );
-                  if (farterSpan) {
-                    if (farterSpan.getAttribute("contenteditable")) {
+                  if (span) {
+                    if (span.getAttribute("contenteditable")) {
                       e.preventDefault();
-                      farterSpan.setAttribute("contenteditable", false);
+                      span.setAttribute("contenteditable", false);
                       return false;
                     }
                     return false;
                   }
                 }
               }
-
-              if (
-                e.keyCode == 37 &&
-                e.keyCode == 38 &&
-                e.keyCode == 39 &&
-                e.keyCode == 40
-              ) {
-                this.cancelSpanEdit();
-              }
+              if (e.keyCode == 37 && e.keyCode == 38 && e.keyCode == 39 && e.keyCode == 40) this.cancelSpanEdit();
             }
           });
-
           editor.on("mousedown", () => {
             this.cancelSpanEdit();
           });
-
           editor.on("mouseup", e => {
             const selection = editor.selection.getSel();
             if (
-              e.target.hasAttribute("contenteditable") &&
-              selection.anchorOffset == 1 &&
-              selection.anchorOffset == 1
-            ) {
-              // 忽略
-            } else if (
               e.target.hasAttribute("contenteditable") &&
               selection.isCollapsed
             ) {
@@ -358,20 +302,15 @@ export default {
     },
     setSpanEditAttr(node, canEdit) {
       if (node && node.hasAttribute('contenteditable')) {
-        if (node.getAttribute('contenteditable') != canEdit) {
-          node.setAttribute('contenteditable', false)
-        }
+        if (node.getAttribute('contenteditable') != canEdit) node.setAttribute('contenteditable', canEdit)
       }
-
       if (node && node.children) {
         for (let index = 0; index < node.children.length; index++) {
           const element = node.children[index];
           if (element.children) {
             this.setSpanEditAttr(element, canEdit)
           } else if (element.hasAttribute('contenteditable')) {
-            if (node.getAttribute('contenteditable') != canEdit) {
-              element.setAttribute('contenteditable', false)
-            }
+            if (node.getAttribute('contenteditable') != canEdit) element.setAttribute('contenteditable', canEdit)
           }
         }
       }
@@ -380,36 +319,19 @@ export default {
       return this.editor.dom.getParent(this.editor.selection.getNode(), tag);
     },
     getSpanNode(item, node) {
-      const parent =
-        node.parent.data != null && node.parent.data.id != null
-          ? node.parent.data.id
-          : "null";
-      if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") {
-        return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
-      }
+      const parent = node.parent.data != null && node.parent.data.id != null ? node.parent.data.id : "null";
+      if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
       if (item.id == 'isAmountChinese') return `<p style="display:inline-block" data-tag='isAmountChinese'>大写金额(${parent})<p>`
       if (item.id == 'thousands') return `<p style="display:inline-block" data-tag='thousands'>千位分隔符(${parent},2)<p>`
-      return `<span data-tag="${parent}.${item.id
-        }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
-        }}</span>`;
+      return `<span data-tag="${parent}.${item.id}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id}}</span>`;
     },
     getSpanColorClass() {
-      const color = [
-        "customer",
-        "contacts",
-        "business",
-        "contract",
-        "receivables",
-        "product"
-      ].includes(this.activeTab)
-        ? this.activeTab
-        : "common";
+      const color = ["customer", "contacts", "business", "contract", "receivables", "product"].includes(this.activeTab) ? this.activeTab : "common";
       return `wk-tiny-color--${color}`;
     }
   }
 };
 </script>
-
 <style lang="scss" scoped>
 .print-template-detail {
   height: 100%;
