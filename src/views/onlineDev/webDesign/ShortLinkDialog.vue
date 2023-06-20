@@ -43,70 +43,72 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-divider></el-divider>
-      <el-form-item label="公开查询">
-        <el-switch v-model="dataForm.columnUse" :active-value="1" :inactive-value="0">
-        </el-switch>
-        <span class="short_link_span">开启后，无需登录即可查询已有数据。</span>
-      </el-form-item>
-      <el-form-item label="查询地址" v-if="dataForm.columnUse==1">
-        <el-row class="form-use-row">
-          <el-input v-model="dataForm.columnLink" class="form-use-input float-left" readonly>
-          </el-input>
-          <el-button-group class="btn-left">
-            <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
-            <el-button type="primary" @click="copy(dataForm.columnLink,$event)"
-              class="float-left">复制
-            </el-button>
-          </el-button-group>
-          <el-popover placement="bottom-end" width="180" trigger="hover" class="btn-left">
-            <div class="qrcode">
-              <p>扫描二维码，分享此链接</p>
-              <div id="qrcode2" ref="qrCode2" style="display: inline-block;margin: 2px 0px;">
+      <template v-if="webType != '1'">
+        <el-divider></el-divider>
+        <el-form-item label="公开查询">
+          <el-switch v-model="dataForm.columnUse" :active-value="1" :inactive-value="0">
+          </el-switch>
+          <span class="short_link_span">开启后，无需登录即可查询已有数据。</span>
+        </el-form-item>
+        <el-form-item label="查询地址" v-if="dataForm.columnUse==1">
+          <el-row class="form-use-row">
+            <el-input v-model="dataForm.columnLink" class="form-use-input float-left" readonly>
+            </el-input>
+            <el-button-group class="btn-left">
+              <el-button @click="open(dataForm.columnLink)" class="float-left">打开</el-button>
+              <el-button type="primary" @click="copy(dataForm.columnLink,$event)"
+                class="float-left">复制
+              </el-button>
+            </el-button-group>
+            <el-popover placement="bottom-end" width="180" trigger="hover" class="btn-left">
+              <div class="qrcode">
+                <p>扫描二维码，分享此链接</p>
+                <div id="qrcode2" ref="qrCode2" style="display: inline-block;margin: 2px 0px;">
+                </div>
               </div>
-            </div>
-            <div style="text-align: center; ">
-              <el-button icon="icon-ym icon-ym-download" style="width: 100%;" size="mini"
-                @click="download(2)">下载</el-button>
-            </div>
-            <div slot="reference" class="form-use-icon float-left ym-custom ym-custom-qrcode "
-              @mouseover="getQRimg2"></div>
-          </el-popover>
-        </el-row>
-      </el-form-item>
-      <template v-if="dataForm.columnUse==1">
-        <el-row class="spacing">
-          <el-form-item label="查询条件" prop="columnCondition">
-            <el-select v-model="columnCondition" placeholder="请选择查询条件" clearable multiple filterable
-              @change="columnConditionChange">
-              <el-option v-for="item in searchList " :key="item.__vModel__" :label="item.label"
-                :value="item.__vModel__">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="显示内容" prop="columnText">
-            <el-select v-model="columnText" placeholder="请选择显示内容" clearable multiple filterable
-              @change="columnTextChange">
-              <el-option v-for="item in listOptions" :key="item.__vModel__" :label="item.label"
-                :value="item.__vModel__">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-row>
-        <el-form-item label="凭密码填写">
-          <el-row class="distance">
-            <el-col :span="6">
-              <el-switch v-model="dataForm.columnPassUse" :active-value="1" :inactive-value="0">
-              </el-switch>
-            </el-col>
-            <el-col :span="18">
-              <el-input v-model="dataForm.columnPassword" v-if="dataForm.columnPassUse==1"
-                placeholder="请输入密码" style="width:200px" type="password" show-password
-                maxlength="20">
-              </el-input>
-            </el-col>
+              <div style="text-align: center; ">
+                <el-button icon="icon-ym icon-ym-download" style="width: 100%;" size="mini"
+                  @click="download(2)">下载</el-button>
+              </div>
+              <div slot="reference" class="form-use-icon float-left ym-custom ym-custom-qrcode "
+                @mouseover="getQRimg2"></div>
+            </el-popover>
           </el-row>
         </el-form-item>
+        <template v-if="dataForm.columnUse==1">
+          <el-row class="spacing">
+            <el-form-item label="查询条件" prop="columnCondition">
+              <el-select v-model="columnCondition" placeholder="请选择查询条件" clearable multiple
+                filterable @change="columnConditionChange">
+                <el-option v-for="item in searchList " :key="item.__vModel__" :label="item.label"
+                  :value="item.__vModel__">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="显示内容" prop="columnText">
+              <el-select v-model="columnText" placeholder="请选择显示内容" clearable multiple filterable
+                @change="columnTextChange">
+                <el-option v-for="item in listOptions" :key="item.__vModel__" :label="item.label"
+                  :value="item.__vModel__">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-row>
+          <el-form-item label="凭密码填写">
+            <el-row class="distance">
+              <el-col :span="6">
+                <el-switch v-model="dataForm.columnPassUse" :active-value="1" :inactive-value="0">
+                </el-switch>
+              </el-col>
+              <el-col :span="18">
+                <el-input v-model="dataForm.columnPassword" v-if="dataForm.columnPassUse==1"
+                  placeholder="请输入密码" style="width:200px" type="password" show-password
+                  maxlength="20">
+                </el-input>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </template>
       </template>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -186,6 +188,7 @@ export default {
       formData: '',
       listOptions: [],
       searchList: [],
+      webType: '1',
       type: ''
     }
   },
@@ -230,6 +233,7 @@ export default {
     },
     init(id) {
       this.btnLoading = false
+      this.webType = '1'
       this.columnCondition = ''
       this.columnText = ''
       getShortLink(id).then(res => {
@@ -252,6 +256,7 @@ export default {
         this.columnText = text
       })
       getVisualDevInfo(id).then(res => {
+        this.webType = res.data.webType || '1';
         this.formData = res.data.formData && JSON.parse(res.data.formData)
         let list = []
         const loop = (data, parent) => {
