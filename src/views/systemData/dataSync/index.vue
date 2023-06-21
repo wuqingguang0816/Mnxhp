@@ -209,7 +209,7 @@ export default {
       }).then(() => {
         batchExecute(data).then(res => {
           this.$message({ message: res.msg, type: 'success', duration: 1000 })
-          for (const key in res.data.list) {
+          for (const key in res.data) {
             for (let index = 0; index < this.list.length; index++) {
               const element = this.list[index];
               if (element.table == key) element.result = res.data[key] == 1 ? '成功' : '失败'
