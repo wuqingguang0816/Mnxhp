@@ -64,7 +64,7 @@ export default {
   components: {
     Form
   },
-  name: 'permission-gradeManage',
+  name: 'permission-grade',
   data() {
     return {
       list: [],
