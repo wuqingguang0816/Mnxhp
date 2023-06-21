@@ -107,7 +107,7 @@
                     <el-dropdown-item @click.native="handleCopy(scope.row.id)">复制</el-dropdown-item>
                     <el-dropdown-item @click.native="handleTestSend(scope.row.id)">测试发送
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="handleView(scope.row.id)">详情</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleView(scope.row)">详情</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -215,10 +215,10 @@ export default {
         this.$refs.TestSend.init(id)
       })
     },
-    handleView(id) {
+    handleView(item) {
       this.viewVisible = true
       this.$nextTick(() => {
-        this.$refs.Detail.init(id)
+        this.$refs.Detail.init(item.id, item.messageSource)
       })
     },
     handleDel(id) {
