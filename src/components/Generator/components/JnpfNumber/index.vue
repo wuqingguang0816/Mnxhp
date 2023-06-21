@@ -64,7 +64,7 @@ export default {
       if (this.thousands) {
         this.innerValue = thousandsFormat(this.innerValue)
       } else {
-        this.innerValue = Number(this.innerValue).toFixed(this.precision || 0)
+        if (this.precision) this.innerValue = Number(this.innerValue).toFixed(this.precision)
       }
       return this.innerValue
     },
