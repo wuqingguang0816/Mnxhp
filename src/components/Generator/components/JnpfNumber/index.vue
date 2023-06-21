@@ -36,7 +36,7 @@ export default {
     },
     precision: {
       type: Number,
-      default: 0
+      default: undefined
     },
   },
   data() {
