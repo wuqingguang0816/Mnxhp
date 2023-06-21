@@ -90,10 +90,8 @@ import {
   exportConfig
 } from '@/api/msgCenter/accountConfig'
 export default {
-  name: 'system-printDev',
-  components: {
-    Form
-  },
+  name: 'msgCenter-accountConfig-weCom',
+  components: { Form },
   data() {
     return {
       list: [],

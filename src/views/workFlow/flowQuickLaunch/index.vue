@@ -9,6 +9,7 @@
 import flow from '../flowLaunch/Flow'
 import FlowBox from '../components/FlowBox'
 export default {
+  name: 'workFlow-addFlow',
   components: { flow, FlowBox },
   data() {
     return {

@@ -131,7 +131,7 @@ import TestSend from './TestSend'
 import Detail from './Detail'
 
 export default {
-  name: 'system--mesCenter-sendConfig',
+  name: 'msgCenter-sendConfig',
   components: { Form, TestSend, Detail },
   data() {
     return {

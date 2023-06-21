@@ -89,7 +89,7 @@ import { getMsgMonitorList, delMsgMonitor, emptyMsgMonitor } from '@/api/msgCent
 import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 import Detail from './Detail'
 export default {
-  name: 'system-mesCenter-msgMonitor',
+  name: 'msgCenter-msgMonitor',
   components: { Detail },
   data() {
     return {
