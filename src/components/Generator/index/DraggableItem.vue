@@ -165,7 +165,7 @@ const layouts = {
                   }
                   return (
                     <el-collapse-item key={item.name} title={item.title} name={item.name} >
-                      <el-col style="position:relative">
+                      <el-col style="position:relative;padding-top:15px">
                         {tip}
                         <el-row gutter={element.__config__.gutter} >
                           <draggable list={item.__config__.children} animation={340} group={childgroup} onEnd={onChildEnd} class="drag-wrapper">
