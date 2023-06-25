@@ -1,7 +1,8 @@
 <template>
-  <el-date-picker :type="type" v-model="innerValue" placeholder="请选择" :value-format="valueFormat"
-    :picker-options='pickerOptions' :format="format" @change="change" :disabled="disabled"
-    @blur="onblur($event)" :clearable="clearable" :readonly="readOnly" :key="key"></el-date-picker>
+  <el-date-picker :type="type" v-model="innerValue" :placeholder="placeholder"
+    :value-format="valueFormat" :picker-options='pickerOptions' :format="format" @change="change"
+    :disabled="disabled" @blur="onblur($event)" :clearable="clearable" :readonly="readOnly"
+    :key="key"></el-date-picker>
 </template>
 <script>
 import dayjs from 'dayjs'
@@ -21,11 +22,11 @@ export default {
     },
     valueFormat: {
       type: String,
-      default: 'datetime'
+      default: 'timestamp'
     },
     format: {
       type: String,
-      default: 'yyyy-MM-dd HH:mm:ss'
+      default: 'yyyy-MM-dd'
     },
     startTime: {
       default: undefined
@@ -49,6 +50,10 @@ export default {
       type: Boolean,
       default: false
     },
+    placeholder: {
+      type: String,
+      default: '请选择'
+    }
   },
   data() {
     return {
