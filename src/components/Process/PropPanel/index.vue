@@ -84,7 +84,7 @@
               </template>
               <template v-else-if="item.jnpfKey==='date'">
                 <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type||'timestamp'" @change="onConditionDateChange($event,item)"
+                  :type="item.type" @change="onConditionDateChange($event,item)"
                   :valueFormat="item['value-format']" :format="item.format">
                 </JnpfDatePicker>
               </template>
