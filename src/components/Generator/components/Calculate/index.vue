@@ -77,7 +77,7 @@ export default {
      */
     execRPN() {
       const temp = this.RPN_EXP.map(t => typeof t === 'object' ? this.getFormVal(t.__vModel__) : t)
-      this.innerValue = parseFloat(calcRPN(temp)).toFixed(this.precision || 0)
+      this.innerValue = parseFloat(calcRPN(temp))
       this.setValue = JSON.parse(JSON.stringify(this.innerValue))
       if (isNaN(this.innerValue)) this.innerValue = 0
       if (isNaN(this.setValue)) this.setValue = 0
