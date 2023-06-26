@@ -3,7 +3,7 @@
     <CardHeader v-if="activeData.title" slot="header" :title="activeData.title"
       :card="activeData.card" />
     <div class="todo-box-body">
-      <router-link class="item" :style="{'width':100 / option.rowNumber+'%'}"
+      <router-link class="item" :style="{'width':100 / (option.rowNumber||3)+'%'}"
         :class="{'item-box':option.showBorder}"
         :to="item.category?item.urlAddress+'?category='+item.category:item.urlAddress"
         v-for="(item,index) in list" :key="index" v-show="!item.noShow">

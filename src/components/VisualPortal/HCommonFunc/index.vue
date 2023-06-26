@@ -5,7 +5,7 @@
     <div class="commonFunc-box-body">
       <web-link class="item com-hover" :linkType="item.linkType" :urlAddress="item.urlAddress"
         :linkTarget="item.linkTarget" :type="item.type" :propertyJson="item.propertyJson"
-        v-for="(item,i) in list" :key="i" :style="{'width':100 / option.rowNumber+'%'}"
+        v-for="(item,i) in list" :key="i" :style="{'width':100 / (option.rowNumber||5)+'%'}"
         :class="{'item-box':option.showBorder,'item-horizontal-box':option.styleType==2}">
         <i :class="item.icon" :style="{color:item.iconBgColor}"></i>
         <p class="name"
