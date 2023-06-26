@@ -104,11 +104,13 @@ export default {
       let start = currentDate == startDate ? startTime : '00:00:00'
       let end = currentDate == endDate ? endTime : '23:59:59'
       this.startTimeRange = start + '-' + end;
-      if (currentDate == startDate && this.jnpf.toDate(this.innerValue, 'HH:mm:ss') == '00:00:00') {
-        const list = startTime.split(':')
-        this.innerValue = dayjs(this.innerValue).add(list[0] || 0, 'hour').add(list[1] || 0, 'minute').add(list[2] || 0, 'second')
-      } else if (currentDate != this.jnpf.toDate(this.oldInnerValue, 'yyyy-MM-dd')) {
-        this.innerValue = new Date(this.jnpf.toDate(this.innerValue, 'yyyy-MM-dd 00:00:00')).getTime()
+      if (this.format === 'yyyy-MM-dd HH:mm' || this.format === 'yyyy-MM-dd HH:mm:ss') {
+        if (currentDate == startDate && this.jnpf.toDate(this.innerValue, 'HH:mm:ss') == '00:00:00') {
+          const list = startTime.split(':')
+          this.innerValue = dayjs(this.innerValue).add(list[0] || 0, 'hour').add(list[1] || 0, 'minute').add(list[2] || 0, 'second')
+        } else if (currentDate != this.jnpf.toDate(this.oldInnerValue, 'yyyy-MM-dd')) {
+          this.innerValue = new Date(this.jnpf.toDate(this.innerValue, 'yyyy-MM-dd 00:00:00')).getTime()
+        }
       }
       return {
         selectableRange: this.startTimeRange,
