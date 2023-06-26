@@ -137,7 +137,7 @@ export default {
           el.onfocus = e => {
             let a = el.value.replace(/,/g, '') //去除千分号的','
             el.value = Number(parseFloat(a))
-            if (precision) el.value = Number(el.value.toFixed(precision))
+            if (precision) el.value = Number(el.value).toFixed(precision)
           }
           el.onblur = e => {
             el.value = vnode.context.delcommafy(el.value)
