@@ -88,6 +88,7 @@ export default {
       this.$emit('close')
     },
     init(id) {
+      this.dataForm.id = ''
       this.$nextTick(() => {
         this.fileList = []
         this.$refs['dataForm'].resetFields()
