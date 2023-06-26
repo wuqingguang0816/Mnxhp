@@ -67,8 +67,9 @@ export default {
       this.$refs.uploadBtn.$el.click()
     },
     onFileAdded(file) {
-      if (this.beforeUpload && typeof this.beforeUpload === "function") {
-        if (!this.beforeUpload(file)) return file.cancel()
+      if (this.beforeUpload && typeof this.beforeUpload === "function" && !this.beforeUpload(file)) {
+        file.cancel()
+        return false
       }
       // 自定义状态
       file.customStatus = 'check'
