@@ -170,9 +170,7 @@ const printOptionApi = {
             if (pcontent.includes('千位分隔符(')) {
               let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
               let place = 0
-              if (text.includes(`</span>,`)) {
-                place = text.split('</span>,')[1]
-              }
+              if (text.includes(`</span>,`)) place = text.split('</span>,')[1].replace(')', '') || 0
               let value = getTrueValue(tag == 'td' ? pcontent : text)
               let transValue = this.getThousands(value, place)
               this.replaceValue(text, transValue)
