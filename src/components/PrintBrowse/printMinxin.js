@@ -224,16 +224,15 @@ const printOptionApi = {
               if (isNaN(Number(value))) continue
               let place = arr[1] ? arr[1] : 0
               let transValue = this.getThousands(value, place)
-              this.replaceValue(dom.innerHTML, transValue)
+              this.replaceValue(data, transValue)
               continue
             }
             if (pcontent.includes('大写金额(')) {
+              let text = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[0];
               let value = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[1];
-              if (!value || isNaN(Number(value))) {
-                continue
-              }
+              if (!value || isNaN(Number(value))) continue
               let transValue = getAmountChinese(value)
-              this.replaceValue(dom.innerHTML, transValue)
+              this.replaceValue(text, transValue)
               continue
             }
             // 替换二维码
