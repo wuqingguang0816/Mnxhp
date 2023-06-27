@@ -306,6 +306,7 @@ export default {
       })
     },
     getData() {
+      this.nodeId = '0'
       this.getAllList()
     },
     getAllList() {
