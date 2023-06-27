@@ -101,6 +101,7 @@ export default {
       })
     },
     search() {
+      this.nodeId = '0'
       this.initData()
     },
     initData() {
