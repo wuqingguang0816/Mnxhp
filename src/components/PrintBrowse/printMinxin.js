@@ -120,7 +120,7 @@ const printOptionApi = {
         if (data) {
           let re = ''
           for (const item of data) {
-            re += item[field] + '-'
+            re += item[field] || '' + '-'
           }
           value = re.substring(0, re.length - 1)
         }
