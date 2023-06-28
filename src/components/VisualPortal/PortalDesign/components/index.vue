@@ -294,7 +294,7 @@ export default {
       if (this.layout.length) {
         let maxYItem = { y: 0, h: 0 };
         for (let i = 0; i < this.layout.length; i++) {
-          if (maxYItem.y < this.layout[i].y) maxYItem = this.layout[i];
+          if (this.layout[i].y >= maxYItem.y) maxYItem = this.layout[i];
         }
         y = maxYItem.y + maxYItem.h;
       }
