@@ -103,6 +103,7 @@ export default {
         this.btnLoading = true
         this.formData = res.formData
         let query = {
+          type: this.currRow.type,
           formData: JSON.stringify(this.formData),
           id: this.currRow.id
         }
