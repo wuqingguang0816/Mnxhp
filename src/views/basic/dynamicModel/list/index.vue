@@ -1029,8 +1029,7 @@ export default {
       const flowId = row.flowId || this.flowList[0].id;
       if (!flowId) return
       const list = this.flowList.filter(o => o.id === flowId)
-      if (!list.length) return
-      this.currFlow = list[0]
+      this.currFlow = !list.length ? this.flowList[0] : list[0]
       let flowTemplateJson = this.currFlow.flowTemplateJson ? JSON.parse(this.currFlow.flowTemplateJson) : {}
       this.isCustomCopy = flowTemplateJson.properties && flowTemplateJson.properties.isCustomCopy
     },
