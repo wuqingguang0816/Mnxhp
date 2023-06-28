@@ -244,7 +244,7 @@ export default {
       this.activeData.__config__.templateJson = []
     },
     dictionaryTypeChange(val) {
-      this.activeData.__config__.defaultValue = []
+      this.activeData.__config__.defaultValue = this.activeData.multiple ? [] : ''
       if (!val) {
         this.activeData.options = []
         return
