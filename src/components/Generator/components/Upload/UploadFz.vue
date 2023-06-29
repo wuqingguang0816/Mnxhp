@@ -185,10 +185,7 @@ export default {
       dispatch.call(this, 'ElFormItem', 'el.form.change', this.fileList)
     },
     downloadAll() { //下载全部（打包下载）
-      if (!this.fileList.length) {
-        this.$message.error('未发现文件')
-        return
-      }
+      if (!this.fileList.length) return this.$message.error('未发现文件')
       let fileInfo = [];
       for (let i = 0, len = this.fileList.length; i < len; i++) {
         fileInfo.push({ fileId: this.fileList[i].fileId, fileName: this.fileList[i].name })
@@ -196,7 +193,6 @@ export default {
       getPackDownloadUrl(this.type, fileInfo).then(res => {
         this.jnpf.downloadFile(res.data.downloadVo.url, res.data.downloadName)
       })
-
     }
   }
 }
