@@ -67,7 +67,7 @@ export default {
         toUserIds: '',
       },
       type: '',
-      checked: '',
+      checked: 1,
       btnLoading: false,
       delVisible: false,
       groupId: '',
@@ -89,6 +89,7 @@ export default {
     init(id, type, groupId) {
       this.type = type
       this.dataForm.id = id || 0
+      this.checked = 1
       this.groupId = groupId || 0
       this.loading = true
       this.$nextTick(() => {
