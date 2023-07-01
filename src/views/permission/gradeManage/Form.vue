@@ -156,25 +156,14 @@ export default {
     },
     initData() {
       this.listLoading = true
-      if (this.dataForm.id) {
-        getSelectorOrgList(this.dataForm.userId || '').then(res => {
-          this.treeList = res.data.list || []
-          this.listLoading = false
-          this.btnLoading = false
-        }).catch(() => {
-          this.listLoading = false
-          this.btnLoading = false
-        })
-      } else {
-        getSelectorOrgList('').then(res => {
-          this.treeList = res.data.list || []
-          this.listLoading = false
-          this.btnLoading = false
-        }).catch(() => {
-          this.listLoading = false
-          this.btnLoading = false
-        })
-      }
+      getSelectorOrgList(this.dataForm.userId || '').then(res => {
+        this.treeList = res.data.list || []
+        this.listLoading = false
+        this.btnLoading = false
+      }).catch(() => {
+        this.listLoading = false
+        this.btnLoading = false
+      })
     },
     onThisLayerSelectChange(val, row) {
       if (val) return
@@ -191,23 +180,21 @@ export default {
     init(id) {
       this.treeList = []
       this.dataForm.id = id || ""
-      if (!this.dataForm.id) {
-        this.dataForm.userId = ""
-      }
+      this.dataForm.userId = id || ""
       this.visible = true
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
-        this.dataForm.userId = id || ""
         this.initData()
+        this.formLoading = false
       })
-      this.formLoading = false
     },
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           let query = {
-            ...this.dataForm, orgAdminModel: this.treeList
+            ...this.dataForm,
+            orgAdminModel: this.treeList
           }
           this.btnLoading = true
           saveGradeManage(query).then(res => {
