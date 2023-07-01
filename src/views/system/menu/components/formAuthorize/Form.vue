@@ -163,8 +163,8 @@ export default {
     },
     closeForm(val, value) {
       this.dataForm.enCode = val
-      this.dataForm.bindTable = value.tableName
-      this.dataForm.fullName = value.fieldName || ''
+      if (value.tableName) this.dataForm.bindTable = value.tableName
+      if (value.fieldName) this.dataForm.fullName = value.fieldName
     },
     onEnCodeChange(e) {
       let objVal;
