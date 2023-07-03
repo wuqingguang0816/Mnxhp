@@ -55,7 +55,7 @@ export default {
     getPopupSelect(data) {
       const isSubTable = this.activeData.__config__.isSubTable
       if (!isSubTable && !data.__config__.isSubTable) return true
-      if (isSubTable && data.__config__.isSubTable && this.activeData.__config__.relationTable === data.__config__.relationTable) return true
+      if (isSubTable && data.__config__.isSubTable && this.activeData.__config__.parentVModel === data.__config__.parentVModel) return true
       return false
     }
   }
