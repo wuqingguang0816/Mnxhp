@@ -204,6 +204,7 @@ const printOptionApi = {
             }
             if (pcontent.includes('&lt;barCode')) {
               let value = getTrueValue(pcontent)
+              if (!value) return
               if (value.trim() == '') {
                 this.replaceValue(dom.innerHTML, '')
                 continue
@@ -213,8 +214,9 @@ const printOptionApi = {
             }
             if (tag == 'td') {
               let value = getTrueValue(pcontent)
-              let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-              this.replaceValue(spanText, value)
+              let cloneNode = dom.cloneNode(true)
+              cloneNode.innerText = value
+              this.replaceValue(pcontent, cloneNode.outerHTML)
             }
           } else {
             if (pcontent.includes('千位分隔符(')) {
