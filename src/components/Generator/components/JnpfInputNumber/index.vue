@@ -102,12 +102,12 @@ export default {
     value: {
       handler(val) {
         this.innerValue = val
-        this.amountChinese(this.innerValue)
+        this.amountChinese(val)
       },
       deep: true
     },
     isAmountChinese() {
-      this.amountChinese(this.innerValue)
+      this.amountChinese(this.value)
     },
     thousands(val) {
       this.key2 = +new Date()
