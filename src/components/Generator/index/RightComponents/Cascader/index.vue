@@ -172,7 +172,7 @@ export default {
     renderContent(h, { node, data, store }) {
       return (
         <div class="custom-tree-node">
-          <span>{node.label}</span>
+          <span class="tree-node-ellipsis">{node.label}</span>
           <span class="node-operation">
             <i on-click={() => this.append(data)}
               class="el-icon-plus"
@@ -342,5 +342,11 @@ export default {
   >>> .el-button:hover {
     border-color: #dcdfe6;
   }
+}
+.tree-node-ellipsis {
+  width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 </style>
