@@ -169,8 +169,12 @@ export function deepClone(obj) {
  */
 export function getAmountChinese(val) {
   if (!val && val !== 0) return ''
+  const value = val
+  if (val < 0) {
+    val = Number(val.toString().split('-')[1])
+  }
   const amount = +val
-  if (Number.isNaN(amount) || amount < 0) return ''
+  if (Number.isNaN(amount)) return ''
   const NUMBER = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
   const N_UNIT1 = ['', '拾', '佰', '仟']
   const N_UNIT2 = ['', '万', '亿', '兆']
@@ -205,6 +209,7 @@ export function getAmountChinese(val) {
   } else {
     res += '整'
   }
+  if (value < 0) res = '负数' + res
   return res
 }
 /**
