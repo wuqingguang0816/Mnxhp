@@ -56,6 +56,7 @@ export default {
         this.option.defaultValue = []
         this.chartData = []
         if (val == 'static') this.initStaticData(this.option.styleType)
+        this.initBarType()
       }
     },
     'option.styleType': {
@@ -399,15 +400,18 @@ export default {
       }
     },
     initBarType() {
-      const optionData = this.option.defaultValue || []
+      if (this.option.styleType !== 7) return
+      const optionData = this.chartData || []
       if (!Array.isArray(optionData)) return
       this.option.barType = []
       let typeArr = Array.from(new Set(optionData.map((item) => item.type)))
       typeArr.map((item, index) => {
-        this.option.barType.push({
-          title: item,
-          type: index == 1 ? 'line' : 'bar'
-        })
+        if (item) {
+          this.option.barType.push({
+            title: item,
+            type: index == 1 ? 'line' : 'bar'
+          })
+        }
       })
     },
     getPieData(list) {
