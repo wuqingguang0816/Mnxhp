@@ -143,8 +143,8 @@
           <el-form class="dialog-form-main" :model="dataForm" :rules="formRule"
             label-position="right" label-width="50px" ref="dataForm">
             <el-form-item label="上级" prop="parentId">
-              <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData"
-                placeholder="选择上级菜单" />
+              <JNPF-TreeSelect v-model="dataForm.parentId" :options="treeData" placeholder="选择上级菜单"
+                :lastLevel="listQuery.category=='Web'?false:true" />
             </el-form-item>
             <upload-btn v-show="false" :url="'/api/system/Menu/'+systemId+'/Action/Import'"
               @on-success="uploadSuccess" :buttonText="$t('common.confirmButton')"

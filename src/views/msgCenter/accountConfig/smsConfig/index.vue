@@ -101,7 +101,7 @@ import {
   exportConfig
 } from '@/api/msgCenter/accountConfig'
 export default {
-  name: 'system-printDev',
+  name: 'msgCenter-accountConfig-shortMsg',
   components: {
     Form
   },

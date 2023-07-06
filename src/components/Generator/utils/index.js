@@ -169,8 +169,12 @@ export function deepClone(obj) {
  */
 export function getAmountChinese(val) {
   if (!val && val !== 0) return ''
+  const value = val
+  if (val < 0) {
+    val = Number(val.toString().split('-')[1])
+  }
   const amount = +val
-  if (Number.isNaN(amount) || amount < 0) return ''
+  if (Number.isNaN(amount)) return ''
   const NUMBER = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
   const N_UNIT1 = ['', '拾', '佰', '仟']
   const N_UNIT2 = ['', '万', '亿', '兆']
@@ -180,19 +184,20 @@ export function getAmountChinese(val) {
   let res = ''
   // 整数部分
   if (integer) {
+    let zeroCount = 0;
     for (let i = 0, len = integer.length; i < len; i++) {
-      const num = integer.charAt(i)
-      const pos = len - i - 1 // 排除个位后 所处的索引位置
-      if (num === '0') { // 当前位 等于 0 且下一位也等于 0 则可跳过计算
-        if (i === len - 1) {
-          if (integer.length === 1) res += '零' // 0.35 这种情况不可跳过计算
-          break
-        }
-        if (integer.charAt(i + 1) === '0') continue
+      const num = integer.charAt(i);
+      const pos = len - i - 1; // 排除个位后 所处的索引位置
+      const q = pos / 4;
+      const m = pos % 4;
+      if (num === '0') {
+        zeroCount++;
+      } else {
+        if (zeroCount > 0 && m !== 3) res += NUMBER[0];
+        zeroCount = 0;
+        res += NUMBER[parseInt(num)] + N_UNIT1[m];
       }
-      res += NUMBER[num]
-      if (parseInt(num)) res += N_UNIT1[(pos) % 4]
-      if (pos % 4 === 0) res += N_UNIT2[Math.floor(pos / 4)]
+      if (m == 0 && zeroCount < 4) res += N_UNIT2[Math.floor(q)];
     }
   }
   res += '元'
@@ -205,6 +210,7 @@ export function getAmountChinese(val) {
   } else {
     res += '整'
   }
+  if (value < 0) res = '负数' + res
   return res
 }
 /**

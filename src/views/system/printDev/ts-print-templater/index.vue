@@ -28,7 +28,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import TsDesignerTinymce from "./ts-designer-tinymce";
 import pageSize from "./pageSize";
@@ -59,47 +58,22 @@ export default {
       activeTab: "",
       richHeight: document.documentElement.clientHeight - 42,
       systemData: [
-        {
-          fullName: "打印人员",
-          id: "systemPrinter"
-        },
-        {
-          fullName: "打印时间",
-          id: "systemPrintTime"
-        },
-        {
-          fullName: "审批内容",
-          id: "systemApprovalContent"
-        },
-        {
-          fullName: "图片",
-          id: "img"
-        },
-        {
-          fullName: "二维码",
-          id: "qrCode"
-        },
-        {
-          fullName: "条形码",
-          id: "barCode"
-        },
+        { fullName: "打印人员", id: "systemPrinter" },
+        { fullName: "打印时间", id: "systemPrintTime" },
+        { fullName: "审批内容", id: "systemApprovalContent" },
+        { fullName: "图片", id: "img" },
+        { fullName: "二维码", id: "qrCode" },
+        { fullName: "条形码", id: "barCode" },
       ],
-      parameter: [{
-        fullName: "千位分隔符(字段或数字,小数位数)",
-        id: "thousands"
-      },
-      {
-        fullName: "大写金额(字段或数字)",
-        id: "isAmountChinese"
-      }],
+      parameter: [
+        { fullName: "千位分隔符(字段或数字,小数位数)", id: "thousands" },
+        { fullName: "大写金额(字段或数字)", id: "isAmountChinese" }
+      ],
       defaultProps: {
         children: "children",
         label: "fullName"
       }
     };
-  },
-  mounted() {
-    // this.getEditConfig()
   },
   watch: {
     pageParam: {
@@ -111,9 +85,7 @@ export default {
     },
     value: {
       handler(val) {
-        if (val != this.content) {
-          this.content = val;
-        }
+        if (val != this.content) this.content = val
       },
       immediate: true,
       deep: true
@@ -140,9 +112,7 @@ export default {
   methods: {
     handleNodeClick(item, node) {
       if (item.children != null && item.children.length > 0) return;
-      const tableParent = this.getCurrentParentByTag(
-        'table[data-wk-table-tag="table"]'
-      );
+      const tableParent = this.getCurrentParentByTag('table[data-wk-table-tag="table"]');
       if (!tableParent) {
         this.editor.insertContent(this.getSpanNode(item, node));
         this.content = this.editor.getContent({ format: "html" });
@@ -169,179 +139,163 @@ export default {
       let width = e.width ? e.width : 297
       let height = e.height ? e.height : 'calc(100% - 10px)'
       this.initConfig = {
-        menubar: false,
-        toolbar_sticky: true,
-        statusbar: false,
-        // extended_valid_elements: 'span[class|title|wktag|style|contenteditable]',
-        content_style: `html {
-          background: #fff;
-          padding: 20px 0;
-          box-sizing: border-box;
-          padding-bottom:20px;
-        }
-        body {
-          font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-          width: ${width}mm;
-          height: ${height}mm;
-          padding: ${mt}mm ${mr}mm ${mb}mm ${ml}mm !important;
-          margin: 0 auto !important;
-          // border: 1px solid rgb(210, 213, 216);
-          background: white;
-          min-height: 100%;
-          box-sizing: border-box;
-          box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-          word-break:break-all;
-        }
-        .wk-tiny-color--customer {
-          color: #005AF3;
-        }
-        .wk-tiny-color--contacts {
-          color: #1CB24C;
-        }
-        .wk-tiny-color--business {
-          color: #FF852F;
-        }
-        .wk-tiny-color--contract {
-          color: #FF4A43;
-        }
-        .wk-tiny-color--receivables {
-          color: #FFAE46;
-        }
-        .wk-tiny-color--product {
-          color: #00D0D4;
-        }
-        .wk-tiny-color--common {
-          color: #2362FB;
-        }
-        p { margin: 5px 0; line-height: 1.5;}`,
-        // content_css: ['/static/tinymce/css/tiny-wk-colors.css', '/static/tinymce/css/tiny-wk-word.css'],
-        table_advtab: false,
-        table_cell_advtab: false,
-        table_row_advtab: false,
-        toolbar: {
-          type: [String, Array],
-          default: "code | lineheight | undo redo "
-        },
+        // menubar: false,
+        // toolbar_sticky: true,
+        // statusbar: false,
+        // content_style: `html {
+        //   background: #fff;
+        //   padding: 20px 0;
+        //   box-sizing: border-box;
+        //   padding-bottom:20px;
+        // }
+        // body {
+        //   font-family: simsun, serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        //   width: ${width}mm;
+        //   height: ${height}mm;
+        //   padding: ${mt}mm ${mr}mm ${mb}mm ${ml}mm !important;
+        //   margin: 0 auto !important;
+        //   background: white;
+        //   min-height: 100%;
+        //   box-sizing: border-box;
+        //   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        //   word-break:break-all;
+        // }
+        // .wk-tiny-color--customer {
+        //   color: #005AF3;
+        // }
+        // .wk-tiny-color--contacts {
+        //   color: #1CB24C;
+        // }
+        // .wk-tiny-color--business {
+        //   color: #FF852F;
+        // }
+        // .wk-tiny-color--contract {
+        //   color: #FF4A43;
+        // }
+        // .wk-tiny-color--receivables {
+        //   color: #FFAE46;
+        // }
+        // .wk-tiny-color--product {
+        //   color: #00D0D4;
+        // }
+        // .wk-tiny-color--common {
+        //   color: #2362FB;
+        // }
+        // p { margin: 5px 0; line-height: 1.5;}`,
+        // table_advtab: false,
+        // table_cell_advtab: false,
+        // table_row_advtab: false,
+        // toolbar: {
+        //   type: [String, Array],
+        //   default: "code | lineheight | undo redo "
+        // },
         setup: editor => {
           let _this = this;
-          editor.ui.registry.addButton("page", {
-            text: `<i class="el-icon-s-order" style="font-size:18px"></i>`,
-            tooltip: "纸张大小",
-            onAction: function () {
-              _this.$refs.pageSize.dialogFormVisible = true;
-            }
-          });
-          editor.on("init", function () {
-            editor.execCommand("mceFocus");
-          });
-          editor.on("keydown", e => {
-            this.selectNodes = null;
-            if (
-              e.keyCode === 8 /* Backspace key */ ||
-              /* del key */ e.keyCode == 46
-            ) {
-              const currentNode = editor.selection.getNode();
-              if (
-                currentNode.getAttribute("data-wk-table-td-tag") === "value"
-              ) {
-                e.preventDefault();
-                return false;
-              } else if (currentNode.nodeName == "SPAN") {
-                if (currentNode.hasAttribute("contenteditable")) {
-                  e.preventDefault();
-                  editor.dom.remove(currentNode);
-                  return false;
-                } else {
-                  const farterSpan = this.getCurrentParentByTag(
-                    "span[contenteditable]"
-                  );
-                  if (farterSpan) {
-                    e.preventDefault();
-                    editor.dom.remove(farterSpan);
-                    return false;
-                  }
-                }
-              }
-            } else if (e.keyCode == "65" && (e.metaKey || e.ctrlKey)) {
-              // 全选
-              this.selectNodes = editor.selection.getNode();
-              this.setSpanEditAttr(this.selectNodes, true);
-            } else {
-              // table 里面不允许写内容
-              const currentNode = editor.selection.getNode();
-              if (
-                currentNode.getAttribute("data-wk-table-td-tag") === "value"
-              ) {
-                // 只允许输入上下左右
-                if (
-                  e.keyCode !== 37 &&
-                  e.keyCode !== 38 &&
-                  e.keyCode !== 39 &&
-                  e.keyCode !== 40
-                ) {
-                  e.preventDefault();
-                  return false;
-                }
-              } else if (currentNode.nodeName == "SPAN") {
-                if (currentNode.hasAttribute("contenteditable")) {
-                  if (currentNode.getAttribute("contenteditable")) {
-                    e.preventDefault();
-                    currentNode.setAttribute("contenteditable", false);
-                    return false;
-                  }
-                  return false;
-                } else {
-                  const farterSpan = this.getCurrentParentByTag(
-                    "span[contenteditable]"
-                  );
-                  if (farterSpan) {
-                    if (farterSpan.getAttribute("contenteditable")) {
-                      e.preventDefault();
-                      farterSpan.setAttribute("contenteditable", false);
-                      return false;
-                    }
-                    return false;
-                  }
-                }
-              }
-
-              if (
-                e.keyCode == 37 &&
-                e.keyCode == 38 &&
-                e.keyCode == 39 &&
-                e.keyCode == 40
-              ) {
-                this.cancelSpanEdit();
-              }
-            }
-          });
-
-          editor.on("mousedown", () => {
-            this.cancelSpanEdit();
-          });
-
-          editor.on("mouseup", e => {
-            const selection = editor.selection.getSel();
-            if (
-              e.target.hasAttribute("contenteditable") &&
-              selection.anchorOffset == 1 &&
-              selection.anchorOffset == 1
-            ) {
-              // 忽略
-            } else if (
-              e.target.hasAttribute("contenteditable") &&
-              selection.isCollapsed
-            ) {
-              this.cancelSpanEdit();
-            } else {
-              if (!selection.isCollapsed) {
-                this.selectNodes = editor.selection.getNode();
-                this.setSpanEditAttr(this.selectNodes, true);
-              } else {
-                this.cancelSpanEdit();
-              }
-            }
-          });
+          // editor.ui.registry.addButton("page", {
+          //   text: `<i class="el-icon-s-order" style="font-size:18px"></i>`,
+          //   tooltip: "纸张大小",
+          //   onAction: function () {
+          //     _this.$refs.pageSize.dialogFormVisible = true;
+          //   }
+          // });
+          // editor.on("init", function () {
+          //   editor.execCommand("mceFocus");
+          // });
+          // editor.on("keydown", e => {
+          //   this.selectNodes = null;
+          //   /* Backspace key and del key*/
+          //   if (e.keyCode === 8 || e.keyCode == 46) {
+          //     const currentNode = editor.selection.getNode();
+          //     if (
+          //       currentNode.getAttribute("data-wk-table-td-tag") === "value"
+          //     ) {
+          //       e.preventDefault();
+          //       return false;
+          //     } else if (currentNode.nodeName == "SPAN") {
+          //       console.log(currentNode)
+          //       if (currentNode.hasAttribute("contenteditable")) {
+          //         e.preventDefault();
+          //         editor.dom.remove(currentNode);
+          //         return false;
+          //       } else {
+          //         const span = this.getCurrentParentByTag(
+          //           "span[contenteditable]"
+          //         );
+          //         console.log(span)
+          //         if (span) {
+          //           e.preventDefault();
+          //           editor.dom.remove(span);
+          //           console.log(editor.dom)
+          //           return false;
+          //         }
+          //         if (currentNode.getAttribute("data-tag") === "thousands" || currentNode.getAttribute("data-tag") === "isAmountChinese") {
+          //           if (currentNode.innerHTML.length == 1) {
+          //             e.preventDefault();
+          //             editor.dom.remove(currentNode);
+          //             return false;
+          //           }
+          //         }
+          //       }
+          //     }
+          //   } else if (e.keyCode == "65" && (e.metaKey || e.ctrlKey)) {
+          //     // 全选
+          //     this.selectNodes = editor.selection.getNode();
+          //     this.setSpanEditAttr(this.selectNodes, true);
+          //   } else {
+          //     // table 里面不允许写内容
+          //     const currentNode = editor.selection.getNode();
+          //     if (
+          //       currentNode.getAttribute("data-wk-table-td-tag") === "value"
+          //     ) {
+          //       // 只允许输入上下左右
+          //       if (e.keyCode !== 37 && e.keyCode !== 38 && e.keyCode !== 39 && e.keyCode !== 40) {
+          //         e.preventDefault();
+          //         return false;
+          //       }
+          //     } else if (currentNode.nodeName == "SPAN") {
+          //       if (currentNode.hasAttribute("contenteditable")) {
+          //         if (currentNode.getAttribute("contenteditable")) {
+          //           e.preventDefault();
+          //           currentNode.setAttribute("contenteditable", false);
+          //           return false;
+          //         }
+          //         return false;
+          //       } else {
+          //         const span = this.getCurrentParentByTag(
+          //           "span[contenteditable]"
+          //         );
+          //         if (span) {
+          //           if (span.getAttribute("contenteditable")) {
+          //             e.preventDefault();
+          //             span.setAttribute("contenteditable", false);
+          //             return false;
+          //           }
+          //           return false;
+          //         }
+          //       }
+          //     }
+          //     if (e.keyCode == 37 && e.keyCode == 38 && e.keyCode == 39 && e.keyCode == 40) this.cancelSpanEdit();
+          //   }
+          // });
+          // editor.on("mousedown", () => {
+          //   this.cancelSpanEdit();
+          // });
+          // editor.on("mouseup", e => {
+          //   const selection = editor.selection.getSel();
+          //   if (
+          //     e.target.hasAttribute("contenteditable") &&
+          //     selection.isCollapsed
+          //   ) {
+          //     this.cancelSpanEdit();
+          //   } else {
+          //     if (!selection.isCollapsed) {
+          //       this.selectNodes = editor.selection.getNode();
+          //       this.setSpanEditAttr(this.selectNodes, true);
+          //     } else {
+          //       this.cancelSpanEdit();
+          //     }
+          //   }
+          // });
         }
       };
     },
@@ -358,20 +312,15 @@ export default {
     },
     setSpanEditAttr(node, canEdit) {
       if (node && node.hasAttribute('contenteditable')) {
-        if (node.getAttribute('contenteditable') != canEdit) {
-          node.setAttribute('contenteditable', false)
-        }
+        if (node.getAttribute('contenteditable') != canEdit) node.setAttribute('contenteditable', canEdit)
       }
-
       if (node && node.children) {
         for (let index = 0; index < node.children.length; index++) {
           const element = node.children[index];
           if (element.children) {
             this.setSpanEditAttr(element, canEdit)
           } else if (element.hasAttribute('contenteditable')) {
-            if (node.getAttribute('contenteditable') != canEdit) {
-              element.setAttribute('contenteditable', false)
-            }
+            if (node.getAttribute('contenteditable') != canEdit) element.setAttribute('contenteditable', canEdit)
           }
         }
       }
@@ -380,36 +329,19 @@ export default {
       return this.editor.dom.getParent(this.editor.selection.getNode(), tag);
     },
     getSpanNode(item, node) {
-      const parent =
-        node.parent.data != null && node.parent.data.id != null
-          ? node.parent.data.id
-          : "null";
-      if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") {
-        return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
-      }
-      if (item.id == 'isAmountChinese') return `<p style="display:inline-block" data-tag='isAmountChinese'>大写金额(${parent})<p>`
-      if (item.id == 'thousands') return `<p style="display:inline-block" data-tag='thousands'>千位分隔符(${parent},2)<p>`
-      return `<span data-tag="${parent}.${item.id
-        }" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id
-        }}</span>`;
+      const parent = node.parent.data != null && node.parent.data.id != null ? node.parent.data.id : "null";
+      if (item.id == "img" || item.id == "barCode" || item.id == "qrCode") return `&lt;${item.id} width='100' height='100'&gt;&lt;/${item.id}&gt;`;
+      if (item.id == 'isAmountChinese') return `<span  data-tag='isAmountChinese'>大写金额(${parent})<span>`
+      if (item.id == 'thousands') return `<span  data-tag='thousands'>千位分隔符(${parent},2)<span>`
+      return `<span data-tag="${parent}.${item.id}" class="wk-print-tag-wukong ${this.getSpanColorClass()}" contenteditable="false">{${item.id}}</span>`;
     },
     getSpanColorClass() {
-      const color = [
-        "customer",
-        "contacts",
-        "business",
-        "contract",
-        "receivables",
-        "product"
-      ].includes(this.activeTab)
-        ? this.activeTab
-        : "common";
+      const color = ["customer", "contacts", "business", "contract", "receivables", "product"].includes(this.activeTab) ? this.activeTab : "common";
       return `wk-tiny-color--${color}`;
     }
   }
 };
 </script>
-
 <style lang="scss" scoped>
 .print-template-detail {
   height: 100%;

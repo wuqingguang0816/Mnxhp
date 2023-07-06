@@ -36,7 +36,7 @@ export default {
     },
     precision: {
       type: Number,
-      default: 0
+      default: undefined
     },
   },
   data() {
@@ -61,10 +61,9 @@ export default {
   methods: {
     thousandSeparator() {
       if (this.isAmountChinese) this.amountChineseName = getAmountChinese(this.innerValue)
+      if (this.precision) this.innerValue = Number(this.innerValue).toFixed(this.precision)
       if (this.thousands) {
         this.innerValue = thousandsFormat(this.innerValue)
-      } else {
-        this.innerValue = Number(this.innerValue).toFixed(this.precision || 0)
       }
       return this.innerValue
     },

@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="输出设置" :close-on-click-modal="false" :visible.sync="visible"
     class="JNPF-dialog JNPF-dialog_center release-dialog" lock-scroll width="600px">
-    <el-alert title="注意：以下只能包含数字、字母、下划线、小圆点..但不能用数字开头，不能是关键字或保留字。" type="warning" :closable="false"
+    <el-alert title="注意：以下只能包含数字、字母、下划线、小圆点，不能用数字开头，不能是关键字或保留字。" type="warning" :closable="false"
       show-icon style="margin-bottom: 12px;" />
     <el-form ref="dataForm" label-width="100px" :model="dataForm">
       <jnpf-form-tip-item label="模块命名" prop="module" v-if="type!=3"

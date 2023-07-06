@@ -1,8 +1,8 @@
 <template>
   <div id="common-file-uploader" :class="{'hasDefault': !!value.length}">
-    <uploader ref="uploader" :options="options" :autoStart="false" @file-added="onFileAdded"
-      @file-success="onFileSuccess" @file-progress="onFileProgress" @file-error="onFileError"
-      class="uploader-app" @complete="onComplete" :file-status-text="statusText">
+    <uploader class="uploader-app" ref="uploader" :options="options" :autoStart="false"
+      :file-status-text="statusText" @file-added="onFileAdded" @file-success="onFileSuccess"
+      @file-progress="onFileProgress" @file-error="onFileError" @complete="onComplete">
       <uploader-unsupport></uploader-unsupport>
       <uploader-btn id="file-uploader-btn" ref="uploadBtn" :attrs="attrs">选择文件</uploader-btn>
       <uploader-list>
@@ -73,34 +73,18 @@ export default {
   },
   mixins: [uploadMixin],
   data() {
-    return {
-
-    }
+    return {}
   },
   computed: {
     acceptText() {
       let txt = ''
-      if (this.accept.includes('image/*')) {
-        txt += '、图片'
-      }
-      if (this.accept.includes('video/*')) {
-        txt += '、视频'
-      }
-      if (this.accept.includes('audio/*')) {
-        txt += '、音频'
-      }
-      if (this.accept.includes('.xls,.xlsx')) {
-        txt += '、excel'
-      }
-      if (this.accept.includes('.doc,.docx')) {
-        txt += '、word'
-      }
-      if (this.accept.includes('.pdf')) {
-        txt += '、pdf'
-      }
-      if (this.accept.includes('.txt')) {
-        txt += '、txt'
-      }
+      if (this.accept.includes('image/*')) txt += '、图片'
+      if (this.accept.includes('video/*')) txt += '、视频'
+      if (this.accept.includes('audio/*')) txt += '、音频'
+      if (this.accept.includes('.xls,.xlsx')) txt += '、excel'
+      if (this.accept.includes('.doc,.docx')) txt += '、word'
+      if (this.accept.includes('.pdf')) txt += '、pdf'
+      if (this.accept.includes('.txt')) txt += '、txt'
       return txt.slice(1)
     },
   },
@@ -117,72 +101,23 @@ export default {
         this.$message.error(`文件大小超过${this.fileSize}${this.sizeUnit}`)
         return isRightSize
       }
-      let isAccept = false
-      if (!this.accept) {
-        isAccept = true
-      }
-      let extension = file.getExtension()
-      if (this.accept.indexOf(extension) > -1) {
-        isAccept = true
-      } else if (this.accept === '*') {
-        isAccept = true
-      } else {
-        let isImage = false
-        let isVideo = false
-        let isAudio = false
-        if (this.accept.includes("image/*")) {
-          let type = file.fileType
-          isImage = new RegExp("image/*").test(type)
-          if (isImage) {
-            isAccept = true
-          } else {
-            if (this.accept.includes("video/*")) {
-              isVideo = new RegExp("video/*").test(type)
-              if (isVideo) {
-                isAccept = true
-              } else {
-                if (this.accept.includes("audio/*")) {
-                  isAudio = new RegExp("audio/*").test(type)
-                  if (isAudio) {
-                    isAccept = true
-                  }
-                }
-              }
-            } else {
-              if (this.accept.includes("audio/*")) {
-                isAudio = new RegExp("audio/*").test(type)
-                if (isAudio) {
-                  isAccept = true
-                }
-              }
-            }
-          }
-        } else if (this.accept.includes("video/*")) {
-          let type = file.fileType
-          isVideo = new RegExp("video/*").test(type)
-          if (isVideo) {
-            isAccept = true
-          } else {
-            if (this.accept.includes("audio/*")) {
-              isAudio = new RegExp("audio/*").test(type)
-              if (isAudio) {
-                isAccept = true
-              }
-            }
-          }
-        } else if (this.accept.includes("audio/*")) {
-          let type = file.fileType
-          isAudio = new RegExp("audio/*").test(type)
-          if (isAudio) {
-            isAccept = true
-          }
-        }
-      }
+      const isAccept = this.checkAccept(file);
       if (!isAccept) {
         this.$message.error(`请选择${this.acceptText}类型的文件`)
         return isAccept
       }
-      return true
+      return isRightSize && isAccept;
+    },
+    // 校验格式
+    checkAccept(file) {
+      if (!this.accept || this.accept === '*') return true;
+      const extension = file.getExtension();
+      const fileType = file.fileType;
+      if (this.accept.indexOf(extension) > -1) return true;
+      if (this.accept.includes('image/*') && new RegExp('image/*').test(fileType)) return true;
+      if (this.accept.includes('video/*') && new RegExp('video/*').test(fileType)) return true;
+      if (this.accept.includes('audio/*') && new RegExp('audio/*').test(fileType)) return true;
+      return false;
     },
     handelSuccess(file) {
       const form = new FormData()

@@ -6,7 +6,7 @@
       <web-link :linkType="item.linkType" :urlAddress="item.urlAddress"
         :linkTarget="item.linkTarget" :type="item.type" :propertyJson="item.propertyJson"
         class="dataBoard-item" v-for="(item,i) in list" :key="i"
-        :style="{'width':100 / option.rowNumber+'%'}" :class="{'item-box':option.showBorder}">
+        :style="{'width':100 / (option.rowNumber||4)+'%'}" :class="{'item-box':option.showBorder}">
         <i :class="item.icon+' dataBoard-body-item'"
           :style="{'color':item.iconColor,'background':item.iconColor.replace('rgb','rgba').replace(')',',0.1)')}"></i>
         <div class="text">

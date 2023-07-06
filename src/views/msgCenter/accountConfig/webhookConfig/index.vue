@@ -101,7 +101,7 @@ import {
 } from '@/api/msgCenter/accountConfig'
 import { getMsgTypeList } from '@/api/msgCenter/msgTemplate'
 export default {
-  name: 'system-printDev',
+  name: 'msgCenter-accountConfig-webhook',
   components: {
     Form
   },

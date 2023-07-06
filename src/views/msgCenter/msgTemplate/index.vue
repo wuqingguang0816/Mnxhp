@@ -127,7 +127,7 @@ import { getMsgTemplateList, delMsgTemplate, copyMsgTemplate, getMsgTypeList } f
 import Form from './Form'
 import Detail from './Detail'
 export default {
-  name: 'system-mesCenter-msgTemplate',
+  name: 'msgCenter-msgTemplate',
   components: { Form, Detail },
   data() {
     return {

@@ -120,7 +120,7 @@ const printOptionApi = {
         if (data) {
           let re = ''
           for (const item of data) {
-            re += item[field] + '-'
+            re += item[field] || '' + '-'
           }
           value = re.substring(0, re.length - 1)
         }
@@ -170,9 +170,7 @@ const printOptionApi = {
             if (pcontent.includes('千位分隔符(')) {
               let text = pcontent.match(/千位分隔符\(\<span[^>]+"[^<]+\>[^)]+\)/)[0];
               let place = 0
-              if (text.includes(`</span>,`)) {
-                place = text.split('</span>,')[1]
-              }
+              if (text.includes(`</span>,`)) place = text.split('</span>,')[1].replace(')', '') || 0
               let value = getTrueValue(tag == 'td' ? pcontent : text)
               let transValue = this.getThousands(value, place)
               this.replaceValue(text, transValue)
@@ -206,6 +204,7 @@ const printOptionApi = {
             }
             if (pcontent.includes('&lt;barCode')) {
               let value = getTrueValue(pcontent)
+              if (!value) return
               if (value.trim() == '') {
                 this.replaceValue(dom.innerHTML, '')
                 continue
@@ -215,8 +214,9 @@ const printOptionApi = {
             }
             if (tag == 'td') {
               let value = getTrueValue(pcontent)
-              let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
-              this.replaceValue(spanText, value)
+              let cloneNode = dom.cloneNode(true)
+              cloneNode.innerText = value
+              this.replaceValue(pcontent, cloneNode.outerHTML)
             }
           } else {
             if (pcontent.includes('千位分隔符(')) {
@@ -226,16 +226,15 @@ const printOptionApi = {
               if (isNaN(Number(value))) continue
               let place = arr[1] ? arr[1] : 0
               let transValue = this.getThousands(value, place)
-              this.replaceValue(dom.innerHTML, transValue)
+              this.replaceValue(data, transValue)
               continue
             }
             if (pcontent.includes('大写金额(')) {
+              let text = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[0];
               let value = pcontent.match(/大写金额\((.*?)\)/) && pcontent.match(/大写金额\((.*?)\)/)[1];
-              if (!value || isNaN(Number(value))) {
-                continue
-              }
+              if (!value || isNaN(Number(value))) continue
               let transValue = getAmountChinese(value)
-              this.replaceValue(dom.innerHTML, transValue)
+              this.replaceValue(text, transValue)
               continue
             }
             // 替换二维码

@@ -208,25 +208,11 @@ export default {
         type: 'warning'
       }).then(() => {
         batchExecute(data).then(res => {
-          if (res.msg == 1) {
-            this.$message({
-              message: '批量同步成功!',
-              type: 'success',
-              duration: 1000
-            })
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error',
-              duration: 1000
-            })
-          }
+          this.$message({ message: res.msg, type: 'success', duration: 1000 })
           for (const key in res.data) {
             for (let index = 0; index < this.list.length; index++) {
               const element = this.list[index];
-              if (element.table == key) {
-                element.result = res.data[key] == 1 ? '成功' : '失败'
-              }
+              if (element.table == key) element.result = res.data[key] == 1 ? '成功' : '失败'
             }
           }
           this.listLoading = false

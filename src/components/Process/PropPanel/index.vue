@@ -77,15 +77,15 @@
               </template>
               <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
                 <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type" value-format="timestamp"
+                  :type="item.type ||'datetime'" value-format="timestamp"
                   @change="onConditionDateChange($event,item)"
                   :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </el-date-picker>
               </template>
               <template v-else-if="item.jnpfKey==='date'">
                 <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
-                  :type="item.type||'timestamp'" @change="onConditionDateChange($event,item)"
-                  :valueFormat="item['value-format']" :format="item.format">
+                  :type="item.type||'datetime'" @change="onConditionDateChange($event,item)"
+                  :valueFormat="item['value-format']" :format="item.format||'yyyy-MM-dd HH:mm:ss'">
                 </JnpfDatePicker>
               </template>
               <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">

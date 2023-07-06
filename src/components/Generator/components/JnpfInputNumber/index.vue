@@ -102,12 +102,12 @@ export default {
     value: {
       handler(val) {
         this.innerValue = val
-        this.amountChinese(this.innerValue)
+        this.amountChinese(val)
       },
       deep: true
     },
     isAmountChinese() {
-      this.amountChinese(this.innerValue)
+      this.amountChinese(this.value)
     },
     thousands(val) {
       this.key2 = +new Date()
@@ -136,7 +136,8 @@ export default {
           // 聚焦转化为数字格式（去除千分位）
           el.onfocus = e => {
             let a = el.value.replace(/,/g, '') //去除千分号的','
-            el.value = Number(parseFloat(a)).toFixed(precision)
+            el.value = Number(parseFloat(a))
+            if (precision) el.value = Number(el.value).toFixed(precision)
           }
           el.onblur = e => {
             el.value = vnode.context.delcommafy(el.value)

@@ -292,8 +292,11 @@ export default {
       let clone = deepClone(item)
       let x = 0, y = 0, i = this.config.layoutId
       if (this.layout.length) {
-        let lastItem = this.layout[this.layout.length - 1]
-        y = lastItem.y + lastItem.h
+        let maxYItem = { y: 0, h: 0 };
+        for (let i = 0; i < this.layout.length; i++) {
+          if (this.layout[i].y >= maxYItem.y) maxYItem = this.layout[i];
+        }
+        y = maxYItem.y + maxYItem.h;
       }
       let row = { ...clone, i, x, y }
       if (needDefaultList.includes(row.jnpfKey) && type != 'copy') row.option.defaultValue = this.getDefaultValue(row)

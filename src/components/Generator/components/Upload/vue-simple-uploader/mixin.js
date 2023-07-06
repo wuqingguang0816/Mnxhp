@@ -67,8 +67,10 @@ export default {
       this.$refs.uploadBtn.$el.click()
     },
     onFileAdded(file) {
-      if (this.beforeUpload && typeof this.beforeUpload === "function") {
-        if (!this.beforeUpload(file)) return file.cancel()
+      if (this.beforeUpload && typeof this.beforeUpload === "function" && !this.beforeUpload(file)) {
+        file.cancel()
+        file.ignored = true
+        return false
       }
       // 自定义状态
       file.customStatus = 'check'
@@ -112,10 +114,7 @@ export default {
       let _this = this
       const fileReader = new FileReader()
       const time = new Date().getTime()
-      const blobSlice =
-        File.prototype.slice ||
-        File.prototype.mozSlice ||
-        File.prototype.webkitSlice
+      const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
       let currentChunk = 0
       const chunkSize = 10 * 1024 * 1000
       const chunks = Math.ceil(file.size / chunkSize)
@@ -129,17 +128,9 @@ export default {
         if (currentChunk < chunks) {
           currentChunk++
           loadNext()
-          // 实时展示MD5的计算进度
-          this.$nextTick(() => {
-            // $(`.myStatus_${file.id}`).text('正在校验MD5 ' + ((currentChunk / chunks) * 100).toFixed(0) + '%')
-          })
         } else {
           const md5 = spark.end()
           this.computeMD5Success(md5, file)
-          // console.log(
-          //   `MD5计算完毕：${file.name} \nMD5：${md5} \n分片：${chunks} 大小:${file.size
-          //   } 用时：${new Date().getTime() - time} ms`
-          // )
         }
       }
       fileReader.onerror = function () {
@@ -149,8 +140,7 @@ export default {
 
       function loadNext() {
         const start = currentChunk * chunkSize
-        const end =
-          start + chunkSize >= file.size ? file.size : start + chunkSize
+        const end = start + chunkSize >= file.size ? file.size : start + chunkSize
         fileReader.readAsArrayBuffer(blobSlice.call(file.file, start, end))
       }
     },

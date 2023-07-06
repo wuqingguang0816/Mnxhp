@@ -10,7 +10,8 @@
     </div>
     <el-row class="main">
       <el-col :span="14" :offset="5" class="mt-20">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="120px" @submit.native.prevent>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
+          label-width="120px" @submit.native.prevent>
           <jnpf-form-tip-item label="appId" prop="appId">
             <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100">
             </el-input>
@@ -23,7 +24,7 @@
           <jnpf-form-tip-item label="应用名称" prop="appName">
             <el-input v-model="dataForm.appName" placeholder="输入应用名称"></el-input>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="验证签名" prop="verifySignature">
+          <jnpf-form-tip-item label="验证签名" prop="verifySignature" tip-label="开启后需要验证消息签名的真实性">
             <el-row>
               <el-col :span="12">
                 <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0">
@@ -34,8 +35,9 @@
               </el-col>
             </el-row>
           </jnpf-form-tip-item>
-          <jnpf-form-tip-item label="使用期限" prop="usefulLife">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" format="yyyy-MM-dd" value-format="timestamp"></el-date-picker>
+          <jnpf-form-tip-item label="使用期限" prop="usefulLife" tip-label="未选择日期默认永久有效">
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择"
+              style="width:100%" format="yyyy-MM-dd" value-format="timestamp"></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
             <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" />
@@ -46,7 +48,8 @@
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+              controls-position="right" />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="enabledMark">
             <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0">
@@ -58,7 +61,8 @@
         </el-form>
       </el-col>
     </el-row>
-    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo" @close="verifySignatureVisible=false" />
+    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo"
+      @close="verifySignatureVisible=false" />
   </div>
 </template>
 

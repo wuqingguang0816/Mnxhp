@@ -117,7 +117,7 @@ export default {
     }
   },
   methods: {
-    init(id) {
+    init(id, messageSourceName) {
       this.dataForm.id = id || ''
       this.getConfig()
       this.$nextTick(() => {
@@ -126,6 +126,7 @@ export default {
           this.loading = true
           getSendConfigDetail(this.dataForm.id).then(res => {
             this.dataForm = res.data
+            this.dataForm.messageSourceName = messageSourceName
             this.dataForm.enabledMark = Number(this.dataForm.enabledMark)
             this.loading = false
           }).catch(() => {

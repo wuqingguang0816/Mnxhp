@@ -120,7 +120,7 @@ import preview from './Preview'
 import previewDialog from '@/components/PreviewDialog'
 import { getFormList, release, del, copyForm, exportData } from '@/api/workFlow/FormDesign'
 export default {
-  name: 'workFlow-flowEngine',
+  name: 'formDesign',
   components: { Form, preview, previewDialog },
   data() {
     return {

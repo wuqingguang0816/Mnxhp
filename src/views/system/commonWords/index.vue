@@ -59,7 +59,7 @@ import {
 import Form from './Form'
 
 export default {
-  name: 'system-area',
+  name: 'commonWords',
   components: { Form },
   data() {
     return {

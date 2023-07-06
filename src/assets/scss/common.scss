@@ -2729,5 +2729,9 @@ textarea.el-textarea__inner {
 .tooltip-question {
   color: #a0acb7 !important;
   opacity: 0.8;
+}
 
+.el-table-column--selection .cell {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
 }

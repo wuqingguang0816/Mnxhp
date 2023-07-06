@@ -47,7 +47,7 @@ const getFormDataFields = item => {
   const jnpfKey = item.__config__.jnpfKey
   const list = ["comInput", "textarea", "numInput", "switch", "date", "time", "colorPicker", "rate",
     "slider", "editor", "link", "JNPFText", "alert", 'table', "collapse", 'collapseItem', 'tabItem',
-    "tab", "row", "card", 'groupTitle', 'divider'
+    "tab", "row", "card", 'groupTitle', 'divider', 'tableGrid', 'tableGridTr', 'tableGridTd',
   ]
   const fieldsSelectList = ["radio", "checkbox", "select", "cascader", "treeSelect"]
   if (list.includes(jnpfKey) || (fieldsSelectList.includes(jnpfKey) && item.__config__.dataType ===

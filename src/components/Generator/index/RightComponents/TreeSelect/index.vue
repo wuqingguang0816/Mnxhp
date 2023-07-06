@@ -28,7 +28,25 @@
       <template v-if="activeData.__config__.dataType === 'static'">
         <!-- 级联选择静态树 -->
         <el-tree draggable :data="activeData.options" node-key="id" :expand-on-click-node="false"
-          :render-content="renderContent" :props="activeData.props.props" />
+          :props="activeData.props.props" >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span class='tree-node-ellipsis' :title="node.label">{{node.label}}</span>
+          <span class="node-operation">
+            <i  @click="append(data)" 
+              class="el-icon-plus"
+              title="添加"
+            ></i>
+            <i @click="update(node, data)"
+              class="el-icon-edit-outline"
+              title="编辑"
+            ></i>
+            <i @click="remove(node, data)"
+              class="el-icon-delete"
+              title="删除"
+            ></i>
+          </span>
+          </span>
+        </el-tree>
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
@@ -160,27 +178,6 @@ export default {
     }
   },
   methods: {
-    renderContent(h, { node, data, store }) {
-      return (
-        <div class="custom-tree-node">
-          <span>{node.label}</span>
-          <span class="node-operation">
-            <i on-click={() => this.append(data)}
-              class="el-icon-plus"
-              title="添加"
-            ></i>
-            <i on-click={() => this.update(node, data)}
-              class="el-icon-edit-outline"
-              title="编辑"
-            ></i>
-            <i on-click={() => this.remove(node, data)}
-              class="el-icon-delete"
-              title="删除"
-            ></i>
-          </span>
-        </div>
-      )
-    },
     selectChange() {
       this.$emit('changeSelect')
       this.dictionaryTypeChange(this.dictionaryId)
@@ -244,7 +241,7 @@ export default {
       this.activeData.__config__.templateJson = []
     },
     dictionaryTypeChange(val) {
-      this.activeData.__config__.defaultValue = []
+      this.activeData.__config__.defaultValue = this.activeData.multiple ? [] : ''
       if (!val) {
         this.activeData.options = []
         return
@@ -297,12 +294,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 >>> .custom-tree-node {
-  width: 100%;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
   .node-operation {
-    float: right;
+   width: 54px;
   }
   i[class*='el-icon'] + i[class*='el-icon'] {
     margin-left: 6px;
@@ -332,5 +328,12 @@ export default {
   >>> .el-button:hover {
     border-color: #dcdfe6;
   }
+}
+.tree-node-ellipsis {
+  flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 </style>

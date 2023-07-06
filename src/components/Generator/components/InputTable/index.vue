@@ -115,6 +115,8 @@ import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import SelectDialog from '@/components/SelectDialog/index'
 import { thousandsFormat } from "@/components/Generator/utils/index"
+import { mapGetters } from "vuex";
+
 export default {
   name: 'input-table',
   components: { SelectDialog },
@@ -155,6 +157,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo']),
     childRelations() {
       let obj = {}
       for (let key in this.relations) {
@@ -678,10 +681,17 @@ export default {
         if (t.__config__.jnpfKey === 'time' && t.__config__.defaultCurrent) {
           t.__config__.defaultValue = this.jnpf.toDate(new Date(), t.format)
         }
+        if (t.__config__.jnpfKey === 'comSelect' && t.__config__.defaultCurrent) {
+          if (this.userInfo.organizeIdList instanceof Array && this.userInfo.organizeIdList.length > 0) {
+            t.__config__.defaultValue = t.multiple == true ? [this.userInfo.organizeIdList] : this.userInfo.organizeIdList
+          } else {
+            t.__config__.defaultValue = []
+          }
+        }
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
-          value: val && val[t.__vModel__] || t.__config__.defaultValue,
+          value: val? (val[t.__vModel__]) : t.__config__.defaultValue,
           options,
           valid: true,
           regValid: true,

@@ -90,7 +90,7 @@ import {
   exportConfig
 } from '@/api/msgCenter/accountConfig'
 export default {
-  name: 'system-printDev',
+  name: 'msgCenter-accountConfig-mp',
   components: {
     Form
   },

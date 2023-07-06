@@ -354,6 +354,9 @@ export default {
   },
   mounted() {
     this.initRelationData()
+    this.$nextTick(() => {
+      this.$refs[this.formConf.formRef].clearValidate()
+    })
   },
   methods: {
     initRelationData() {
