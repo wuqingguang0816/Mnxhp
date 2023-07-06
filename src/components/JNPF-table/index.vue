@@ -178,5 +178,8 @@ export default {
   flex: 1 0 0;
   height: 100%;
   overflow: hidden;
+  .el-table-column--selection .cell {
+    padding: 0 10px;
+  }
 }
 </style>
