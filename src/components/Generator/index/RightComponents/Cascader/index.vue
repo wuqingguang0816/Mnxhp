@@ -33,8 +33,7 @@
         <el-tree draggable :data="activeData.options" node-key="id" :expand-on-click-node="false"
           :props="props" >
           <span class="custom-tree-node" slot-scope="{ node, data }">
-            <div class="custom-tree-node">
-          <span class='tree-node-ellipsis'>{{node.label}}</span>
+          <span class='tree-node-ellipsis' :title="node.label">{{node.label}}</span>
           <span class="node-operation">
             <i  @click="append(data)" 
               class="el-icon-plus"
@@ -49,7 +48,6 @@
               title="删除"
             ></i>
           </span>
-        </div>
           </span>
         </el-tree>
         <div style="margin-left: 20px">
@@ -307,12 +305,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 >>> .custom-tree-node {
-  width: 100%;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
   .node-operation {
-    float: right;
+    width: 54px;
   }
   i[class*='el-icon'] + i[class*='el-icon'] {
     margin-left: 6px;
@@ -343,7 +340,8 @@ export default {
   }
 }
 .tree-node-ellipsis {
-  width: 200px;
+  flex: 1;
+  min-width: 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
