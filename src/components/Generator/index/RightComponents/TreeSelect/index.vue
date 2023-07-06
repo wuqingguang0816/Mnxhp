@@ -28,7 +28,27 @@
       <template v-if="activeData.__config__.dataType === 'static'">
         <!-- 级联选择静态树 -->
         <el-tree draggable :data="activeData.options" node-key="id" :expand-on-click-node="false"
-          :render-content="renderContent" :props="activeData.props.props" />
+          :props="activeData.props.props" >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <div class="custom-tree-node">
+          <span class='tree-node-ellipsis'>{{node.label}}</span>
+          <span class="node-operation">
+            <i  @click="append(data)" 
+              class="el-icon-plus"
+              title="添加"
+            ></i>
+            <i @click="update(node, data)"
+              class="el-icon-edit-outline"
+              title="编辑"
+            ></i>
+            <i @click="remove(node, data)"
+              class="el-icon-delete"
+              title="删除"
+            ></i>
+          </span>
+        </div>
+          </span>
+        </el-tree>
         <div style="margin-left: 20px">
           <el-button style="padding-bottom: 0" icon="el-icon-circle-plus-outline" type="text"
             @click="addTreeItem">添加父级</el-button>
@@ -160,27 +180,6 @@ export default {
     }
   },
   methods: {
-    renderContent(h, { node, data, store }) {
-      return (
-        <div class="custom-tree-node">
-          <span class='tree-node-ellipsis'>{node.label}</span>
-          <span class="node-operation">
-            <i on-click={() => this.append(data)}
-              class="el-icon-plus"
-              title="添加"
-            ></i>
-            <i on-click={() => this.update(node, data)}
-              class="el-icon-edit-outline"
-              title="编辑"
-            ></i>
-            <i on-click={() => this.remove(node, data)}
-              class="el-icon-delete"
-              title="删除"
-            ></i>
-          </span>
-        </div>
-      )
-    },
     selectChange() {
       this.$emit('changeSelect')
       this.dictionaryTypeChange(this.dictionaryId)
