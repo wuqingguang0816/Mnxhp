@@ -240,11 +240,25 @@ export default {
         if (!data) return
         if (data.__vModel__) {
           const isTableChild = parent && parent.__config__ && parent.__config__.jnpfKey === 'table'
-          let obj = JSON.parse(JSON.stringify(data))
-          if (isTableChild) {
-            obj.__vModel__ = parent.__vModel__ + '-' + data.__vModel__
-            obj.__config__.label = parent.__config__.label + '-' + data.__config__.label
+          let obj = {
+            ...data,
+            id: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
+            __vModel__: isTableChild ? parent.__vModel__ + '-' + data.__vModel__ : data.__vModel__,
+            fullName: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+            __config__: {
+              label: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
+              jnpfKey: data.__config__.jnpfKey,
+              required: data.__config__.required,
+            },
           }
+          delete obj.on
+          delete obj.style
+          delete obj.options
+          delete obj.props
+          delete obj.templateJson
+          delete obj.columnOptions
+          delete obj.addTableConf
+          delete obj.tableConf
           list.push(obj)
         }
         if (Array.isArray(data)) data.forEach(d => loop(d, parent))
