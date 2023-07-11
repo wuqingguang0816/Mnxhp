@@ -405,7 +405,7 @@
                 </el-form-item>
                 <el-form-item label="边框宽度">
                   <el-input-number v-model="activeData.__config__.borderWidth" :min="1" :max="10"
-                    :precision="0" controls-position="right" />
+                    :precision="0" controls-position="right" @change="onBorderWidthChange" />
                 </el-form-item>
               </template>
             </template>
@@ -1207,6 +1207,9 @@ export default {
         this.$set(this.activeData.__config__.children[i].__config__, 'relationTable', tableName)
         this.$set(this.activeData.__config__.children[i], '__vModel__', '')
       }
+    },
+    onBorderWidthChange(val) {
+      if (!val) this.$nextTick(() => this.$set(this.activeData.__config__, 'borderWidth', 1))
     },
     getDictionaryType() {
       getDictionaryTypeSelector().then(res => {
