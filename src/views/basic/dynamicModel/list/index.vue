@@ -102,7 +102,7 @@
                     <template v-if="item.jnpfKey==='numInput'">
                       <JnpfInputNumber v-model="scope.row[item.prop]"
                         :placeholder="item.placeholder" :min="item.min" :max="item.max"
-                        :step="item.step" :precision="item.precision"
+                        :step="item.step" :precision="item.precision"   :addonBefore="item.addonBefore" :addonAfter="item.addonAfter"
                         :controls-position="item['controls-position']" :disabled="item.disabled"
                         style="width:100%" :thousands="item.thousands" />
                     </template>
