@@ -169,6 +169,7 @@ export function deepClone(obj) {
  */
 export function getAmountChinese(val) {
   if (!val && val !== 0) return ''
+  if (val.toString().indexOf("e") != -1) return '数字较大溢出'
   const value = val
   if (val < 0) {
     val = Number(val.toString().split('-')[1])
@@ -213,6 +214,7 @@ export function getAmountChinese(val) {
   if (value < 0) res = '负数' + res
   return res
 }
+
 /**
  * 将用户输入的连续单个数字合并为一个数
  * @param {Array} expressions - 记录计算表达式的数组
