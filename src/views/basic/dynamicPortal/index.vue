@@ -2,7 +2,8 @@
   <div class="dynamicPortal-container" v-loading="loading">
     <template v-if="!ajaxing">
       <template v-if="portalId">
-        <PortalLayout :layout="layout" v-if="type===0" />
+        <PortalLayout :layout="layout" :enabledLock="enabledLock" v-if="type===0"
+          @layoutUpdatedEvent="layoutUpdatedEvent" />
         <div class="custom-page" v-if="type===1">
           <component :is="currentView" v-if="linkType===0" />
           <embed :src="url" width="100%" height="100%" type="text/html" v-if="linkType===1" />
@@ -15,65 +16,17 @@
     </template>
   </div>
 </template>
-
 <script>
-import { getAuthPortal } from '@/api/onlineDev/portal'
-import PortalLayout from '@/components/VisualPortal/Layout'
-
+import mixin from '../../dashboard/mixin';
 export default {
   name: 'dynamicPortal',
-  components: { PortalLayout },
-  data() {
-    return {
-      portalId: '',
-      layout: [],
-      type: null,
-      linkType: null,
-      currentView: null,
-      url: '',
-      ajaxing: true,
-      loading: false
-    }
-  },
+  mixins: [mixin],
   created() {
+    const system = this.userInfo.systemIds.filter(o => o.currentSystem)[0]
+    this.systemId = system.id
     this.portalId = this.$route.meta.relationId
     this.getData()
   },
-  methods: {
-    getData() {
-      this.loading = true
-      this.layout = []
-      if (!this.portalId) {
-        this.loading = false
-        this.ajaxing = false
-        return
-      }
-      getAuthPortal(this.portalId, { platform: 'Web' }).then(res => {
-        this.type = res.data.type || 0
-        this.linkType = res.data.linkType || 0
-        this.url = res.data.customUrl
-        if (res.data) {
-          if (res.data.type === 1) {
-            if (res.data.customUrl && res.data.customUrl !== 1) {
-              this.currentView = (resolve) => require([`@/views/${res.data.customUrl}`], resolve)
-            }
-          } else {
-            if (res.data.formData) {
-              let formData = JSON.parse(res.data.formData)
-              this.layout = formData.layout || []
-            }
-          }
-        }
-        this.ajaxing = false
-        setTimeout(() => {
-          this.loading = false
-        }, 500);
-      }).catch(() => {
-        this.loading = false
-        this.ajaxing = false
-      })
-    }
-  }
 }
 </script>
 <style lang="scss" scoped>
