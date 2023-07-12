@@ -92,7 +92,7 @@ export default {
             var timer = setInterval(() => {
               ele.renderKey = +new Date()
               this.autoRefresh(ele)
-            }, type == 2 ? this.refreshData.autoRefreshTime * 1000 * 6 : ele.refresh.autoRefreshTime * 1000 * 6);
+            }, type == 2 ? this.refreshData.autoRefreshTime * 1000 * 60 : ele.refresh.autoRefreshTime * 1000 * 60);
             this.timerList.push(timer)
           }
           if (ele.children && ele.children.length) loop(ele.children, type)
