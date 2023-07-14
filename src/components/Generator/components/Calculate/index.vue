@@ -90,7 +90,7 @@ export default {
       if (this.thousands) {
         this.innerValue = thousandsFormat(this.innerValue)
       }
-      if (this.isAmountChinese) this.amountChineseName = getAmountChinese(!isNaN(this.setValue) ? this.setValue : 0)
+      if (this.isAmountChinese) this.amountChineseName = getAmountChinese(this.setValue||0)
     }
   },
   watch: {
