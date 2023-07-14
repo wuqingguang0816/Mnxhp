@@ -42,7 +42,7 @@
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.startTimeType==1">
         <JnpfDatePicker v-model="activeData.__config__.startTimeValue" :type="activeData.type"
-          placeholder="请选择时间" :kay="key2" :valueFormat="activeData['value-format']" clearable
+          placeholder="请选择开始时间" :kay="key2" :valueFormat="activeData['value-format']" clearable
           :format="activeData.format">
         </JnpfDatePicker>
       </el-form-item>
@@ -58,7 +58,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="" class="spacing" v-else-if="activeData.__config__.startTimeType==2">
-        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联日期字段"
+        <el-select v-model="activeData.__config__.startRelationField" placeholder="请选择关联日期选择"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" />
@@ -78,7 +78,7 @@
       </el-form-item>
       <el-form-item class="spacing" label="" v-if="activeData.__config__.endTimeType==1">
         <JnpfDatePicker v-model="activeData.__config__.endTimeValue" :type="activeData.type"
-          :format="activeData.format" placeholder="请选择时间" :kay="key2" clearable
+          :format="activeData.format" placeholder="请选择结束时间" :kay="key2" clearable
           :valueFormat="activeData['value-format']">
         </JnpfDatePicker>
       </el-form-item>
@@ -94,7 +94,7 @@
         </el-input>
       </el-form-item>
       <el-form-item class="spacing" label="" v-else-if="activeData.__config__.endTimeType==2">
-        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联日期字段"
+        <el-select v-model="activeData.__config__.endRelationField" placeholder="请选择关联日期选择"
           filterable>
           <el-option v-for="(item,i) in formFieldsOptions" :key="i" :label="item.realLabel"
             :value="item.realVModel" filterable />

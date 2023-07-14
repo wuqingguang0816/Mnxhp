@@ -45,7 +45,7 @@
       </el-form-item>
       <el-form-item label="" class="spacing" v-if="activeData.__config__.startTimeType==1">
         <el-time-picker v-model="activeData.__config__.startTimeValue"
-          :picker-options="activeData['picker-options']" placeholder="选择默认值" clearable
+          :picker-options="activeData['picker-options']" placeholder="请选择开始时间" clearable
           :value-format="activeData['value-format']" :format="activeData.format">
         </el-time-picker>
       </el-form-item>
@@ -80,7 +80,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="" class="spacing" v-if="activeData.__config__.endTimeType==1">
-        <el-time-picker v-model="activeData.__config__.endTimeValue" placeholder="请选择时间" clearable
+        <el-time-picker v-model="activeData.__config__.endTimeValue" placeholder="请选择结束时间" clearable
           :value-format="activeData['value-format']" :format="activeData.format">
         </el-time-picker>
       </el-form-item>
