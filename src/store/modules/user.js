@@ -92,9 +92,6 @@ const actions = {
         origin,
         code,
         timestamp,
-        client_id: 'admin',
-        client_secret: '123456',
-        scope: 'all',
         grant_type: 'password'
       })).then(response => {
         const { data } = response
