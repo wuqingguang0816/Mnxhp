@@ -170,7 +170,7 @@ export function deepClone(obj) {
 export function getAmountChinese(val) {
   let regexp = /[a-zA-Z]/
   if (!val && val !== 0) return ''
-  if (val === 0) return '零元整'
+  if (Number(val) === 0) return '零元整'
   if (regexp.test(val)) return '数字较大溢出'
   const value = val
   if (val < 0) {
