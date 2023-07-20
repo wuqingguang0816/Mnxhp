@@ -13,7 +13,8 @@
       <a @click="activeData.__config__.defaultValue=0">清空</a>
     </el-form-item>
     <el-form-item label="最大值">
-      <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right" />
+      <el-input-number v-model="activeData.max" placeholder="最大值" controls-position="right"
+        :max="50" />
     </el-form-item>
     <!-- <el-form-item label="显示标签">
       <el-switch v-model="activeData.__config__.showLabel" />
