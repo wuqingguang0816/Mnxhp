@@ -96,7 +96,6 @@ export default {
         this.$emit('change', val || 0)
         this.amountChinese(val)
       },
-      immediate: true,
       deep: true
     },
     value: {
