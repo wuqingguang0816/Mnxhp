@@ -92,8 +92,7 @@ export default {
   watch: {
     innerValue: {
       handler(val) {
-        this.$emit('input', val || 0)
-        this.$emit('change', val || 0)
+      
         this.amountChinese(val)
       },
       deep: true
@@ -113,7 +112,6 @@ export default {
     }
   },
   computed: {
-
   },
   created() {
     if (!this.innerValue) return this.innerValue = null
@@ -178,8 +176,10 @@ export default {
       if (!this.isAmountChinese) return
       this.amountChineseName = getAmountChinese(val)
     },
-    change() {
+    change(val) {
       if (typeof this.innerValue === 'undefined') this.innerValue = null
+      this.$emit('input', val || 0)
+      this.$emit('change', val || 0)
     },
     toNonExponential(num) {
       if (num.indexOf('E') !== -1 || num.indexOf('e') !== -1) {
