@@ -214,9 +214,8 @@ const printOptionApi = {
             }
             if (tag == 'td') {
               let value = getTrueValue(pcontent)
-              let cloneNode = dom.cloneNode(true)
-              cloneNode.innerText = value
-              this.replaceValue(pcontent, cloneNode.outerHTML)
+              let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+              this.replaceValue(spanText, value)
             }
           } else {
             if (pcontent.includes('千位分隔符(')) {
