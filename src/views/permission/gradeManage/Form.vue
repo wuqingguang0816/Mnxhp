@@ -188,6 +188,9 @@ export default {
         if (!id) {
           this.dataForm.id = ''
           this.dataForm.userId = ''
+        } else {
+          this.dataForm.id = id
+          this.dataForm.userId = id
         }
         this.initData()
         this.formLoading = false
