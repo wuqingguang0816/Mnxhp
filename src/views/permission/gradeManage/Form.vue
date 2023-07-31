@@ -185,6 +185,10 @@ export default {
       this.formLoading = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
+        if (!id) {
+          this.dataForm.id = ''
+          this.dataForm.userId = ''
+        }
         this.initData()
         this.formLoading = false
       })
