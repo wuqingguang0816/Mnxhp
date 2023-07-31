@@ -93,6 +93,7 @@ export default {
         this.getFlowList(flag)
       } else {
         this.formConf = JSON.parse(this.config.formData)
+        this.fillFormData(this.formConf, {})
         this.formConf.fields = this.recurSiveFilter(this.formConf.fields)
         this.loading = true
         this.$nextTick(() => {
@@ -101,6 +102,30 @@ export default {
           this.key = +new Date()
         })
       }
+    },
+    fillFormData(form, data, flag) {
+      const loop = (list, parent) => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i]
+          if (item.__vModel__) {
+            if (item.__config__.jnpfKey === 'date' && item.__config__.defaultCurrent) {
+              let format = item.format
+              let dateStr = this.jnpf.toDate(new Date().getTime(), format)
+              let time = format === 'yyyy' ? '-01-01 00:00:00' : format === 'yyyy-MM' ? '-01 00:00:00' : format === 'yyyy-MM-dd' ?
+                ' 00:00:00' : ''
+              let value = new Date(dateStr + time).getTime()
+              item.__config__.defaultValue = value
+            } else if (item.__config__.jnpfKey === 'time' && item.__config__.defaultCurrent) {
+              item.__config__.defaultValue = this.jnpf.toDate(new Date(), item.format)
+            }
+          }
+          if (item.__config__ && item.__config__.children && Array.isArray(item.__config__.children)) {
+            loop(item.__config__.children, item)
+          }
+        }
+      }
+      loop(form.fields)
+      form.formData = data
     },
     getFlowList(flag) {
       getFlowList(this.config.flowId, '1').then(res => {
@@ -207,6 +232,7 @@ export default {
     },
     resetForm() {
       this.formConf = JSON.parse(this.config.formData)
+      this.fillFormData(this.formConf, {})
       this.formConf.fields = this.recurSiveFilter(this.formConf.fields)
       this.$nextTick(() => {
         this.$refs.dynamicForm && this.$refs.dynamicForm.resetForm()
