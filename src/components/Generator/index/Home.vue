@@ -369,7 +369,7 @@ export default {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
-            if (e.__config__.isStorage == 2 && !e.__vModel__) {
+            if (e.isStorage == 1 && !e.__vModel__) {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
@@ -434,7 +434,7 @@ export default {
             if (config && config.children && Array.isArray(config.children)) {
               loop(config.children)
             }
-            if (config.jnpfKey === 'uploadFz') {
+            if (config.jnpfKey === 'uploadFile') {
               if (e.pathType === 'selfPath') {
                 if (e.isAccount === 0) {
                   if (!e.folder) {
@@ -570,11 +570,11 @@ export default {
       if (config.layout === 'colFormItem') {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
-          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || item.isStorage == 1) {
             item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || item.isStorage == 1) {
             item.__vModel__ = ""
           }
         }
@@ -694,7 +694,7 @@ export default {
     },
     handleTableAddRow(element, insertPos, cloneRowIdx) {
       const row = element.__config__.children
-      let rowIdx = (insertPos === undefined) ? row.length : insertPos
+      let rowIdx = (insertPos === undefined) ? row.length : insertPos + row[cloneRowIdx].__config__.children[this.colIndex].__config__.rowspan - 1
       let newRow = (cloneRowIdx === undefined) ? deepClone(row[row.length - 1]) : deepClone(row[cloneRowIdx])
       newRow.__config__.children.forEach(col => {
         col.__config__.formId = ++this.idGlobal
@@ -705,28 +705,7 @@ export default {
       })
       newRow.__config__.formId = ++this.idGlobal
       newRow.__config__.jnpfKey = "tableGridTr"
-      element.__config__.children.splice(rowIdx, 0, newRow)
-      let colNo = 0
-      while ((rowIdx < element.__config__.children.length - 1) && (colNo < element.__config__.children[0].__config__.children.length)) {  //越界判断
-        let rowMerged = element.__config__.children[rowIdx + 1].__config__.children[colNo].__config__.merged  //确定插入位置的单元格是否为合并单元格
-        if (!!rowMerged) {
-          let rowArray = element.__config__.children
-          let unMergedCell = {}
-          let startRowIndex = null
-          for (let i = rowIdx; i >= 0; i--) {  //查找该行已合并的主单元格
-            if (!rowArray[i].__config__.children[colNo].__config__.merged && (rowArray[i].__config__.children[colNo].__config__.rowspan > 1)) {
-              startRowIndex = i
-              unMergedCell = rowArray[i].__config__.children[colNo]
-              break
-            }
-          }
-          let newRowspan = unMergedCell.__config__.rowspan + 1
-          this.setPropsOfMergedRows(startRowIndex, unMergedCell.__config__.colspan, newRowspan, colNo)
-          colNo += unMergedCell.__config__.colspan
-        } else {
-          colNo += 1
-        }
-      }
+      row.splice(rowIdx, 0, newRow)
     },
     handleTableAddCol(element, insertPos, cloneRowIdx) {
       const row = element.__config__.children
