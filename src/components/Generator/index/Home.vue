@@ -369,7 +369,7 @@ export default {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
-            if (e.isStorage == 1 && !e.__vModel__) {
+            if (e.__config__.isStorage == 2 && !e.__vModel__) {
               reject({ msg: `${config.label}的控件字段不能为空`, target: 1 })
               break
             }
@@ -434,7 +434,7 @@ export default {
             if (config && config.children && Array.isArray(config.children)) {
               loop(config.children)
             }
-            if (config.jnpfKey === 'uploadFile') {
+            if (config.jnpfKey === 'uploadFz') {
               if (e.pathType === 'selfPath') {
                 if (e.isAccount === 0) {
                   if (!e.folder) {
@@ -570,11 +570,11 @@ export default {
       if (config.layout === 'colFormItem') {
         if (!this.$store.getters.hasTable) {
           // 分割线和按钮不加vModel
-          if (noVModelList.indexOf(config.jnpfKey) < 0 || item.isStorage == 1) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
             item.__vModel__ = this.toggleVmodelCase(`${config.jnpfKey}Field${this.idGlobal}`)
           }
         } else {
-          if (noVModelList.indexOf(config.jnpfKey) < 0 || item.isStorage == 1) {
+          if (noVModelList.indexOf(config.jnpfKey) < 0 || config.isStorage == 2) {
             item.__vModel__ = ""
           }
         }
