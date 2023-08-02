@@ -177,7 +177,9 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         beforeClose: (action, instance, done) => {
-          if (action !== 'confirm') {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+          } else {
             this.state = false
             done()
           }
