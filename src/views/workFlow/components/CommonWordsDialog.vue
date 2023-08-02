@@ -164,6 +164,7 @@ export default {
       this.visible = false
     },
     rowClick(row) {
+      console.log(222)
       this.checked = row.id
       this.checkedRow = row
       this.select()
@@ -171,7 +172,16 @@ export default {
     handleDel(id) {
       this.state = true
       this.$confirm(this.$t('common.delTip'), this.$t('common.tipTitle'), {
-        type: 'warning'
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        beforeClose: (action, instance, done) => {
+          if (action !== 'confirm') {
+            this.state = false
+            done()
+          }
+        }
       }).then(() => {
         deleteCommonWords(id).then(res => {
           this.$message({
