@@ -128,6 +128,7 @@ const printOptionApi = {
     replaceCommonValue() {
       this.$nextTick(() => {
         let spanList = this.printTemplate.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/g)
+        if(!spanList) return
         for (let index = 0; index < spanList.length; index++) {
           const element = spanList[index];
           if (element.includes('{') && element.includes('data-tag')) {
@@ -171,9 +172,8 @@ const printOptionApi = {
           }
           if (tag == 'td') {
             let value = getTrueValue(pcontent)
-            let cloneNode = dom.cloneNode(true)
-            cloneNode.innerText = value
-            this.replaceValue(pcontent, cloneNode.outerHTML)
+            let spanText = pcontent.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/);
+            this.replaceValue(spanText, value)
           }
         } else {
           if (pcontent.includes('&lt;qrCode')) {
@@ -436,6 +436,7 @@ const printOptionApi = {
       window.URL.revokeObjectURL(href)
     },
     print(tag) {
+      console.log(tag,21);
       let print = this.$refs.tsPrint.innerHTML
       print = print + `<style>html * {word-break:break-all}</style>`
       let iframe = document.createElement('IFRAME');
@@ -450,7 +451,7 @@ const printOptionApi = {
           let title = oldTitle.split('-')[0]
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
-            printNum: tag ? _this.batchIds.split(",").length : 1,
+            printNum: tag=='batch' ? _this.batchIds.split(",").length : 1,
             printId: _this.id
           }
           request({
@@ -463,7 +464,9 @@ const printOptionApi = {
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;
-        document.body.removeChild(iframe);
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 0);
       }
       doc.write(print);
       doc.close();
