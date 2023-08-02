@@ -179,6 +179,10 @@ export default {
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true;
+            setTimeout(() => {
+              instance.confirmButtonLoading = false;
+              done();
+            }, 1000);
           } else {
             this.state = false
             done()
