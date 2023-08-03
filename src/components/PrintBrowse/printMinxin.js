@@ -131,6 +131,7 @@ const printOptionApi = {
     replaceCommonValue() {
       this.$nextTick(() => {
         let spanList = this.printTemplate.match(/<span class="wk-print-tag-wukong.*?[^}]}.*?<\/span>/g)
+        if (!spanList) return
         for (let index = 0; index < spanList.length; index++) {
           const element = spanList[index];
           if (element.includes('{') && element.includes('data-tag')) {
@@ -530,7 +531,7 @@ const printOptionApi = {
           let title = oldTitle.split('-')[0]
           let data = {
             printTitle: _this.fullName ? _this.fullName : title,
-            printNum: tag ? _this.batchIds.split(",").length : 1,
+            printNum: tag == 'batch' ? _this.batchIds.split(",").length : 1,
             printId: _this.id
           }
           request({
@@ -543,7 +544,9 @@ const printOptionApi = {
         document.title = "JNPF快速开发平台";
         iframe.contentWindow.print();
         document.title = oldTitle;
-        document.body.removeChild(iframe);
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 0);
       }
       doc.write(print);
       doc.close();

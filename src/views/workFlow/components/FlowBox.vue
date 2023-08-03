@@ -632,7 +632,7 @@ export default {
     printDialog() {
       this.printDialogVisible = true
       this.$nextTick(() => {
-        this.$refs.printDialog.init(JSON.parse(this.properties.printId))     
+        this.$refs.printDialog.init(this.properties.printId)
       })
     },
     handleMore(e) {

@@ -111,7 +111,11 @@ export default {
         ]
       },
       list: [],
-      pagination: {},
+      pagination: {
+        total:0,
+        currentPage:1,
+        pageSize:20
+      },
       loading: false,
       listLoading: true,
       title: "",
