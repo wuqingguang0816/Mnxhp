@@ -639,7 +639,6 @@ export default {
     printDialog() {
       this.printDialogVisible = true
       this.$nextTick(() => {
-        if(!Array.isArray(this.properties.printId)) this.properties.printId = JSON.parse(this.properties.printId)
         this.$refs.printDialog.init(this.properties.printId)
       })
     },

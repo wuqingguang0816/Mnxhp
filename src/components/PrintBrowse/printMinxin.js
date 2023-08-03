@@ -436,7 +436,6 @@ const printOptionApi = {
       window.URL.revokeObjectURL(href)
     },
     print(tag) {
-      console.log(tag,21);
       let print = this.$refs.tsPrint.innerHTML
       print = print + `<style>html * {word-break:break-all}</style>`
       let iframe = document.createElement('IFRAME');
