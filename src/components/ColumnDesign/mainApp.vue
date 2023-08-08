@@ -547,8 +547,10 @@ export default {
         inter: for (let ii = 0; ii < data.length; ii++) {
           if (replacedData[i][key] === data[ii][key]) {
             if (type === 'search') {
-              data[ii].searchType = replacedData[i].searchType
-              data[ii].searchMultiple = replacedData[i].searchMultiple
+              if (replacedData[i].jnpfKey === data[ii].jnpfKey) {
+                data[ii].searchType = replacedData[i].searchType
+                data[ii].searchMultiple = replacedData[i].searchMultiple
+              }
             }
             if (this.webType == 4) data[ii].label = replacedData[i].label
             res.push(data[ii])

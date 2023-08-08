@@ -835,8 +835,10 @@ export default {
               if (this.webType == 4) data[ii].label = replacedData[i].label
             }
             if (type === 'search') {
-              data[ii].searchType = replacedData[i].searchType
-              data[ii].searchMultiple = replacedData[i].searchMultiple
+              if (replacedData[i].jnpfKey === data[ii].jnpfKey) {
+                data[ii].searchType = replacedData[i].searchType
+                data[ii].searchMultiple = replacedData[i].searchMultiple
+              }
               if (this.webType == 4) data[ii].__config__.label = replacedData[i].__config__.label
             }
             res.push(data[ii])
