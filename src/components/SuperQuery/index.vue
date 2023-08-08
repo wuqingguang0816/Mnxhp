@@ -51,12 +51,16 @@
                     :value-format="item.attr['value-format']" :format="item.attr.format">
                   </el-time-picker>
                 </template>
-                <template v-else-if="['date','createTime', 'modifyTime'].includes(item.jnpfKey)">
+                <template v-else-if="['createTime', 'modifyTime'].includes(item.jnpfKey)">
                   <el-date-picker v-model="item.fieldValue" clearable placeholder="请选择"
-                    :type="item.jnpfKey==='date'&&item.attr.type?item.attr.type:'datetime'"
-                    :value-format="item.attr['value-format']" style="width:100%" :key="item.cellKey"
-                    :format="item.attr.format||'yyyy-MM-dd HH:mm:ss'">
+                    type="datetime" value-format="timestamp" format="yyyy-MM-dd HH:mm:ss">
                   </el-date-picker>
+                </template>
+                <template v-else-if="item.jnpfKey==='date'">
+                  <JnpfDatePicker v-model="item.fieldValue" clearable placeholder="请选择"
+                    :type="item.attr.type||'datetime'" :valueFormat="item.attr['value-format']"
+                    :format="item.attr.format||'yyyy-MM-dd HH:mm:ss'">
+                  </JnpfDatePicker>
                 </template>
                 <template v-else-if="['comSelect','currOrganize'].includes(item.jnpfKey)">
                   <comSelect v-model="item.fieldValue" placeholder="请选择" clearable />
