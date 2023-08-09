@@ -712,7 +712,7 @@ export default {
           RejectList(this.setting.taskId).then(res => {
             this.showReject = res.data.isLastAppro
             this.rejectList = res.data.list || []
-            this.candidateForm.rejectStep = this.rejectList[0].nodeCode
+            this.candidateForm.rejectStep = this.rejectList.length && this.rejectList[0].nodeCode || ''
             if (!this.properties.hasSign && !this.properties.hasOpinion && !this.properties.isCustomCopy && !this.showReject) {
               this.$confirm('此操作将退回该审批单，是否继续？', '提示', {
                 type: 'warning'
