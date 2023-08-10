@@ -52,7 +52,7 @@
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list">
                   <el-table-column prop="fullName" label="门户名称" width="200" />
-                  <el-table-column prop="categoryName" label="门户分类" width="150" />
+                  <el-table-column prop="categoryName" label="分类" width="150" />
                   <el-table-column prop="description" label="说明" min-width="200"
                     show-overflow-tooltip />
                   <el-table-column prop="creatorUser" label="创建人" width="120" />
