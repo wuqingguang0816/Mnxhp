@@ -150,10 +150,6 @@ const defaultDataForm = {
 export default {
   components: { iconBox },
   data() {
-    var validateUrl = (rule, value, callback) => {
-      if (this.dataForm.type == 7 && !validURL(value)) callback(new Error('请输入正确的链接地址'));
-      callback();
-    };
     return {
       visible: false,
       formLoading: false,
@@ -218,7 +214,6 @@ export default {
         ],
         urlAddress: [
           { required: true, message: '地址不能为空', trigger: 'blur' },
-          { validator: validateUrl, trigger: 'blur' }
         ],
         'propertyJson.moduleId': [
           { required: true, message: '关联不能为空', trigger: 'blur' }
