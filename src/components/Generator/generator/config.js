@@ -1164,7 +1164,8 @@ export const selectComponents = [
     disabled: false,
     clearable: true,
     multiple: false,
-    filterable: false
+    filterable: false,
+    interfaceHasPage: 0
   },
   {
     __config__: {
@@ -1346,7 +1347,8 @@ export const selectComponents = [
     popupTitle: "选择数据",
     popupWidth: "800px",
     disabled: false,
-    clearable: true
+    clearable: true,
+    interfaceHasPage: 0
   },
   {
     __config__: {

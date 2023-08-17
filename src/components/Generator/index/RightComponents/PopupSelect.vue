@@ -78,7 +78,8 @@
     </div>
     <el-divider>列表分页</el-divider>
     <el-form-item label="分页设置">
-      <el-switch v-model="activeData.hasPage"></el-switch>
+      <el-switch v-model="activeData.hasPage"
+        :disabled="!!activeData.interfaceHasPage && activeData.hasPage"></el-switch>
     </el-form-item>
     <el-form-item label="分页条数" label-width="80px" v-if="activeData.hasPage">
       <el-radio-group v-model="activeData.pageSize">
@@ -158,6 +159,7 @@ export default {
         this.activeData.interfaceId = ''
         this.activeData.interfaceName = ''
         this.activeData.templateJson = []
+        this.activeData.interfaceHasPage = 0;
         this.activeData.__config__.defaultValue = ''
         return
       }
@@ -165,6 +167,8 @@ export default {
       this.activeData.interfaceName = row.fullName
       this.activeData.templateJson = row.requestParameters ? JSON.parse(row.requestParameters) : []
       this.activeData.__config__.defaultValue = ''
+      this.activeData.interfaceHasPage = row.hasPage;
+      if (row.hasPage) this.activeData.hasPage = true;
     },
     onRelationFieldChange(val, row) {
       if (!val) return row.jnpfKey = ''
