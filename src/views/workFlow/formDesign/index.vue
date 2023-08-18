@@ -91,9 +91,9 @@
     <preview v-if="previewVisible" ref="preview" @close="previewVisible=false" />
     <previewDialog :visible.sync="previewDialogVisible" :id="currRow.id" type="flow"
       @previewPc="previewPc" :dataSource="currRow.dataSource" :previewType="previewType" />
-    <el-dialog title="新建流程表单" :visible.sync="dialogVisible"
+    <el-dialog title="新建表单" :visible.sync="dialogVisible"
       class="JNPF-dialog JNPF-dialog_center JNPF-dialog-add" lock-scroll width="600px"
-      :show-close="false">
+      :close-on-click-modal="false">
       <div class="add-main">
         <div class="add-item add-item-left" @click="addForm(0,2)">
           <i class="add-icon icon-ym icon-ym-launchFlow"></i>
