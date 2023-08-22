@@ -203,7 +203,7 @@ export function getAmountChinese(val) {
       if (m == 0 && zeroCount < 4) res += N_UNIT2[Math.floor(q)];
     }
   }
-  res += '元'
+  if (Number(integer) != 0) res += '元'
   // 小数部分
   if (parseInt(decimal)) {
     for (let i = 0; i < 4; i++) {
