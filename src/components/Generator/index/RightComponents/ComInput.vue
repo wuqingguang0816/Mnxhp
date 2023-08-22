@@ -118,7 +118,7 @@ export default {
           label: '数字'
         },
         {
-          pattern: '/^([1-9][\d]*|0)(\.[\d]+)?$/',
+          pattern: '/^([1-9][\\d]*|0)(\\.[\\d]+)?$/',
           message: '请输入正确的金额',
           label: '金额'
         },
