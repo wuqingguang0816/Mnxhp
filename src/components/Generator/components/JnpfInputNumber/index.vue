@@ -178,6 +178,7 @@ export default {
     },
     change(val) {
       if (typeof this.innerValue === 'undefined') this.innerValue = null
+      this.$emit('input', val || 0)
       this.$emit('change', val || 0)
     },
     toNonExponential(num) {
