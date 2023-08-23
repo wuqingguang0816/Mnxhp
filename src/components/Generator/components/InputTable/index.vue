@@ -453,7 +453,7 @@ export default {
       if (item.rowIndex === -1) {
         return this.tableData[item.colIndex].options || [];
       } else {
-        return this.tableFormData[item.rowIndex][item.colIndex].options || [];
+        return this.tableFormData[item.rowIndex][item.colIndex].config.options || [];
       }
     },
     // 判断templateJson里是否有关联字段
