@@ -4,7 +4,6 @@ import { getDateDay, getLaterData, getBeforeData, getBeforeTime, getLaterTime } 
 import jnpf from '@/utils/jnpf'
 import render from '@/components/Generator/render/render.js'
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
-import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import request from '@/utils/request'
 import { mapGetters } from "vuex"
@@ -844,8 +843,8 @@ export default {
           let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
-            getDictionaryDataSelector(config.dictionaryType).then(res => {
-              cur.options = res.data.list
+            this.$store.dispatch('base/getDicDataSelector', config.dictionaryType).then(res => {
+              cur.options = res
               data[cur.__vModel__ + 'Options'] = cur.options
             })
           } else if (config.dataType === 'dynamic') {

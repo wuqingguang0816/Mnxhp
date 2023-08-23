@@ -24,6 +24,7 @@ export default {
     }
   },
   created() {
+    this.$store.dispatch('base/getDictionaryAll')
     let isPreview = this.$route.query.isPreview || false
     if (isPreview) {
       this.modelId = this.$route.query.id

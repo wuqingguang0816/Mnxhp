@@ -111,7 +111,6 @@
 </template>
 <script>
 import { dyOptionsList } from '@/components/Generator/generator/comConfig'
-import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import SelectDialog from '@/components/SelectDialog/index'
 import { thousandsFormat } from "@/components/Generator/utils/index"
@@ -142,6 +141,7 @@ export default {
     return {
       tableFormData: [],
       tableData: [],
+      dataInterfaceInfo: [],
       activeRowIndex: 0,
       selectDialogVisible: false,
       isAddRow: true // list类型下 添加行数据 number类型组件会进行校验 产生不需要的结果 在这里进行添加行数据判断 hack
@@ -174,14 +174,13 @@ export default {
   },
   methods: {
     buildOptions() {
-      this.tableData.forEach(cur => {
+      this.tableData.forEach((cur, index) => {
         const config = cur.__config__
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-          let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
-            getDictionaryDataSelector(config.dictionaryType).then(res => {
-              cur.options = res.data.list
+            this.$store.dispatch('base/getDicDataSelector', config.dictionaryType).then(res => {
+              cur.options = res
             })
           }
           if (config.dataType === 'dynamic') {
@@ -189,6 +188,9 @@ export default {
             let query = {
               paramList: config.templateJson ? this.getDefaultParamList(config.templateJson, this.formData) : [],
             }
+            const matchInfo = JSON.stringify({ id: config.propsUrl, query });
+            const item = { matchInfo, rowIndex: -1, colIndex: index };
+            this.dataInterfaceInfo.push(item);
             getDataInterfaceRes(config.propsUrl, query).then(res => {
               let realData = res.data
               if (Array.isArray(realData)) {
@@ -372,14 +374,29 @@ export default {
         }
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
-            if (!config.propsUrl || !config.templateJson || !config.templateJson.length) return
+            if (!config.propsUrl || !config.templateJson || !config.templateJson.length || !hasTemplateJsonRelation(config.templateJson)) continue
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
             }
-            getDataInterfaceRes(config.propsUrl, query).then(res => {
-              let realData = res.data
-              item.options = Array.isArray(realData) ? realData : []
-            })
+            const matchInfo = JSON.stringify({ id: config.propsUrl, query });
+            const item = { matchInfo, rowIndex, colIndex: i };
+            const infoIndex = this.dataInterfaceInfo.findIndex(item => item.matchInfo === matchInfo);
+            let useCacheOptions = false;
+            if (infoIndex === -1) {
+              this.dataInterfaceInfo.push(item);
+            } else {
+              const cacheOptions = getCacheOptions(infoIndex);
+              if (cacheOptions.length) {
+                cur.options = cacheOptions;
+                useCacheOptions = true;
+              }
+            }
+            if (!useCacheOptions) {
+              getDataInterfaceRes(config.propsUrl, query).then(res => {
+                let realData = res.data
+                cur.options = Array.isArray(realData) ? realData : []
+              })
+            }
           }
         }
         if (config.jnpfKey === 'userSelect' && cur.relationField && cur.selectType !== 'all' && cur.selectType !== 'custom') {
@@ -429,6 +446,19 @@ export default {
           item.config.endTime = endTime
         }
       }
+    },
+    // 获取缓存options数据
+    getCacheOptions(index) {
+      const item = this.dataInterfaceInfo[index];
+      if (item.rowIndex === -1) {
+        return this.tableData[item.colIndex].options || [];
+      } else {
+        return this.tableFormData[item.rowIndex][item.colIndex].options || [];
+      }
+    },
+    // 判断templateJson里是否有关联字段
+    hasTemplateJsonRelation(templateJson) {
+      return templateJson.some(o => o.relationField);
     },
     getParamList(templateJson, formData, index) {
       for (let i = 0; i < templateJson.length; i++) {
@@ -691,7 +721,7 @@ export default {
         let res = {
           tag: t.__config__.tag,
           formId: t.__config__.formId,
-          value: val? (val[t.__vModel__]) : t.__config__.defaultValue,
+          value: val ? (val[t.__vModel__]) : t.__config__.defaultValue,
           options,
           valid: true,
           regValid: true,

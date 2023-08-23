@@ -55,12 +55,16 @@ const mutations = {
 const actions = {
   getDictionaryAll({ commit }) {
     return new Promise((resolve, reject) => {
-      getDictionaryAll().then(res => {
-        commit('SET_DICTIONARY_LIST', res.data.list)
-        resolve(res.data.list)
-      }).catch(error => {
-        reject(error)
-      })
+      if (state.dictionaryList.length) {
+        resolve(state.dictionaryList)
+      } else {
+        getDictionaryAll().then(res => {
+          commit('SET_DICTIONARY_LIST', res.data.list)
+          resolve(res.data.list)
+        }).catch(error => {
+          reject(error)
+        })
+      }
     })
   },
   getDictionaryData({ state, dispatch }, info) {
@@ -108,6 +112,24 @@ const actions = {
           }
         }
       }
+      resolve(json)
+    })
+  },
+  getDicDataSelector({ state, dispatch }, value, key = 'id') {
+    return new Promise(async resolve => {
+      let list = [],
+        data = {},
+        json = [];
+      if (!state.dictionaryList.length) {
+        list = await dispatch('getDictionaryAll')
+      } else {
+        list = state.dictionaryList
+      }
+      if (!value) return resolve([])
+      let arr = list.filter(o => o[key] === value);
+      if (!arr.length) return resolve([])
+      data = arr[0];
+      json = data.dictionaryList;
       resolve(json)
     })
   },

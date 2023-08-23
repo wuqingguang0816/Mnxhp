@@ -102,7 +102,8 @@
                     <template v-if="item.jnpfKey==='numInput'">
                       <JnpfInputNumber v-model="scope.row[item.prop]"
                         :placeholder="item.placeholder" :min="item.min" :max="item.max"
-                        :step="item.step" :precision="item.precision"   :addonBefore="item.addonBefore" :addonAfter="item.addonAfter"
+                        :step="item.step" :precision="item.precision"
+                        :addonBefore="item.addonBefore" :addonAfter="item.addonAfter"
                         :controls-position="item['controls-position']" :disabled="item.disabled"
                         style="width:100%" :thousands="item.thousands" />
                     </template>
@@ -525,7 +526,6 @@ import PrintBrowse from "@/components/PrintBrowse/batch";
 import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { printOptionsApi } from '@/api/system/printDev'
-import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
 import { getColumnsByModuleId } from '@/api/common'
 import { dyOptionsList, systemComponentsList } from '@/components/Generator/generator/comConfig'
@@ -812,8 +812,8 @@ export default {
     getTreeView() {
       if (this.columnData.treeDataSource === "dictionary") {
         if (!this.columnData.treeDictionary) return
-        getDictionaryDataSelector(this.columnData.treeDictionary).then(res => {
-          this.treeData = res.data.list
+        this.$store.dispatch('base/getDicDataSelector', this.columnData.treeDictionary).then(res => {
+          this.treeData = res
           this.initData()
         })
       }
@@ -1537,8 +1537,8 @@ export default {
           let isTreeSelect = config.jnpfKey === 'treeSelect' || config.jnpfKey === 'cascader'
           if (config.dataType === 'dictionary') {
             if (!config.dictionaryType) return
-            getDictionaryDataSelector(config.dictionaryType).then(res => {
-              cur.options = res.data.list
+            this.$store.dispatch('base/getDicDataSelector', config.dictionaryType).then(res => {
+              cur.options = res
             })
           }
           if (config.dataType === 'dynamic') {
