@@ -53,7 +53,7 @@ const mutations = {
 }
 
 const actions = {
-  getDictionaryAll({ commit }) {
+  getDictionaryAll({ state, commit }) {
     return new Promise((resolve, reject) => {
       if (state.dictionaryList.length) {
         resolve(state.dictionaryList)
