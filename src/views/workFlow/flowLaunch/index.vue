@@ -129,11 +129,11 @@
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="toDetail(scope.row,'-1')"
-                :disabled="[1,2,4,5].indexOf(scope.row.status)>-1">编辑
+                :disabled="[1,2,4,5,6].indexOf(scope.row.status)>-1">编辑
               </el-button>
               <el-button size="mini" type="text" class="JNPF-table-delBtn"
                 @click="handleDel(scope.$index,scope.row.id)"
-                :disabled="[1,2,3,5].indexOf(scope.row.status)>-1">删除
+                :disabled="[1,2,3,5,6].indexOf(scope.row.status)>-1">删除
               </el-button>
               <el-button size="mini" type="text" @click="toDetail(scope.row,0)"
                 :disabled="!scope.row.status">详情
