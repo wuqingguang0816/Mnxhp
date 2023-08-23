@@ -374,7 +374,7 @@ export default {
         }
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
           if (config.dataType === 'dynamic') {
-            if (!config.propsUrl || !config.templateJson || !config.templateJson.length || !hasTemplateJsonRelation(config.templateJson)) continue
+            if (!config.propsUrl || !config.templateJson || !config.templateJson.length || !this.hasTemplateJsonRelation(config.templateJson)) continue
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
             }
@@ -385,7 +385,7 @@ export default {
             if (infoIndex === -1) {
               this.dataInterfaceInfo.push(item);
             } else {
-              const cacheOptions = getCacheOptions(infoIndex);
+              const cacheOptions = this.getCacheOptions(infoIndex);
               if (cacheOptions.length) {
                 cur.options = cacheOptions;
                 useCacheOptions = true;
@@ -486,7 +486,7 @@ export default {
             let childVModel = templateJson[i].relationField.split('-')[1]
             let list = this.tableData.filter(o => o.__vModel__ === childVModel)
             templateJson[i].defaultValue = ''
-            if (list.length) templateJson[i].defaultValue = list[0].__config__.defaultValue
+            if (list.length) templateJson[i].defaultValue = list[0].__config__.defaultValue || ''
           } else {
             templateJson[i].defaultValue = formData[templateJson[i].relationField] || ''
           }
