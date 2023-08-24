@@ -246,7 +246,7 @@ export default {
     },
     treeReset() {
       for (let i = 0; i < this.searchList.length; i++) {
-        this.searchList[i].value = ''
+        if (this.searchList[i].value) this.searchList[i].value = ''
       }
     }
   }
