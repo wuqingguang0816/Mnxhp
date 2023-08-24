@@ -120,8 +120,8 @@ export default {
       default: ''
     },
     dataType: {
-      type: Number,
-      default: 0
+      type: [String, Number],
+      default: ''
     },
     clearable: {
       type: Boolean,
@@ -189,7 +189,7 @@ export default {
       const query = {
         ...this.listQuery,
         ...this.query,
-        dataType: this.dataType === 0 ? this.query.dataType : this.dataType,
+        dataType: !this.dataType ? this.query.dataType : this.dataType,
         hasPage: this.hasPage
       }
       getDataInterfaceSelectorList(query).then(res => {

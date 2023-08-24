@@ -53,7 +53,7 @@
             </el-form-item>
             <el-form-item label="数据接口" prop="interfaceId">
               <interface-dialog :value="dataForm.interfaceId" :title="dataForm.interfaceName"
-                @change="onInterfaceChange" :hasPage="0" />
+                @change="onInterfaceChange" :hasPage="0" dataType="1,3" />
             </el-form-item>
             <el-table v-if="interfaceParam" :data="interfaceParam" style="margin-bottom: 18px;">
               <el-table-column type="index" width="50" label="序号" align="center" />
