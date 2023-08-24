@@ -36,9 +36,9 @@
               <el-col :span="8" v-if="!dataType">
                 <el-form-item label="类型">
                   <el-select v-model="query.dataType" placeholder="请选择" clearable>
-                    <el-option label="静态数据" :value="2"></el-option>
-                    <el-option label="SQL操作" :value="1"></el-option>
-                    <el-option label="API操作" :value="3"></el-option>
+                    <el-option label="静态数据" value="2"></el-option>
+                    <el-option label="SQL操作" value="1"></el-option>
+                    <el-option label="API操作" value="3"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -120,7 +120,7 @@ export default {
       default: ''
     },
     dataType: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     clearable: {
