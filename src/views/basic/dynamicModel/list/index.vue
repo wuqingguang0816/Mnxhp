@@ -464,7 +464,7 @@
                         {{item.label}}</el-button>
                     </template>
                   </template>
-                  <template v-if="customBtnsList.length">
+                  <template v-if="showMoreBtn">
                     <el-dropdown hide-on-click>
                       <span class="el-dropdown-link">
                         <el-button type="text" size="mini">
@@ -634,6 +634,9 @@ export default {
       let customWidth = this.customBtnsList.length ? 50 : 0
       if (this.columnData.type == 4 && this.config.enableFlow) customWidth += 50
       return this.columnBtnsList.length * 50 + customWidth
+    },
+    showMoreBtn() {
+      return this.customBtnsList.length && this.customBtnsList.some(o => this.jnpf.hasBtnP(o.value))
     }
   },
   watch: {
