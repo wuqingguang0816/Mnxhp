@@ -42,14 +42,22 @@
         </template>
       </el-table-column>
       <el-table-column prop="handleOpinion" label="备注" min-width="200" show-overflow-tooltip />
+      <el-table-column prop="handleOpinion" label="事件日志" width="100" v-if="opType==4">
+        <template slot-scope="scope">
+          <el-link type="primary" :underline="false" @click="handelNodeLog(scope.row)">
+            事件日志</el-link>
+        </template>
+      </el-table-column>
     </JNPF-table>
     <Preview :visible.sync="previewVisible" :file="activeFile" :showDownload="true" />
     <FormBox v-if="formVisible" ref="FormBox" @close="formVisible = false" />
+
   </div>
 </template>
 <script>
 import Preview from '@/components/Generator/components/Upload/Preview'
 import FormBox from '../components/FormBox'
+
 export default {
   components: { Preview, FormBox },
   props: {
@@ -68,6 +76,7 @@ export default {
       previewVisible: false,
       formVisible: false,
       activeFile: {},
+      logVisible: false
     }
   },
   methods: {
@@ -90,6 +99,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.FormBox.init(data)
       })
+    },
+    handelNodeLog(item) {
+      this.$emit('handelNodeLog', item)
     }
   }
 }

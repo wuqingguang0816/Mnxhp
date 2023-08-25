@@ -206,3 +206,11 @@ export function subFlowInfo(taskNodeId) {
     method: 'get',
   })
 }
+
+//事件日志
+export function eventLog(taskNodeId) {
+  return request({
+    url: `/api/workflow/Engine/FlowMonitor/${taskNodeId}/EventLog`,
+    method: 'get',
+  })
+}
