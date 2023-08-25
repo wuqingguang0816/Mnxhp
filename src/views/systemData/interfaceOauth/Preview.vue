@@ -11,7 +11,8 @@
         <group-title content="基本信息" />
       </el-col>
       <el-col :span="14" :offset="5" class="mb-10">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="120px" @submit.native.prevent>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
+          label-width="120px" @submit.native.prevent>
           <jnpf-form-tip-item label="appId" prop="appId">
             <el-input v-model="dataForm.appId" placeholder="输入appId" maxlength="100" readonly>
             </el-input>
@@ -26,7 +27,8 @@
           <jnpf-form-tip-item label="验证签名" prop="verifySignature">
             <el-row>
               <el-col :span="12">
-                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0" disabled>
+                <el-switch v-model="dataForm.verifySignature" :active-value="1" :inactive-value="0"
+                  disabled>
                 </el-switch>
               </el-col>
               <el-col :span="12" align="right">
@@ -35,10 +37,12 @@
             </el-row>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="使用期限" prop="usefulLife">
-            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择" style="width:100%" readonly></el-date-picker>
+            <el-date-picker v-model="dataForm.usefulLife" type="date" placeholder="请选择"
+              style="width:100%" readonly></el-date-picker>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="白名单" prop="whiteList">
-            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5" readonly />
+            <el-input v-model="dataForm.whiteList" placeholder="" type="textarea" :rows="5"
+              readonly />
             <!-- <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span> -->
           </jnpf-form-tip-item>
           <!-- <jnpf-form-tip-item label="黑名单" prop="blackList">
@@ -46,14 +50,17 @@
             <span style="color:#C0C4CC">多个IP设置，用英文符号隔开，如192.168.0.1,192.168.0.2</span>
           </jnpf-form-tip-item> -->
           <jnpf-form-tip-item label="排序" prop="sortCode">
-            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode" controls-position="right" readonly />
+            <el-input-number :min="0" :max="999999" v-model="dataForm.sortCode"
+              controls-position="right" readonly />
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="状态" prop="enabledMark">
-            <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0" disabled>
+            <el-switch v-model="dataForm.enabledMark" :active-value="1" :inactive-value="0"
+              disabled>
             </el-switch>
           </jnpf-form-tip-item>
           <jnpf-form-tip-item label="说明" prop="description">
-            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5" readonly />
+            <el-input v-model="dataForm.description" placeholder="" type="textarea" :rows="5"
+              readonly />
           </jnpf-form-tip-item>
         </el-form>
       </el-col>
@@ -85,9 +92,19 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <el-col :span="22" :offset="1">
+        <group-title content="用户集合" />
+      </el-col>
+      <el-col :span="20" :offset="2" class="mt-20">
+        <el-table v-loading="listLoading" :data="userList">
+          <el-table-column prop="userName" label="接口名称" width="200" />
+          <el-table-column prop="userKey" label="userKey" min-width="200" />
+        </el-table>
+      </el-col>
       <el-col class="mt-50"></el-col>
     </el-row>
-    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo" @close="verifySignatureVisible=false" />
+    <VerifySignatureInfo v-if="verifySignatureVisible" ref="VerifySignatureInfo"
+      @close="verifySignatureVisible=false" />
   </div>
 </template>
 
@@ -130,6 +147,7 @@ export default {
       listLoading: false,
       listLoading2: false,
       tableList: [],
+      userList: [],
       tenantId: '',
       options: [
         { label: '字符串', value: 'varchar' },
@@ -155,7 +173,6 @@ export default {
       this.setInterfaceData()
     },
     setInterfaceData() {
-
       getInfo(this.dataForm.id).then(res => {
         if (res.data) {
           this.dataForm = res.data
@@ -168,7 +185,6 @@ export default {
             if (item.requestParameters) {
               item.paramList = [...JSON.parse(item.requestParameters)]
             }
-
             if (item.paramList.length > 0) {
               item.paramList.forEach(elem => {
                 this.options.forEach(elm2 => {
@@ -182,6 +198,7 @@ export default {
           })
           this.tableList = res.data.list
         }
+        this.userList = res.data.userList || []
       })
     },
     showVerify() {
