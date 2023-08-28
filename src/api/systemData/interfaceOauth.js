@@ -76,12 +76,3 @@ export function dataInterfaceLog(id, data) {
   })
 }
 
-//保存授权用户
-export function SaveUserList(data) {
-  return request({
-    url: `/api/system/InterfaceOauth/SaveUserList`,
-    method: 'POST',
-    data
-  })
-}
-

@@ -71,9 +71,6 @@
                     <el-dropdown-item @click.native="viewEmpower(scope.row)">
                       授权
                     </el-dropdown-item>
-                    <el-dropdown-item @click.native="getUsers(scope.row.id)">
-                      用户
-                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </tableOpts>
@@ -88,7 +85,6 @@
     <Preview v-if="previewVisible" ref="Preview" @close="closeOtherWind" />
     <Log v-if="logVisible" ref="Log" @close="closeOtherWind" />
     <Empower v-if="empowerVisible" ref="Empower" @close="closeOtherWind" multiple />
-    <Transfer v-if="userVisible" ref="user" @close="userVisible" />
   </div>
 </template>
 
@@ -97,12 +93,11 @@ import Form from './Form'
 import Preview from './Preview'
 import Log from './Log'
 import Empower from './Empower'
-import Transfer from './Transfer'
 import { getInterfaceOauthList, deleteInterfaceIdent } from '@/api/systemData/interfaceOauth.js'
 
 export default {
   name: 'systemData-interfaceOauth',
-  components: { Form, Preview, Log, Empower, Transfer },
+  components: { Form, Preview, Log, Empower },
   data() {
     return {
       tableList: [],
@@ -118,8 +113,7 @@ export default {
       formVisible: false,
       previewVisible: false,
       logVisible: false,
-      empowerVisible: false,
-      userVisible: false
+      empowerVisible: false
     }
   },
   created() {
@@ -204,12 +198,6 @@ export default {
         this.$refs.Empower.init(data)
       })
     },
-    getUsers(id) {
-      this.userVisible = true
-      this.$nextTick(() => {
-        this.$refs.user.init(id)
-      })
-    }
   }
 }
 </script>
