@@ -7,7 +7,6 @@ const defaultStartForm = {
   title: '流程发起',
   errorRule: 1, // 异常处理规则
   errorRuleUser: [], // 指定人员处理异常
-  funcConfigRule: 0,
   // 限时设置
   timeLimitConfig: {
     on: 0,  // 开启

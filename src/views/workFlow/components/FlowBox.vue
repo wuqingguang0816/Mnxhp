@@ -87,7 +87,7 @@
       </el-tab-pane>
       <el-tab-pane label="流转记录" v-if="setting.opType!='-1'" v-loading="loading">
         <recordList :list='flowTaskOperatorRecordList' :endTime='endTime' :flowId="setting.flowId"
-          :opType="setting.opType" @handelNodeLog='handelNodeLog' />
+          :opType="setting.opType" />
       </el-tab-pane>
       <el-tab-pane label="审批汇总" v-if="setting.opType!='-1' && isSummary" v-loading="loading"
         name="recordSummary">
@@ -226,7 +226,6 @@
     <FlowBox v-if="flowBoxVisible" ref="FlowBox" @close="flowBoxVisible = false" />
     <PrintDialog v-if="printDialogVisible" ref="printDialog" @change="printBrowseHandle">
     </PrintDialog>
-    <EventLog v-if="logVisible" ref="EventLog" @close="logVisible = false" />
   </div>
   <!-- </transition> -->
 </template>
@@ -234,7 +233,6 @@
 <script>
 import PrintDialog from '@/components/PrintDialog'
 import SignImgDialog from '@/components/SignImgDialog'
-import EventLog from './EventLog'
 import { FlowBeforeInfo, Audit, Reject, Transfer, Recall, Cancel, Assign, SaveAudit, Candidates, CandidateUser, Resurgence, ResurgenceList, RejectList, suspend, restore, subFlowInfo } from '@/api/workFlow/FlowBefore'
 import { Revoke, Press } from '@/api/workFlow/FlowLaunch'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
@@ -253,7 +251,7 @@ import CommonWordsDialog from './CommonWordsDialog'
 import { mapGetters } from "vuex"
 export default {
   name: 'FlowBox',
-  components: { PrintDialog, SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog, EventLog },
+  components: { PrintDialog, SignImgDialog, HasFreeApprover, recordList, Process, PrintBrowse, Comment, RecordSummary, CandidateForm, CandidateUserSelect, ErrorForm, ActionDialog, SuspendDialog, CommonWordsDialog },
   data() {
     return {
       printTemplateId: '',
@@ -275,7 +273,6 @@ export default {
           }
         ],
       },
-      logVisible: false,
       previewVisible: false,
       assignNodeList: [],
       resurgenceNodeList: [],
@@ -401,12 +398,6 @@ export default {
     },
     approverDialog(needClose) {
       if (needClose) this.$emit('close', true)
-    },
-    handelNodeLog(item) {
-      this.logVisible = true
-      this.$nextTick(() => {
-        this.$refs.EventLog.init(item.taskNodeId, item.nodeName)
-      })
     },
     activeClick() {
       let data = this.subFlowInfoList.filter(o => o.flowTaskInfo.id == this.subFlowTab) || []

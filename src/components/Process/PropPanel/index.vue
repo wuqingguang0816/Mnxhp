@@ -622,17 +622,7 @@
         <el-tab-pane label="流程事件">
           <el-scrollbar class="config-scrollbar">
             <el-form :model="startForm" class="pd-10-20" label-position="left">
-              <!-- <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon /> -->
-              <el-form-item label="事件处理规则" class="mt-10">
-                <div slot="label" class="form-item-label">事件处理规则</div>
-                <el-tooltip content="发起、撤回、同意、退回四个事件按此规则执行" placement="top">
-                  <a class="el-icon-question tooltip-question"></a>
-                </el-tooltip>
-                <el-select v-model="startForm.funcConfigRule" placeholder="请选择活动区域">
-                  <el-option label="事件执行失败，流程继续流转。" :value="0"></el-option>
-                  <el-option label="事件执行失败，终止后续节点。" :value="1"></el-option>
-                </el-select>
-              </el-form-item>
+              <el-alert title="开启后可配置触发事件同时进行参数赋值" type="warning" :closable="false" show-icon />
               <el-form-item label="发起事件" class="mt-10">
                 <div slot="label" class="form-item-label">发起事件</div>
                 <el-switch v-model="startForm.initFuncConfig.on" />
@@ -2541,7 +2531,6 @@ const defaultApproverForm = {
   formFieldList: [],
   prevNodeList: [],
   assignList: [],
-  funcConfigRule: 0,
   timeLimitConfig: {
     on: 2,  // 开启
     nodeLimit: 0, // 节点限定时长起始值类型
