@@ -45,8 +45,8 @@
     </template>
     <template v-else>
       <el-form-item label="步长">
-        <el-input-number v-model="activeData.step" placeholder="步数" :min="1"
-          controls-position="right" />
+        <el-input-number v-model="activeData.step" placeholder="步数"
+          :precision="activeData.precision" controls-position="right" />
       </el-form-item>
     </template>
     <el-form-item label="大写金额">
