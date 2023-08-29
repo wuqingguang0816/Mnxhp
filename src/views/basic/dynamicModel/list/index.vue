@@ -396,20 +396,20 @@
                     <template v-if="item.value=='edit'">
                       <template v-if="columnData.type === 4">
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5,6].indexOf(scope.row.flowState)>-1"
                           @click="editForRowEdit(scope.row)">
                           {{item.label}}</el-button>
                       </template>
                       <template v-else>
                         <el-button size="mini" type="text" :key="i"
-                          :disabled="config.enableFlow==1 && [1,2,4,5].indexOf(scope.row.flowState)>-1"
+                          :disabled="config.enableFlow==1 && [1,2,4,5,6].indexOf(scope.row.flowState)>-1"
                           @click="columnBtnsHandel(item.value,scope.row)">
                           {{item.label}}</el-button>
                       </template>
                     </template>
                     <template v-else-if="item.value=='remove'">
                       <el-button size="mini" type="text" :key="i" class="JNPF-table-delBtn"
-                        :disabled="config.enableFlow==1 && [1,2,3,5].indexOf(scope.row.flowState)>-1"
+                        :disabled="config.enableFlow==1 && [1,2,3,5,6].indexOf(scope.row.flowState)>-1"
                         @click="columnBtnsHandel(item.value,scope.row,scope.$index)">
                         {{item.label}}</el-button>
                     </template>
