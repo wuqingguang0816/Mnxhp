@@ -23,7 +23,7 @@
     </el-form-item>
     <el-form-item label="精度">
       <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" :max="15"
-        controls-position="right" />
+        controls-position="right" :precision="0" />
     </el-form-item>
     <el-form-item label="按钮">
       <el-radio-group v-model="activeData.controlsPosition" @change="controlsPositionChange">
