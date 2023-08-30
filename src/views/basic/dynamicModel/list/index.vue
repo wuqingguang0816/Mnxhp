@@ -523,7 +523,7 @@
 <script>
 import PrintDialog from '@/components/PrintDialog'
 import PrintBrowse from "@/components/PrintBrowse/batch";
-import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData } from '@/api/onlineDev/visualDev'
+import { getModelList, getModelSubList, deleteModel, batchDelete, exportModel, createModel, updateModel, getConfigData, getModelInfo } from '@/api/onlineDev/visualDev'
 import { Create, Update } from '@/api/workFlow/workFlowForm'
 import { printOptionsApi } from '@/api/system/printDev'
 import { getDataInterfaceRes } from '@/api/systemData/dataInterface'
@@ -1494,16 +1494,21 @@ export default {
     },
     handleInterface(item, row, index) {
       const handlerInterface = () => {
-        if (item.templateJson && item.templateJson.length) {
-          item.templateJson.forEach((ele) => {
-            ele.defaultValue = row[ele.relationField] || ""
+        getModelInfo(this.modelId, row.id).then(res => {
+          const dataForm = res.data || {};
+          if (!dataForm.data) return;
+          const data = { ...JSON.parse(dataForm.data), id: row.id };
+          if (item.templateJson && item.templateJson.length) {
+            item.templateJson.forEach(e => {
+              e.defaultValue = e.sourceType == 1 ? data[e.relationField] || '' : e.relationField;
+            });
+          }
+          let query = {
+            paramList: item.templateJson || [],
+          }
+          getDataInterfaceRes(item.interfaceId, query).then(res => {
+            this.$message({ message: res.msg, type: 'success' });
           })
-        }
-        let query = {
-          paramList: item.templateJson || [],
-        }
-        getDataInterfaceRes(item.interfaceId, query).then(res => {
-          this.$message({ message: res.msg, type: 'success' });
         })
       }
       if (!item.useConfirm) return handlerInterface()
