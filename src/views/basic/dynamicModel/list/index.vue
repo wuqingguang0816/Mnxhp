@@ -1497,11 +1497,10 @@ export default {
         getModelInfo(this.modelId, row.id).then(res => {
           const dataForm = res.data || {};
           if (!dataForm.data) return;
-          const data = { ...JSON.parse(dataForm.data), id: row.id };
           if (item.templateJson && item.templateJson.length) {
-            item.templateJson.forEach(e => {
-              e.defaultValue = e.sourceType == 1 ? data[e.relationField] || '' : e.relationField;
-            });
+            item.templateJson.forEach((ele) => {
+              ele.defaultValue = row[ele.relationField] || ""
+            })
           }
           let query = {
             paramList: item.templateJson || [],
