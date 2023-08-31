@@ -3926,6 +3926,7 @@ export default {
               label: isTableChild ? parent.__config__.label + '-' + data.__config__.label : data.__config__.label,
               jnpfKey: data.__config__.jnpfKey,
               required: data.__config__.required,
+              isSubTable: data.__config__.isSubTable,
             },
           }
           delete obj.on
