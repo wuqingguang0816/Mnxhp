@@ -1492,27 +1492,32 @@ export default {
       if (!func) return
       func.call(this, parameter)
     },
-    handleInterface(item, row, index) {
-      const handlerInterface = () => {
+    handleInterface(item, row) {
+      const handlerData = () => {
         getModelInfo(this.modelId, row.id).then(res => {
           const dataForm = res.data || {};
           if (!dataForm.data) return;
-          if (item.templateJson && item.templateJson.length) {
-            item.templateJson.forEach((ele) => {
-              ele.defaultValue = row[ele.relationField] || ""
-            })
-          }
-          let query = {
-            paramList: item.templateJson || [],
-          }
-          getDataInterfaceRes(item.interfaceId, query).then(res => {
-            this.$message({ message: res.msg, type: 'success' });
-          })
+          const data = { ...JSON.parse(dataForm.data), id: row.id };
+          handlerInterface(data);
         })
       }
-      if (!item.useConfirm) return handlerInterface()
+      const handlerInterface = data => {
+        if (item.templateJson && item.templateJson.length) {
+          item.templateJson.forEach(e => {
+            e.defaultValue = data[e.relationField] || '';
+          });
+        }
+        const query = { paramList: item.templateJson || [] };
+        getDataInterfaceRes(item.interfaceId, query).then(res => {
+          this.$message.success(res.msg);
+        });
+      };
+      const handleFun = () => {
+        state.config.webType == '4' ? handlerInterface(row) : handlerData();
+      };
+      if (!item.useConfirm) return handleFun();
       this.$confirm(item.confirmTitle || '确认执行此操作', '提示', { type: 'warning' }).then(() => {
-        handlerInterface()
+        handleFun();
       }).catch(() => { })
     },
     request(url, method, data) {
