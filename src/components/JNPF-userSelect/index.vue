@@ -51,7 +51,7 @@
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
                   v-loading="loading" lazy :load="loadNode" v-if="!isAsync"
                   :default-expanded-keys="defaultExpandedKeys">
-                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                  <span class="custom-tree-node" slot-scope="{ node, data }" :title="node.label">
                     <i :class="data.icon"></i>
                     <span class="text">{{node.label}}</span>
                   </span>
@@ -117,7 +117,7 @@
                 <el-tree :data="treeData4" :props="props" :expand-on-click-node="false"
                   check-on-click-node @node-click="handleNodeClick2" class="JNPF-common-el-tree"
                   node-key="id" v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node }">
+                  <span class="custom-tree-node" slot-scope="{ node }" :title="node.label">
                     <i class="icon-ym icon-ym-tree-user2"></i>
                     <span class="text">{{node.label}}</span>
                   </span>

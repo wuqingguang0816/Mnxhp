@@ -13,7 +13,7 @@
             <el-tree :data="treeData" :props="props" check-on-click-node
               @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="id"
               v-loading="loading" lazy :load="loadNode" v-if="!this.isAsync">
-              <span class="custom-tree-node" slot-scope="{ node, data }">
+              <span class="custom-tree-node" slot-scope="{ node, data }" :title="node.label">
                 <i :class="data.icon"></i>
                 <span class="text">{{node.label}}</span>
               </span>

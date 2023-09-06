@@ -61,7 +61,7 @@
                   :filter-node-method="filterNode" :expand-on-click-node="false" check-on-click-node
                   @node-click="handleNodeClick" class="JNPF-common-el-tree" node-key="onlyId"
                   v-loading="loading">
-                  <span class="custom-tree-node" slot-scope="{ node,data }">
+                  <span class="custom-tree-node" slot-scope="{ node,data }" :title="node.label">
                     <i :class="data.icon" />
                     <span class="text">{{node.label}}</span>
                   </span>
@@ -78,7 +78,7 @@
           <div class="transfer-pane__body shadow right-pane">
             <template>
               <div v-for="(item, index) in selectedData" :key="index" class="selected-item">
-                <span>{{item.fullName}}</span>
+                <span :title="item.fullName">{{item.fullName}}</span>
                 <i class="el-icon-delete" @click="removeData(index)"></i>
               </div>
             </template>
