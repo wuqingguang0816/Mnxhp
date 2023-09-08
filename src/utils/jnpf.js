@@ -419,7 +419,7 @@ const jnpf = {
         if (component instanceof Promise) {
           try {
             const module = await component
-            this.component = module?.default
+            this.component = module.default
           } catch (error) {
             console.error(`can not resolve component ${name}, error:`, error)
           }
