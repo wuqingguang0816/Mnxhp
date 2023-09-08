@@ -401,6 +401,36 @@ const jnpf = {
   },
   isEmptyArray(data) {
     return Array.isArray(data) ? data.length === 0 : true
+  },
+  /**
+   * 将指定组件设置自定义名称
+   *
+   * @param {String} name 组件自定义名称
+   * @param {Component | Promise<Component>} component
+   * @return {Component}
+   */
+  createCustomComponent(name, component) {
+    return {
+      name,
+      data() {
+        return { component: null }
+      },
+      async created() {
+        if (component instanceof Promise) {
+          try {
+            const module = await component
+            this.component = module?.default
+          } catch (error) {
+            console.error(`can not resolve component ${name}, error:`, error)
+          }
+          return
+        }
+        this.component = component
+      },
+      render(h) {
+        return this.component ? h(this.component) : null
+      },
+    }
   }
 }
 export default jnpf

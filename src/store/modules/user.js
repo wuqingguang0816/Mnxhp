@@ -2,6 +2,7 @@ import { login, logout, getInfo, unlock } from '@/api/user'
 import { setLock, getLock, removeLock, getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import defaultSettings from '@/settings'
+import jnpf from '@/utils/jnpf'
 import qs from 'qs'
 import md5 from 'js-md5';
 const define = require('@/utils/define')
@@ -175,10 +176,11 @@ const actions = {
                 componentUrl = 'dynamicPortal'
               }
               e.path = '/' + e.urlAddress
+              const componentName = componentUrl + name
               let newObj = {
                 path: '/' + e.urlAddress,
-                component: (resolve) => require([`@/views/basic/${componentUrl}`], resolve),
-                name: e.enCode,
+                component: jnpf.createCustomComponent(componentName, (resolve) => require([`@/views/basic/${componentUrl}`], resolve)),
+                name: componentName,
                 meta: {
                   title: name,
                   icon: e.icon,
