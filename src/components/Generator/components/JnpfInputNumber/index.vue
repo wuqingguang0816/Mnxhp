@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      innerValue: this.value,
+      innerValue: undefined,
       amountChineseName: '',
       key2: ''
     }
@@ -99,7 +99,8 @@ export default {
     },
     value: {
       handler(val) {
-        this.innerValue = val
+        let value = val ? val : val == 0 ? 0 : undefined
+        this.innerValue = value
         this.amountChinese(val)
       },
       deep: true
@@ -114,7 +115,7 @@ export default {
   computed: {
   },
   created() {
-    if (!this.innerValue) return this.innerValue = null
+    if (!this.innerValue) return
     this.amountChinese(this.innerValue)
   },
   directives: {
@@ -132,16 +133,18 @@ export default {
           el.value = vnode.context.format_number_thousandth(el.value)
           // 聚焦转化为数字格式（去除千分位）
           el.onfocus = e => {
-            let a = el.value.replace(/,/g, '') //去除千分号的','
-            el.value = Number(parseFloat(a))
-            if (precision) el.value = Number(el.value).toFixed(precision)
+            if (el.value) {
+              let a = el.value.replace(/,/g, '') //去除千分号的','
+              el.value = Number(parseFloat(a))
+              if (precision) el.value = Number(el.value).toFixed(precision)
+            }
           }
           el.onblur = e => {
-            el.value = vnode.context.delcommafy(el.value)
             el.value = vnode.context.format_number_thousandth(el.value)
           }
+          if (isNaN(el.value)) el.value = undefined
         } else {
-          el.value = el.value
+          if (isNaN(el.value)) el.value = undefined
         }
       },
       componentUpdated: (el, binding, vnode) => {
@@ -154,18 +157,20 @@ export default {
             el = el.getElementsByTagName('input')[0]
           }
           el.onblur = e => {
-            el.value = vnode.context.delcommafy(el.value)
-            el.value = vnode.context.format_number_thousandth(el.value)
+            if (el.value) {
+              if (precision) el.value = Number(el.value).toFixed(precision)
+              el.value = vnode.context.format_number_thousandth(el.value)
+            }
           }
         }
-        el.value = el.value ? el.value : null
+        if (isNaN(el.value)) el.value = undefined
       },
       unbind: (el, binding, vnode) => {
         // 聚焦转化为数字格式（去除千分位）
         if (el.tagName.toLocaleUpperCase() !== 'INPUT') {
           el = el.getElementsByTagName('input')[0]
         }
-        el.value = el.value ? el.value : null
+        if (isNaN(el.value)) el.value = undefined
       }
     }
   },
@@ -176,36 +181,17 @@ export default {
       if (!this.isAmountChinese) return
       this.amountChineseName = getAmountChinese(val)
     },
-    change(val) {
-      if (typeof this.innerValue === 'undefined') this.innerValue = null
-      this.$emit('input', val || 0)
-      this.$emit('change', val || 0)
-    },
-    toNonExponential(num) {
-      if (num.indexOf('E') !== -1 || num.indexOf('e') !== -1) {
-        // 验证是否为科学计数法
-        const m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/)
-        return num.toFixed(Math.max(0, (m[1] || '').length - m[2]))
-      } else {
-        return num
-      }
-    },
     format_number_thousandth(num) {
       return thousandsFormat(num)
     },
-    delcommafy(num) {
-      if (num === null) {
-        return null
-      }
-      if ((num + '').trim() === '') {
-        return ''
-      }
-      num = num.replace(/\$\s?|(,*)/g, '')
-      return num
-    },
     onblur(event) {
       this.$emit('blur', event)
-    }
+    },
+    change(val) {
+      let value = val ? val : val == 0 ? 0 : undefined
+      this.$emit('input', value)
+      this.$emit('change', value)
+    },
   }
 }
 </script>
