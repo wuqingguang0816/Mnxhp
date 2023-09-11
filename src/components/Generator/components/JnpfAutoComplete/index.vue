@@ -62,7 +62,6 @@ export default {
   data() {
     return {
       innerValue: this.value,
-      list: [],
       timeout: null
     }
   },
@@ -75,11 +74,6 @@ export default {
       this.$emit('change', this.innerValue)
     }
   },
-  mounted() {
-  },
-  created() {
-  },
-  mounted() { },
   methods: {
     getParamList() {
       let templateJson = this.templateJson
@@ -110,10 +104,16 @@ export default {
         paramList
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
-        this.list = res.data.list || []
-        cb(this.list.splice(0, this.total))
+        let list = res.data.list || []
+        if (list.length) list = unique(list, this.relationField)
+        cb(list.splice(0, this.total))
       }).catch(() => { })
 
+    },
+    unique(arr, attrName) {
+      const res = new Map();
+      // 根据对象的某个属性值去重
+      return arr.filter(o => !res.has(o[attrName]) && res.set(o[attrName], 1));
     },
     handleSelect(item) {
       this.innerValue = item[this.relationField] || ''
