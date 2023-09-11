@@ -105,7 +105,7 @@ export default {
       }
       getDataInterfaceDataSelect(this.interfaceId, query).then(res => {
         let list = res.data.list || []
-        if (list.length) list = unique(list, this.relationField)
+        if (list.length) list = this.unique(list, this.relationField)
         cb(list.splice(0, this.total))
       }).catch(() => { })
 
