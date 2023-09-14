@@ -103,7 +103,8 @@ export default {
         this.innerValue = value
         this.amountChinese(val)
       },
-      deep: true
+      deep: true,
+      immediate:true
     },
     isAmountChinese() {
       this.amountChinese(this.value)
@@ -111,12 +112,6 @@ export default {
     thousands(val) {
       this.key2 = +new Date()
     }
-  },
-  computed: {
-  },
-  created() {
-    if (!this.innerValue) return
-    this.amountChinese(this.innerValue)
   },
   directives: {
     thousands: {
