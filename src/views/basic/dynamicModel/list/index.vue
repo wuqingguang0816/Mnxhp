@@ -1633,7 +1633,17 @@ export default {
       this.extraFormVisible = true
       this.$nextTick(() => {
         const fields = this.columnList.filter(o => o.jnpfKey != 'table')
-        fields.map(ele => { ele.__config__.span = 24 })
+        fields = fields.map(o => {
+          o.__config__.span = 24;
+          o.__config__.label = o.label;
+          if (o.__config__.templateJson && o.__config__.templateJson.length) {
+            o.__config__.templateJson = o.__config__.templateJson.map(o => ({ ...o, relationField: '' }));
+          }
+          if (o.templateJson && o.templateJson.length) {
+            o.templateJson = o.templateJson.map(o => ({ ...o, relationField: '' }));
+          }
+          return o;
+        })
         const formData = { ...this.formData, fields }
         this.$refs.extraForm.init(formData, this.modelId, this.isPreview, this.columnData.useFormPermission, this.list[index])
       })
