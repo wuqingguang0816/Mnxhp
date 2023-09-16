@@ -151,9 +151,7 @@ export default {
     this.tableData = this.config.__config__.children
     this.buildOptions()
     if (this.value && this.value.length) {
-      this.value.forEach(t => this.addRow(t))
-    } else {
-      // this.addRow()
+      this.value.forEach(t => this.addRow(t, false))
     }
   },
   computed: {
@@ -763,14 +761,14 @@ export default {
       }).catch(() => {
       });
     },
-    addRow(val) {
+    addRow(val, isUpdate = true) {
       this.isAddRow = true
       if (!Array.isArray(this.tableFormData)) this.tableFormData = []
       const rowIndex = this.tableFormData.length
       this.tableFormData.push(JSON.parse(JSON.stringify(this.getEmptyRow(val, rowIndex))))
       this.buildRowAttr(rowIndex)
       this.clearAddRowFlag()
-      this.updateParentData()
+      if (isUpdate) this.updateParentData()
     },
     addItem() {
       if (this.config.addType == 1) {
