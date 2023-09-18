@@ -3026,6 +3026,7 @@ export default {
       let readCount = 0
       let writeCount = 0
       let requiredCount = 0
+      if(!this.formOperatesList.length ) return res 
       this.formOperatesList.forEach(item => {
         if (item.read) {
           readCount++
