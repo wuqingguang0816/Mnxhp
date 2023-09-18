@@ -371,8 +371,8 @@ export default {
           }
         }
         if (dyOptionsList.indexOf(config.jnpfKey) > -1) {
-          if (config.dataType === 'dynamic') {
-            if (!config.propsUrl || !config.templateJson || !config.templateJson.length || !this.hasTemplateJsonRelation(config.templateJson)) continue
+          if (config.dataType === 'dynamic' && config.propsUrl) {
+            if (cur.options && cur.options.length && (!config.templateJson || !config.templateJson.length || !this.hasTemplateJsonRelation(config.templateJson))) continue
             let query = {
               paramList: config.templateJson ? this.getParamList(config.templateJson, this.formData, rowIndex) : [],
             }
