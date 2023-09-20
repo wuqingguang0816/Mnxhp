@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="main">
-        <component :is="currentView" @close="goBack" ref="form"></component>
+        <component :is="currentView" :config="setting" @close="goBack" ref="form"></component>
       </div>
     </div>
   </transition>
@@ -35,13 +35,9 @@ export default {
         data.formConf = res.data[dataSource]
         data.type = res.data.type
         data.formOperates = []
+        this.setting = data
         const formUrl = data.formType == 2 ? 'workFlow/workFlowForm/dynamicForm' : res.data.urlAddress ? res.data.urlAddress.replace(/\s*/g, "") : `workFlow/workFlowForm/${data.enCode}`
         this.currentView = (resolve) => require([`@/views/${formUrl}`], resolve)
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$refs.form && this.$refs.form.init(data)
-          })
-        }, 300)
       })
     },
   }

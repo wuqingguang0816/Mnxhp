@@ -3,7 +3,7 @@
     class="JNPF-dialog JNPF-dialog_center" lock-scroll append-to-body width='1000px'
     destroy-on-close>
     <div class="main" v-loading="loading">
-      <component :is="currentView" ref="form" @setLoad="setLoad"
+      <component :is="currentView" ref="form" :config="setting" @setLoad="setLoad"
         @setCandidateLoad="setCandidateLoad" @setPageLoad="setPageLoad" />
     </div>
     <span slot="footer" class="dialog-footer">
@@ -51,11 +51,7 @@ export default {
             data.formOperates[i].write = false
           }
         }
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$refs.form && this.$refs.form.init(data)
-          })
-        }, 500)
+        this.setting = data
       }).catch(() => { this.loading = false })
     },
     setPageLoad(val) {

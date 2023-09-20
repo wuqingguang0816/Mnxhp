@@ -2,21 +2,14 @@
   <div class="flow-form" :style="{margin: '0 auto',width:formConf.fullScreenWidth}">
     <parser :form-conf="formConf" @submit="submitForm" :key="key" ref="dynamicForm"
       v-if="!loading" />
-    <candidate-form :visible.sync="candidateVisible" :candidateList="this.candidateList"
-      :branchList="branchList" @submitCandidate="selfHandleRequest" :formData="dataForm"
-      :isCustomCopy="isCustomCopy" />
-    <error-form :visible.sync="errorVisible" :nodeList="errorNodeList" @submit="handleError" />
   </div>
 </template>
 <script>
-import { createModel, updateModel, getModelInfo } from '@/api/onlineDev/visualDev'
-import { Candidates } from '@/api/workFlow/FlowBefore'
 import Parser from '@/components/Generator/parser/Parser'
-import CandidateForm from '@/views/workFlow/components/CandidateForm'
-import ErrorForm from '@/views/workFlow/components/ErrorForm'
 import { mapGetters } from "vuex";
 export default {
-  components: { Parser, CandidateForm, ErrorForm },
+  props: ['config'],
+  components: { Parser },
   data() {
     return {
       setting: {},
@@ -27,12 +20,6 @@ export default {
       key: +new Date(),
       formConf: {},
       isCustomCopy: false,
-      candidateVisible: false,
-      candidateList: [],
-      candidateType: 1,
-      branchList: [],
-      errorVisible: false,
-      errorNodeList: [],
       isAdd: false,
       dataForm: {
         id: '',
@@ -43,6 +30,9 @@ export default {
   },
   computed: {
     ...mapGetters(['userInfo']),
+  },
+  mounted() {
+    this.init(this.config)
   },
   methods: {
     init(data) {
@@ -138,80 +128,6 @@ export default {
       this.dataForm.formData = formData
       if (callback && typeof callback === "function") callback()
       this.$emit('eventReceiver', this.dataForm, this.eventType)
-    },
-    selfSubmit() {
-      this.dataForm.status = this.eventType === 'submit' ? 0 : 1
-      this.dataForm.flowId = this.setting.flowId
-      this.dataForm.flowUrgent = this.flowUrgent || 1
-      if (this.eventType === 'save') return this.selfHandleRequest()
-      this.$emit('setCandidateLoad', true)
-      Candidates(0, this.dataForm).then(res => {
-        let data = res.data
-        this.$emit('setCandidateLoad', false)
-        this.candidateType = data.type
-        if (data.type == 1) {
-          this.branchList = res.data.list.filter(o => o.isBranchFlow)
-          this.candidateList = res.data.list.filter(o => !o.isBranchFlow && o.isCandidates)
-          this.candidateVisible = true
-        } else if (data.type == 2) {
-          this.branchList = []
-          this.candidateList = res.data.list.filter(o => o.isCandidates)
-          this.candidateVisible = true
-        } else {
-          if (this.isCustomCopy) {
-            this.branchList = []
-            this.candidateList = []
-            this.candidateVisible = true
-            return
-          }
-          this.$confirm('您确定要提交当前流程吗, 是否继续?', '提示', {
-            type: 'warning'
-          }).then(() => {
-            this.selfHandleRequest()
-          }).catch(() => { });
-        }
-      }).catch(() => {
-        this.$emit('setCandidateLoad', false)
-      })
-    },
-    selfHandleRequest(candidateData) {
-      if (candidateData) this.dataForm = { ...this.dataForm, ...candidateData }
-      this.dataForm.candidateType = this.candidateType
-      if (!this.dataForm.id) delete (this.dataForm.id)
-      if (this.eventType === 'save') this.$emit('setLoad', true)
-      const formMethod = this.dataForm.id ? updateModel : createModel
-      this.$emit('setCandidateLoad', true)
-      formMethod(this.setting.flowId, this.dataForm).then(res => {
-        const errorData = res.data
-        if (errorData && Array.isArray(errorData) && errorData.length) {
-          this.errorNodeList = errorData
-          this.errorVisible = true
-          this.$emit('setCandidateLoad', false)
-        } else {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-            duration: 1000,
-            onClose: () => {
-              if (this.eventType === 'save') this.$emit('setLoad', false)
-              this.candidateVisible = false
-              this.errorVisible = false
-              this.$emit('setCandidateLoad', false)
-              this.$emit('close', true)
-            }
-          })
-        }
-      }).catch(() => {
-        if (this.eventType === 'save') this.$emit('setLoad', false)
-        this.$emit('setCandidateLoad', false)
-      })
-    },
-    handleError(data) {
-      if (this.eventType === 'submit') {
-        this.dataForm.errorRuleUserList = data
-        this.selfHandleRequest()
-        return
-      }
     },
     dataFormSubmit(eventType, flowUrgent) {
       if (this.setting.isPreview) return this.$message({ message: '功能预览不支持数据保存', type: 'warning' })

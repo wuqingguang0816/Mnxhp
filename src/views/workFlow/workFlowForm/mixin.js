@@ -2,6 +2,7 @@ import { mapGetters } from "vuex"
 import { BillNumber } from '@/api/system/billRule'
 const includeList = ['crmOrder', 'salesOrder', 'leaveApply']
 export default {
+  props: ['config'],
   computed: {
     ...mapGetters(['userInfo']),
     formOperates() {
@@ -18,6 +19,9 @@ export default {
       tableRequiredData: {},
       formRef: 'dataForm',
     }
+  },
+  mounted() {
+    this.init(this.config)
   },
   methods: {
     init(data) {
