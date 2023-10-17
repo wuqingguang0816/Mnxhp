@@ -5,13 +5,12 @@
         <el-page-header @back="goBack" :content="!dataForm.table ? '新建表名' : '编辑表名'" />
         <div class="options">
           <el-button type="primary" @click="dataFormSubmit()" :loading="btnLoading">
-            {{$t('common.confirmButton')}}</el-button>
-          <el-button @click="goBack()">{{$t('common.cancelButton')}}</el-button>
+            {{ $t('common.confirmButton') }}</el-button>
+          <el-button @click="goBack()">{{ $t('common.cancelButton') }}</el-button>
         </div>
       </div>
       <div class="main">
-        <el-form :inline="true" :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20"
-          label-width="100px">
+        <el-form :inline="true" :model="dataForm" :rules="dataRule" ref="dataForm" class="mt-20" label-width="100px">
           <el-form-item label="表名称" prop="newTable">
             <el-input v-model="dataForm.newTable" placeholder="表名称" maxlength="50"></el-input>
           </el-form-item>
@@ -27,48 +26,45 @@
                 常用字段<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="addHandle(item)" v-for="item in fieldList"
-                  :key="item.id">{{item.field}}</el-dropdown-item>
+                <el-dropdown-item @click.native="addHandle(item)" v-for="item in fieldList" :key="item.id">{{ item.field
+                }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
         </div>
-        <el-table v-loading="listLoading" :data="list" size='mini' ref="dragTable" row-key="index"
-          v-if="refreshTable">
+        <el-table v-loading="listLoading" :data="list" size='mini' ref="dragTable" row-key="index" v-if="refreshTable">
           <el-table-column align="center" label="拖动" width="50">
             <template>
-              <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px"
-                title='点击拖动' />
+              <i class="drag-handler icon-ym icon-ym-darg" style="cursor: move;font-size:20px" title='点击拖动' />
             </template>
           </el-table-column>
           <el-table-column type="index" width="50" label="序号" align="center" />
           <el-table-column prop="field" label="列名">
             <template slot-scope="scope">
-              <p v-if="scope.row.disabled">{{scope.row.field}}</p>
+              <p v-if="scope.row.disabled">{{ scope.row.field }}</p>
               <el-input v-else v-model="scope.row.field" placeholder="请输入列名" maxlength="50" />
             </template>
           </el-table-column>
           <el-table-column prop="dataType" label="类型">
             <template slot-scope="scope">
-              <p v-if="scope.row.disabled">{{scope.row.dataType}}</p>
+              <p v-if="scope.row.disabled">{{ getdataType(scope.row.dataType) }}</p>
               <el-select v-else v-model="scope.row.dataType" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                  :value="item.value" />
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </template>
           </el-table-column>
           <el-table-column prop="dataLength" label="长度">
             <template slot-scope="scope">
-              <p v-if="scope.row.disabled">{{scope.row.dataLength}}</p>
+              <p v-if="scope.row.disabled">{{ scope.row.dataLength }}</p>
               <el-input v-else v-model="scope.row.dataLength" placeholder="请输入长度"
-                :disabled="scope.row.dataType!=='varchar'&&scope.row.dataType!=='decimal'" />
+                :disabled="scope.row.dataType !== 'varchar' && scope.row.dataType !== 'decimal'" />
             </template>
           </el-table-column>
           <el-table-column prop="primaryKey" label="是否主键" width="70" align="center">
             <template slot-scope="scope">
               <el-checkbox :value='!!scope.row.primaryKey' v-if="scope.row.disabled" />
-              <el-checkbox v-else v-model="scope.row.primaryKey"
-                @change='changeKey($event,scope.row)' :true-label="1" :false-label="0" />
+              <el-checkbox v-else v-model="scope.row.primaryKey" @change='changeKey($event, scope.row)' :true-label="1"
+                :false-label="0" />
             </template>
           </el-table-column>
           <el-table-column prop="allowNull" label="允许空" width="60" align="center">
@@ -79,14 +75,14 @@
           </el-table-column>
           <el-table-column prop="fieldName" label="说明">
             <template slot-scope="scope">
-              <p v-if="scope.row.disabled">{{scope.row.fieldName}}</p>
+              <p v-if="scope.row.disabled">{{ scope.row.fieldName }}</p>
               <el-input v-else v-model="scope.row.fieldName" placeholder="请输入说明" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="50">
             <template slot-scope="scope">
-              <el-button class="JNPF-table-delBtn" size="mini" type="text"
-                v-if="!scope.row.disabled" @click="handleDel(scope.$index,scope.row)">删除
+              <el-button class="JNPF-table-delBtn" size="mini" type="text" v-if="!scope.row.disabled"
+                @click="handleDel(scope.$index, scope.row)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -138,6 +134,11 @@ export default {
     }
   },
   methods: {
+    getdataType(v) {
+      const data = this.options.find(r => r.value == v)
+      if (data) return data.label
+      else return v
+    },
     goBack() {
       this.$emit('close')
     },

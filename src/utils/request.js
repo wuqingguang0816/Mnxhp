@@ -20,7 +20,7 @@ service.interceptors.request.use(
     // 部分接口timeout时间单独处理
     if (config.url.indexOf('SynThirdInfo') > -1 || config.url.indexOf('extend/Email/Receive') > -1 ||
       config.url.indexOf('Permission/Authority/Data') > -1 || config.url.indexOf('DataSync/Actions/Execute') > -1) {
-      config.timeout = 100000
+      config.timeout = 200000
     }
     // do something before request is sent
     config.headers['jnpf-origin'] = 'pc'

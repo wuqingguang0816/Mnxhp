@@ -5,17 +5,14 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="关键词">
-              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
+              <el-input v-model="keyword" placeholder="请输入关键词查询" clearable @keyup.enter.native="search()" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="数据连接">
               <el-select v-model="dataBase" placeholder="请选择数据连接" @change="getTableData" filterable>
-                <el-option-group v-for="group in dbOptions" :key="group.fullName"
-                  :label="group.fullName">
-                  <el-option v-for="item in group.children" :key="item.id" :label="item.fullName"
-                    :value="item.id" />
+                <el-option-group v-for="group in dbOptions" :key="group.fullName" :label="group.fullName">
+                  <el-option v-for="item in group.children" :key="item.id" :label="item.fullName" :value="item.id" />
                 </el-option-group>
               </el-select>
             </el-form-item>
@@ -23,8 +20,8 @@
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
-                {{$t('common.search')}}</el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                {{ $t('common.search') }}</el-button>
+              <el-button icon="el-icon-refresh-right" @click="reset()">{{ $t('common.reset') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -33,24 +30,24 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <topOpts @add="addOrUpdateHandle()" addText="新建表名">
-            <upload-btn :url="'/api/system/DataModel/'+dataBase+'/Action/Import'"
-              @on-success="getTableData" accept=".bdb" />
+            <upload-btn :url="'/api/system/DataModel/' + dataBase + '/Action/Import'" @on-success="getTableData"
+              accept=".bdb" />
             <el-button type="text" icon="el-icon-menu" @click="handleFieldsManage()">常用字段
             </el-button>
           </topOpts>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                @click="getTableData()" />
+              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false" @click="getTableData()" />
             </el-tooltip>
           </div>
         </div>
-        <JNPF-table v-loading="listLoading" :data="list" @expand-change="expandChange"
-          :hasNO="false">
+        <JNPF-table v-loading="listLoading" :data="list.slice(
+          (listQuery.currentPage - 1) * listQuery.pageSize,
+          listQuery.currentPage * listQuery.pageSize
+        )" @expand-change="expandChange" :hasNO="false">
           <el-table-column type="expand" width="40">
             <template slot-scope="props">
-              <el-table v-loading="props.row.childTableLoading" :data="props.row.childTable" stripe
-                size='mini'>
+              <el-table v-loading="props.row.childTableLoading" :data="props.row.childTable" stripe size='mini'>
                 <el-table-column prop="field" label="字段" />
                 <el-table-column prop="fieldName" label="说明" />
                 <el-table-column prop="dataType" label="类型" />
@@ -69,12 +66,11 @@
           <el-table-column prop="tableName" label="说明" show-overflow-tooltip sortable />
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
-              <tableOpts @edit="addOrUpdateHandle(scope.row.table)"
-                @del="handleDel(scope.$index,scope.row.table)">
+              <tableOpts @edit="addOrUpdateHandle(scope.row.table)" @del="handleDel(scope.$index, scope.row.table)">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button size="mini" type="text">
-                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      {{ $t('common.moreBtn') }}<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -90,8 +86,9 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage"
-          :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <!-- <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
+        @pagination="initData" /> -->
+        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" />
       </div>
     </div>
     <Form v-if="formVisible" ref="Form" @close="closeForm" />
@@ -102,7 +99,7 @@
 
 <script>
 import { getDataSourceListAll } from '@/api/systemData/dataSource'
-import { DataModelList, DataModelDelete, DataModelFieldList, exportTpl } from '@/api/systemData/dataModel'
+import { DataModelListAll, DataModelDelete, DataModelFieldList, exportTpl } from '@/api/systemData/dataModel'
 import Form from './Form'
 import Preview from './Preview'
 import FieldsList from './fields/index'
@@ -161,9 +158,11 @@ export default {
         keyword: this.keyword
       }
       this.listLoading = true
-      DataModelList(this.dataBase, query).then(res => {
+      DataModelListAll(this.dataBase, query).then(res => {
+        // DataModelList(this.dataBase, query).then(res => {
         this.list = res.data.list
-        this.total = res.data.pagination.total
+        // this.total = res.data.pagination.total
+        this.total = res.data.list.length
         for (let i = 0; i < this.list.length; i++) {
           this.$set(this.list[i], 'isExpanded', false)
           this.$set(this.list[i], 'childTableLoading', false)

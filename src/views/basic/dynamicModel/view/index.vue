@@ -6,53 +6,49 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div v-if="isPreview || !columnData.useBtnPermission">
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon"
-              @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
+            <el-button :type="i == 0 ? 'primary' : 'text'" :icon="item.icon" @click="headBtnsHandel(item.value)"
+              v-for="(item, i) in columnData.btnsList" :key="i">
+              {{ item.label }}</el-button>
           </div>
           <div v-else>
-            <el-button :type="i==0?'primary':'text'" :icon="item.icon" v-has="'btn_'+item.value"
+            <el-button :type="i == 0 ? 'primary' : 'text'" :icon="item.icon" v-has="'btn_' + item.value"
               @click="headBtnsHandel(item.value)" v-for="(item, i) in columnData.btnsList" :key="i">
-              {{item.label}}</el-button>
+              {{ item.label }}</el-button>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
-              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                @click="initData()" />
+              <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false" @click="initData()" />
             </el-tooltip>
           </div>
         </div>
         <JNPF-table v-loading="listLoading" :data="list" row-key="id"
-          :default-expand-all="columnData.childTableStyle!==2?expandsTable:false"
-          :tree-props="{children: 'children', hasChildren: ''}" :load="treeLoad"
-          @sort-change="sortChange" :row-style="rowStyle" :cell-style="cellStyle"
-          :has-c="hasBatchBtn" @selection-change="handleSelectionChange" v-if="refreshTable"
-          custom-column :span-method="arraySpanMethod" ref="tableRef"
-          :hasNO="!(columnData.childTableStyle==2&&childColumnList.length&&columnData.type != 3&&columnData.type != 4)"
-          :hasNOFixed="columnList.some(o=>o.fixed == 'left')"
-          :show-summary='columnData.showSummary && !(columnData.type==3 ||columnData.type==5)'
+          :default-expand-all="columnData.childTableStyle !== 2 ? expandsTable : false"
+          :tree-props="{ children: 'children', hasChildren: '' }" :load="treeLoad" @sort-change="sortChange"
+          :row-style="rowStyle" :cell-style="cellStyle" :has-c="hasBatchBtn" @selection-change="handleSelectionChange"
+          v-if="refreshTable" custom-column :span-method="arraySpanMethod" ref="tableRef"
+          :hasNO="!(columnData.childTableStyle == 2 && childColumnList.length && columnData.type != 3 && columnData.type != 4)"
+          :hasNOFixed="columnList.some(o => o.fixed == 'left')"
+          :show-summary='columnData.showSummary && !(columnData.type == 3 || columnData.type == 5)'
           :summary-method="getTableSummaries">
           <template>
             <template v-for="(item, i) in columnList">
-              <el-table-column :prop="item.prop" :label="item.label" :align="item.align"
-                :fixed="getFixed(item,i)" :width="item.width" :key="i"
-                :sortable="item.sortable?'custom':item.sortable" />
+              <el-table-column :prop="item.prop" :label="item.label" :align="item.align" :fixed="getFixed(item, i)"
+                :width="item.width" :key="i" :sortable="item.sortable ? 'custom' : item.sortable" />
             </template>
           </template>
-          <el-table-column label="操作"
-            :fixed="columnData.childTableStyle==2&&childColumnList.length?false:'right'" :width="80"
-            v-if="columnBtnsList.length || customBtnsList.length">
+          <el-table-column label="操作" :fixed="columnData.childTableStyle == 2 && childColumnList.length ? false : 'right'"
+            :width="80" v-if="columnBtnsList.length || customBtnsList.length">
             <template slot-scope="scope" v-if="!scope.row.top">
               <template v-if="customBtnsList.length">
                 <el-dropdown hide-on-click>
                   <span class="el-dropdown-link">
                     <el-button type="text" size="mini">
-                      {{$t('common.moreBtn')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      {{ $t('common.moreBtn') }}<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-for="(item, i) in customBtnsList" :key="i"
-                      @click.native="customBtnsHandel(item,scope.row,scope.$index)">{{item.label}}
+                      @click.native="customBtnsHandel(item, scope.row, scope.$index)">{{ item.label }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -60,15 +56,14 @@
             </template>
           </el-table-column>
         </JNPF-table>
-        <template
-          v-if="columnData.type !== 3 &&columnData.type !== 5&& columnData.hasPage&&refreshTable">
-          <pagination :total="total" :page.sync="listQuery.currentPage"
-            :limit.sync="listQuery.pageSize" @pagination="initData" />
+        <template v-if="columnData.type !== 3 && columnData.type !== 5 && columnData.hasPage && refreshTable">
+          <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
+            @pagination="initData" />
         </template>
       </div>
     </div>
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download" />
-    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible= false" />
+    <CustomBox v-if="customBoxVisible" ref="CustomBox" @close="customBoxVisible = false" />
   </div>
 </template>
 
@@ -166,8 +161,13 @@ export default {
       if (!this.config.columnData) return
       this.columnData = JSON.parse(this.config.columnData)
       if (this.config.webType == 4) {
+        // console.log(this.columnData, 9999);
         for (let i = 0; i < this.columnData.searchList.length; i++) {
           const element = this.columnData.searchList[i];
+          // if (element.prop == 'CREATE_ON') {
+          //   element.__config__.jnpfKey = 'date'
+          //   element.__config__['value-format'] = "yyyy-MM-dd"
+          // }
           element.__config__.jnpfKey = 'comInput'
         }
       }

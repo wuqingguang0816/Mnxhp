@@ -19,7 +19,8 @@ import i18n from './lang' // internationalization
 import './permission' // permission control
 import './utils/error-log' // error log
 import { message } from './utils/message';
-
+import { todays, pickerOptions } from './utils/time';
+import { PostApiActionSQL } from '@/api/summary'
 import * as filters from './filters' // global filters
 
 // 自定义按钮权限指令
@@ -27,7 +28,9 @@ import permission from "@/directive/permission";
 Vue.use(permission)
 //eventBus挂载
 Vue.prototype.$eventBus = new Vue()
-
+Vue.prototype.$timeDate = todays()
+Vue.prototype.$pickerOptions = pickerOptions
+Vue.prototype.$request = PostApiActionSQL
 Vue.use(Element, {
   size: jnpf.storageGet('size') || 'small', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
